@@ -89,7 +89,7 @@ function buildEditors() {
   repeatabilityRows.forEach((label, index) => {
     const field = document.createElement("label");
     field.textContent = label;
-    field.append(makeInput(`repeatability_${index + 1}`, "Aanwijzing (kg)"));
+    field.append(makeInput(`repeatability_${index + 1}`, "Aanwijzing (g)"));
     repeatabilityEditor.append(field);
   });
 }
@@ -116,11 +116,15 @@ function renderLinearity() {
         : index === 15
           ? ["[Max]", "", "..."]
           : ["", "", ""];
+
+    const mtfValue = valueFor(`linearity_${index}_mtf`);
+    const mtfDisplay = mtfValue ? `± ${mtfValue}` : defaults[2];
+
     const values = [
       index,
       valueFor(`linearity_${index}_load`) || defaults[0],
       valueFor(`linearity_${index}_deviation`) || defaults[1],
-      valueFor(`linearity_${index}_mtf`) || defaults[2]
+      mtfDisplay
     ];
     values.forEach((value) => {
       const cell = document.createElement("td");
@@ -165,9 +169,51 @@ function render() {
 }
 
 function resetForm() {
+  if (!confirm("Wilt u een nieuw formulier starten? Alle niet-opgeslagen wijzigingen gaan verloren.")) return;
   form.reset();
   form.elements.date.value = todayIso();
   render();
+}
+
+function saveToLibrary() {
+  const data = serialize();
+  const filename = `${valueFor("clientName")} - ${valueFor("certificateNumber")}.json`.replace(/[/\\?%*:|"<>]/g, "-");
+  
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function loadFromLibrary() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  
+  input.onchange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        restore(data);
+        render();
+      } catch (err) {
+        alert("Fout bij het laden van het bestand. Zorg dat het een geldig JSON-bestand is.");
+      }
+    };
+    reader.readAsText(file);
+  };
+  
+  input.click();
 }
 
 buildEditors();
@@ -186,6 +232,8 @@ form.addEventListener("input", render);
 form.addEventListener("change", render);
 document.querySelector("#printButton").addEventListener("click", () => window.print());
 document.querySelector("#printButtonBottom").addEventListener("click", () => window.print());
+document.querySelector("#saveButton").addEventListener("click", saveToLibrary);
+document.querySelector("#loadButton").addEventListener("click", loadFromLibrary);
 document.querySelector("#resetButton").addEventListener("click", resetForm);
 document.querySelector("#clearLinearity").addEventListener("click", () => {
   for (let index = 1; index <= linearityRows; index += 1) {

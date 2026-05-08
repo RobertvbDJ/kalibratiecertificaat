@@ -72,7 +72,7 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: 25px;
+  font-size: 32px;
 }
 
 .panel {
@@ -82,7 +82,7 @@ h1 {
 
 .panel h2 {
   margin-bottom: 12px;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .panel__title-row {
@@ -222,9 +222,9 @@ textarea:focus {
 
 .certificate-header {
   display: grid;
-  grid-template-columns: minmax(58mm, 78mm) 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 12mm;
+  gap: 8mm;
   border-bottom: 2px solid var(--ink);
   padding: 0 0 5mm;
   margin-bottom: 8mm;
@@ -240,12 +240,12 @@ textarea:focus {
   width: 70%;
   max-height: 32mm;
   object-fit: contain;
-  object-position: left center;
+  object-position: left top;
 }
 
 .certificate-header h2 {
   margin: 0;
-  font-size: 26px;
+  font-size: 32px;
   line-height: 1.1;
   overflow-wrap: anywhere;
 }
@@ -302,8 +302,8 @@ textarea:focus {
   min-height: 16px;
 }
 
-.info-grid section > p,
-.info-grid section > dl {
+.info-grid section>p,
+.info-grid section>dl {
   padding-left: 3mm;
   padding-right: 3mm;
 }
@@ -481,6 +481,7 @@ dd {
 }
 
 @media screen and (max-width: 720px) {
+
   .field-grid,
   .compact-grid,
   .info-grid,
@@ -543,9 +544,9 @@ dd {
 
   .certificate-header {
     display: grid;
-    grid-template-columns: 60mm 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    gap: 10mm;
+    gap: 8mm;
   }
 
   .certificate-header.slim {
@@ -557,6 +558,7 @@ dd {
   .results-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 5mm;
   }
 
   .results-grid {
@@ -593,7 +595,7 @@ dd {
   }
 
   .certificate-header h2 {
-    font-size: 20px;
+    font-size: 32px;
     font-weight: 500;
   }
 
@@ -613,8 +615,8 @@ dd {
     padding: 1.2mm 2mm;
   }
 
-  .info-grid section > p,
-  .info-grid section > dl {
+  .info-grid section>p,
+  .info-grid section>dl {
     padding-left: 2mm;
     padding-right: 2mm;
   }
