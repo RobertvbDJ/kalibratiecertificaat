@@ -89,7 +89,7 @@ function buildEditors() {
   repeatabilityRows.forEach((label, index) => {
     const field = document.createElement("label");
     field.textContent = label;
-    field.append(makeInput(`repeatability_${index + 1}`, "Aanwijzing (kg)"));
+    field.append(makeInput(`repeatability_${index + 1}`, "Aanwijzing (g)"));
     repeatabilityEditor.append(field);
   });
 }
