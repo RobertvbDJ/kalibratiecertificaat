@@ -223,7 +223,7 @@ textarea:focus {
 .certificate-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: end;
   gap: 8mm;
   border-bottom: 2px solid var(--ink);
   padding: 0 0 5mm;
@@ -240,7 +240,7 @@ textarea:focus {
   width: 70%;
   max-height: 32mm;
   object-fit: contain;
-  object-position: left center;
+  object-position: left bottom;
 }
 
 .certificate-header h2 {
