@@ -854,9 +854,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                   <tr>
                     <th>Nr</th>
                     <th>Nominaal (<span data-unit="w">kg</span>)</th>
-                    <th>Voor just. (<span data-unit="w">kg</span>)</th>
-                    <th>Na just. (<span data-unit="w">kg</span>)</th>
-                    <th>Afwijking (<span data-unit="m">kg</span>)</th>
+                    <th>Voor just. (<span data-unit="m">kg</span>)</th>
+                    <th>Na just. (<span data-unit="m">kg</span>)</th>
                     <th>MTF (<span data-unit="m">kg</span>)</th>
                     <th>✓</th>
                   </tr>
@@ -987,7 +986,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="result-badge info" id="herh-result">
                 <span class="dot"></span>Bereken na invullen
               </div>
-              <span class="field hint">Maximaal verschil tussen metingen, moet ≤ 1d zijn</span>
+              <span class="field hint">Maximaal verschil tussen metingen, moet ≤ MTF zijn</span>
             </div>
           </div>
         </div>
@@ -1014,7 +1013,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             </div>
             <div class="field">
               <label>Conclusietekst</label>
-              <textarea id="f-conclusie-tekst" rows="4" oninput="syncToCert()">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</textarea>
+              <textarea id="f-conclusie-tekst" rows="4" placeholder="Optionele aanvullende opmerkingen..." oninput="syncToCert()"></textarea>
             </div>
             <div class="field">
               <label>Technicus</label>
@@ -1147,9 +1146,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <tr>
                   <th>Nr</th>
                   <th>Nominaal (<span data-unit="w">kg</span>)</th>
-                  <th>Voor justering (<span data-unit="w">kg</span>)</th>
-                  <th>Na justering (<span data-unit="w">kg</span>)</th>
-                  <th>Afwijking (<span data-unit="m">kg</span>)</th>
+                  <th>Voor justering (<span data-unit="m">kg</span>)</th>
+                  <th>Na justering (<span data-unit="m">kg</span>)</th>
                   <th>MTF (<span data-unit="m">kg</span>)</th>
                   <th>V</th>
                 </tr>
@@ -1194,12 +1192,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           <div class="cert-section">
             <div class="cert-section-header">Herhaalbaarheid</div>
             <table class="cert-table" id="c-rtable">
-              <thead>
-                <tr>
-                  <th>Nr</th>
-                  <th colspan="5" style="text-align:center">Metingen bij testbelasting <span id="c-herh-bel">—</span> <span data-unit="w">kg</span></th>
-                  <th>Max. verschil</th>
-                </tr>
+              <thead id="c-rhead">
+                <!-- Header wordt dynamisch gevuld in syncToCert -->
               </thead>
               <tbody id="c-rbody"></tbody>
             </table>
@@ -1216,7 +1210,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="cert-conclusion-row">
                 <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">—</span></div>
               </div>
-              <div class="cert-remark" id="c-conclusie-tekst">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
+              <div class="cert-remark">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
+              <div class="cert-remark" id="c-conclusie-tekst" style="margin-top:8px; font-style:normal; color:var(--fg)"></div>
             </div>
           </div>
 
@@ -1290,9 +1285,20 @@ function _cvUnit(val, from, to) {
   return from === 'kg' ? val * 1000 : val / 1000;
 }
 
-function _numStr(v) {
+function _numStr(v, decimals = null) {
   if (v === 0) return '0';
-  return parseFloat(v.toPrecision(4)).toString();
+  // Bepaal automatisch het aantal decimalen gebaseerd op de waarde
+  if (decimals === null) {
+    const absV = Math.abs(v);
+    if (absV < 0.001) decimals = 4;
+    else if (absV < 0.01) decimals = 3;
+    else if (absV < 0.1) decimals = 3;
+    else if (absV < 1) decimals = 2;
+    else if (absV < 10) decimals = 2;
+    else if (absV < 100) decimals = 1;
+    else decimals = 0;
+  }
+  return v.toFixed(decimals);
 }
 
 function computeOIML() {
@@ -1321,19 +1327,42 @@ function computeOIML() {
   const minMult = { 'I': 100, 'II': 20, 'III': 20, 'IIII': 10 };
   const minLoad = klasse ? minMult[klasse] * eVal : null;
 
-  return { klasse, n, eVal, dVal, ratioOk, minLoad, um, uw };
+  return { klasse, n, eVal, dVal, ratioOk, minLoad, um, uw, maxVal: bereikVal };
 }
 
-function getOIMLMTF(nomInUnitW, oiml) {
+function getOIMLMTF(loadInUnit, oiml) {
   if (!oiml || !oiml.klasse) return null;
-  const load = _cvUnit(nomInUnitW, oiml.uw, oiml.um);
-  const e = oiml.eVal;
-  const m = load / e;
-  const bounds = { 'I': [50000, 200000], 'II': [500, 2000], 'III': [500, 2000], 'IIII': [50, 200] };
-  const [z1, z2] = bounds[oiml.klasse];
-  if (m <= z1) return 0.5 * e;
-  if (m <= z2) return 1.0 * e;
-  return 1.5 * e;
+  const um = oiml.um;
+  const loadInGram = _cvUnit(loadInUnit, um, 'g');
+  const eInGram = _cvUnit(oiml.eVal, um, 'g');
+  
+  // Bereken zones gebaseerd op capaciteit (Max)
+  // Zone 1: 0 - Max/6, Zone 2: Max/6 - 2*Max/3, Zone 3: 2*Max/3 - Max
+  const maxInGram = _cvUnit(oiml.maxVal || oiml.n * oiml.eVal, um, 'g');
+  const zone1End = maxInGram / 6;
+  const zone2End = (2 * maxInGram) / 3;
+  
+  let mtfMultiplier;
+  if (loadInGram <= zone1End) mtfMultiplier = 1.0;      // ±1,0e voor gebruik
+  else if (loadInGram <= zone2End) mtfMultiplier = 2.0; // ±2,0e voor gebruik
+  else mtfMultiplier = 3.0;                             // ±3,0e voor gebruik
+  
+  const mtfInGram = mtfMultiplier * eInGram;
+  return _cvUnit(mtfInGram, 'g', um);
+}
+
+// Bepaal aantal decimalen gebaseerd op de e-waarde
+function getDecimalsFromE(eVal) {
+  if (!eVal || eVal <= 0) return 2;
+  // Tel aantal decimalen in e-waarde
+  const eStr = eVal.toString();
+  if (eStr.includes('.')) {
+    return eStr.split('.')[1].length;
+  }
+  if (eStr.includes(',')) {
+    return eStr.split(',')[1].length;
+  }
+  return 0;
 }
 
 // ── WEIGHING TABLE BUILD ──
@@ -1381,17 +1410,17 @@ function buildTable() {
   const max = parseFloat(document.getElementById('f-bereik')?.value) || 0;
   const oiml = computeOIML();
   const nominals = computeNominals(max, n);
+  const eDecimals = getDecimalsFromE(oiml?.eVal || d);
   let html = '';
   for (let i = 1; i <= n; i++) {
     const nom = nominals[i - 1];
     const mtfVal = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
-    const tol = _numStr(mtfVal);
+    const tol = _numStr(mtfVal, eDecimals);
     html += `<tr>
       <td>${i}</td>
       <td><input type="number" value="${nom}" step="any" id="wn${i}" oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wb${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wr${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRow(${i})"></td>
-      <td class="mono" id="wd${i}">—</td>
+      <td><input type="number" id="wb${i}" step="0.001" placeholder="Afw." oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wr${i}" step="0.001" placeholder="Afw." oninput="syncToCert(); calcRow(${i})"></td>
       <td class="mono" id="wt${i}">±${tol}</td>
       <td id="wv${i}">—</td>
     </tr>`;
@@ -1403,21 +1432,39 @@ buildTable();
 
 function calcRow(i) {
   const nom = parseFloat(document.getElementById(`wn${i}`).value) || 0;
-  const read = parseFloat(document.getElementById(`wr${i}`).value) || 0;
+  const beforeRaw = document.getElementById(`wb${i}`).value;
+  const afterRaw = document.getElementById(`wr${i}`).value;
+  const before = parseFloat(beforeRaw);
+  const after = parseFloat(afterRaw);
   const d = parseFloat(document.getElementById('f-d').value) || 0.05;
   const oiml = computeOIML();
   const tol = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
+  const eDecimals = getDecimalsFromE(oiml?.eVal || d);
   const tolEl = document.getElementById(`wt${i}`);
-  if (tolEl) tolEl.textContent = `±${_numStr(tol)}`;
-  const dev = read - nom;
-  const absDev = Math.abs(dev);
-  const pass = absDev <= tol;
-  const devEl = document.getElementById(`wd${i}`);
+  if (tolEl) tolEl.textContent = `±${_numStr(tol, eDecimals)}`;
+  
+  // Bepaal welke afwijking te gebruiken voor beoordeling:
+  // - Als "Na just." is ingevuld, gebruik die
+  // - Anders als "Voor just." is ingevuld, gebruik die
+  // - Anders geen beoordeling
+  let dev = null;
+  if (afterRaw !== '' && !isNaN(after)) {
+    dev = after;
+  } else if (beforeRaw !== '' && !isNaN(before)) {
+    dev = before;
+  }
+  
   const vEl = document.getElementById(`wv${i}`);
-  devEl.textContent = dev >= 0 ? `+${dev.toFixed(3)}` : dev.toFixed(3);
-  devEl.className = absDev > tol ? 'mono fail' : 'mono pass';
-  vEl.textContent = pass ? '✓' : '✗';
-  vEl.className = pass ? 'pass' : 'fail';
+  
+  if (dev !== null) {
+    const absDev = Math.abs(dev);
+    const pass = absDev <= tol;
+    vEl.textContent = pass ? '✓' : '✗';
+    vEl.className = pass ? 'pass' : 'fail';
+  } else {
+    vEl.textContent = '—';
+    vEl.className = '';
+  }
 }
 
 // ── REPEAT TABLE BUILD ──
@@ -1436,6 +1483,10 @@ buildRepeatTable();
 function calcRepeat() {
   const n = parseInt(document.getElementById('f-herh-n').value) || 3;
   const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const bel = parseFloat(document.getElementById('f-herh-bel').value) || 0;
+  const oiml = computeOIML();
+  // Gebruik MTF op testbelasting, of fallback naar 1.5*d als OIML niet beschikbaar
+  const mtf = oiml ? (getOIMLMTF(bel, oiml) ?? d * 1.5) : d * 1.5;
   const vals = [];
   for (let i = 1; i <= n; i++) {
     const v = parseFloat(document.getElementById(`rr${i}`).value);
@@ -1443,7 +1494,8 @@ function calcRepeat() {
   }
   let diff = 0;
   if (vals.length >= 2) diff = Math.max(...vals) - Math.min(...vals);
-  const pass = diff <= d;
+  // Herhaalbaarheid: max verschil moet <= MTF zijn (niet <= d)
+  const pass = diff <= mtf;
   const el = document.getElementById('r-diff');
   el.textContent = diff > 0 ? diff.toFixed(3) : '—';
   el.className = diff > 0 && !pass ? 'mono fail' : 'mono pass';
@@ -1542,16 +1594,21 @@ function syncToCert() {
       }
       h += `</div>`;
       if (oiml.klasse) {
-        const bnd = { 'I': [50000, 200000], 'II': [500, 2000], 'III': [500, 2000], 'IIII': [50, 200] };
-        const [z1, z2] = bnd[oiml.klasse];
-        const b1 = _numStr(z1 * e), b2 = _numStr(z2 * e);
-        const m05 = _numStr(0.5*e), m10 = _numStr(1.0*e), m15 = _numStr(1.5*e);
+        const eDecimals = getDecimalsFromE(e);
+        const m05 = _numStr(0.5*e, eDecimals), m10 = _numStr(1.0*e, eDecimals), m15 = _numStr(1.5*e, eDecimals);
+        // Bereken zones gebaseerd op capaciteit
+        const maxGram = _cvUnit(oiml.maxVal, um, 'g');
+        const z1End = maxGram / 6;
+        const z2End = (2 * maxGram) / 3;
+        const z1Str = _numStr(z1End, 0);
+        const z2Str = _numStr(z2End, 0);
+        const maxStr = _numStr(maxGram, 0);
         h += `<table style="width:100%;border-collapse:collapse;font-size:11px">`;
         h += `<tr style="color:var(--muted)"><th style="text-align:left;padding:1px 6px 3px 0">Zone</th><th style="text-align:right;padding:1px 6px 3px">MTF (1e verif.)</th><th style="text-align:right;padding:1px 0 3px">MTF (gebruik)</th></tr>`;
-        h += `<tr><td style="padding:1px 6px 1px 0">0 – ${b1} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m05} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(e)} ${um}</td></tr>`;
-        h += `<tr><td style="padding:1px 6px 1px 0">${b1} – ${b2} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m10} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(2*e)} ${um}</td></tr>`;
-        h += `<tr><td style="padding:1px 6px 1px 0">&gt; ${b2} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m15} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(3*e)} ${um}</td></tr>`;
-        if (oiml.minLoad !== null) h += `<tr><td colspan="3" style="padding:4px 0 0;color:var(--muted)">Min. belasting: ${_numStr(oiml.minLoad)} ${um}</td></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">0 – ${z1Str} g</td><td style="text-align:right;padding:1px 6px 1px">±${m05} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(e, eDecimals)} ${um}</td></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">${z1Str} g – ${z2Str} g</td><td style="text-align:right;padding:1px 6px 1px">±${m10} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(2*e, eDecimals)} ${um}</td></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">${z2Str} g – ${maxStr} g</td><td style="text-align:right;padding:1px 6px 1px">±${m15} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(3*e, eDecimals)} ${um}</td></tr>`;
+        if (oiml.minLoad !== null) h += `<tr><td colspan="3" style="padding:4px 0 0;color:var(--muted)">Min. belasting: ${_numStr(oiml.minLoad, eDecimals)} ${um}</td></tr>`;
         h += `</table>`;
       }
       infoBody.innerHTML = h;
@@ -1568,32 +1625,44 @@ function syncToCert() {
   // Weegproef table
   const unitTxt = currentUnit();
   const n = parseInt(document.getElementById('f-rows').value) || 5;
+  const eDecimals = getDecimalsFromE(oiml?.eVal || parseFloat(d) || 0.05);
   let whtml = '';
-  let tol = _numStr(parseFloat(d) * 1.5 || 0.075);
+  let tol = _numStr(parseFloat(d) * 1.5 || 0.075, eDecimals);
   for (let i = 1; i <= n; i++) {
     const nom = parseFloat(g(`wn${i}`)?.value) || 0;
-    const beforeRaw = g(`wb${i}`)?.value;
+    const beforeRaw = g(`wb${i}`)?.value || '';
+    const afterRaw = g(`wr${i}`)?.value || '';
     const before = parseFloat(beforeRaw);
-    const read = parseFloat(g(`wr${i}`)?.value) || 0;
-    const dev = read - nom;
-    const absDev = Math.abs(dev);
+    const after = parseFloat(afterRaw);
     const rowMtf = oiml ? (getOIMLMTF(nom, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
-    tol = _numStr(rowMtf);
+    tol = _numStr(rowMtf, eDecimals);
     // also sync the editor MTF cell
     const tolEl = g(`wt${i}`);
     if (tolEl) tolEl.textContent = `±${tol}`;
-    const pass = absDev <= rowMtf;
-    const devStr = isNaN(dev) ? '—' : (dev >= 0 ? `+${dev.toFixed(3)}` : dev.toFixed(3));
-    const vStr = isNaN(read) ? '—' : (pass ? '✓' : '✗');
-    const beforeStr = (beforeRaw === '' || isNaN(before)) ? '—' : before.toFixed(3);
+    
+    // Bepaal welke afwijking te gebruiken voor beoordeling
+    let dev = null;
+    let devStr = '—';
+    if (afterRaw !== '' && !isNaN(after)) {
+      dev = after;
+      devStr = after >= 0 ? `+${after.toFixed(3)}` : after.toFixed(3);
+    } else if (beforeRaw !== '' && !isNaN(before)) {
+      dev = before;
+      devStr = before >= 0 ? `+${before.toFixed(3)}` : before.toFixed(3);
+    }
+    
+    const pass = dev !== null && Math.abs(dev) <= rowMtf;
+    const beforeStr = (beforeRaw === '' || isNaN(before)) ? '—' : (before >= 0 ? `+${before.toFixed(3)}` : before.toFixed(3));
+    const afterStr = (afterRaw === '' || isNaN(after)) ? '—' : (after >= 0 ? `+${after.toFixed(3)}` : after.toFixed(3));
+    const vStr = dev === null ? '—' : (pass ? '✓' : '✗');
+    
     whtml += `<tr>
       <td class="center">${i}</td>
       <td class="center mono">${nom || '—'}</td>
       <td class="center mono">${beforeStr}</td>
-      <td class="center mono">${read || '—'}</td>
-      <td class="center mono ${absDev > rowMtf && !isNaN(read) ? 'fail' : 'pass'}">${devStr}</td>
+      <td class="center mono">${afterStr}</td>
       <td class="center mono">±${tol}</td>
-      <td class="center ${isNaN(read) ? '' : (pass ? 'pass' : 'fail')}" style="font-weight:700">${vStr}</td>
+      <td class="center ${dev === null ? '' : (pass ? 'pass' : 'fail')}" style="font-weight:700">${vStr}</td>
     </tr>`;
   }
   g('c-wbody').innerHTML = whtml;
@@ -1609,9 +1678,20 @@ function syncToCert() {
   const formBelEl = g('form-herh-bel');
   if (formBelEl) formBelEl.textContent = bel || '—';
   const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
-  let rhtml = '<tr><td class="center">Nr</td>';
-  for (let i = 1; i <= rn; i++) rhtml += `<td class="center">${i}</td>`;
-  rhtml += '<td class="center">R</td></tr><tr><td class="center">Waarde</td>';
+  // Bereken MTF voor herhaalbaarheid beoordeling
+  const belNum = parseFloat(bel) || 0;
+  const herhMtf = oiml ? (getOIMLMTF(belNum, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
+  
+  // Bouw thead dynamisch zodat kolommen matchen met tbody
+  let rheadHtml = '<tr>';
+  rheadHtml += '<th>Nr</th>';
+  for (let i = 1; i <= rn; i++) rheadHtml += `<th class="center">${i}</th>`;
+  rheadHtml += '<th>Max. verschil</th>';
+  rheadHtml += '</tr>';
+  rheadHtml += `<tr><th colspan="${rn + 2}" style="text-align:center;font-weight:normal;color:var(--muted)">Metingen bij testbelasting ${bel || '—'} ${unitW()}</th></tr>`;
+  g('c-rhead').innerHTML = rheadHtml;
+  
+  let rhtml = '<tr><td class="center">Waarde</td>';
   const vals = [];
   for (let i = 1; i <= rn; i++) {
     const v = parseFloat(g(`rr${i}`)?.value);
@@ -1620,7 +1700,7 @@ function syncToCert() {
   }
   let maxDiff = 0;
   if (vals.length >= 2) maxDiff = Math.max(...vals) - Math.min(...vals);
-  const rPass = maxDiff <= (parseFloat(d) || 0.05);
+  const rPass = maxDiff <= herhMtf;
   rhtml += `<td class="center mono ${vals.length >= 2 ? (rPass ? 'pass' : 'fail') : ''}">${vals.length >= 2 ? maxDiff.toFixed(3) : '—'}</td></tr>`;
   g('c-rbody').innerHTML = rhtml;
 
@@ -1639,8 +1719,11 @@ function syncToCert() {
   setCert('c-sig-name', fv('f-sig-name') || null);
   setCert('c-sig-date', fmtDate('f-sig-date') || null);
   const userConc = (g('f-conclusie-tekst')?.value || '').trim();
-  const defaultConc = 'Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.';
-  g('c-conclusie-tekst').textContent = userConc || defaultConc;
+  const concEl = g('c-conclusie-tekst');
+  if (concEl) {
+    concEl.textContent = userConc;
+    concEl.style.display = userConc ? 'block' : 'none';
+  }
 
   // Signature image toggle
   const sigImg = g('c-sig-img');
