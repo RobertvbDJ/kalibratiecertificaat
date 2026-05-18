@@ -1,0 +1,1982 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalibratiecertificaat — De Jong Weegsystemen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --fg: #111111;
+  --muted: #6e6e73;
+  --border: #e5e5e7;
+  --border-strong: #d2d2d7;
+  --accent: #ff813d;
+  --accent-hover: #e96e2a;
+  --accent-5: rgba(255,129,61,0.05);
+  --accent-10: rgba(255,129,61,0.10);
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font: 'Inter', -apple-system, system-ui, sans-serif;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--fg); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ═══════════════════════════════════════════
+   TOPBAR
+   ═══════════════════════════════════════════ */
+.topbar {
+  display: flex; align-items: center; gap: 20px;
+  padding: 0 24px; height: 56px; flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+.wordmark {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; white-space: nowrap;
+}
+.wordmark img {
+  height: 30px; width: auto; max-width: none; display: block;
+  object-fit: contain; flex-shrink: 0;
+}
+.wordmark-divider {
+  width: 1px; height: 20px; background: var(--border); margin: 0 6px;
+}
+.wordmark-app {
+  font-weight: 600; font-size: 13px; color: var(--muted); letter-spacing: -0.005em;
+}
+
+.topbar-nav { display: flex; gap: 2px; flex: 1; margin-left: 16px; }
+.nav-tab {
+  padding: 6px 14px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  background: none; border: none; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.nav-tab:hover { color: var(--fg); background: var(--bg); }
+.nav-tab.active { color: var(--accent); background: var(--accent-5); }
+
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: 1px solid transparent; transition: all 0.15s ease;
+  white-space: nowrap; font-family: var(--font);
+}
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.btn-ghost { background: none; border-color: var(--border); color: var(--fg); }
+.btn-ghost:hover { background: var(--bg); border-color: var(--border-strong); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+   ═══════════════════════════════════════════ */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* ═══════════════════════════════════════════
+   FORM PANEL
+   ═══════════════════════════════════════════ */
+.form-panel {
+  width: 480px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.form-panel::-webkit-scrollbar { width: 5px; }
+.form-panel::-webkit-scrollbar-track { background: transparent; }
+.form-panel::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+.form-header {
+  padding: 20px 20px 16px; flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--bg);
+}
+.form-header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 3px; }
+.form-header p { font-size: 13px; color: var(--muted); }
+
+.form-scroll { flex: 1; overflow-y: auto; padding: 16px 20px 32px; }
+
+/* ═══════════════════════════════════════════
+   SECTIONS
+   ═══════════════════════════════════════════ */
+.section {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 8px; overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+.section:hover { border-color: var(--border-strong); }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 14px; cursor: pointer; user-select: none;
+  background: var(--surface); transition: background 0.12s ease;
+}
+.section-header:hover { background: var(--accent-5); }
+.section-title { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+.step-num {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--bg); color: var(--muted);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s ease;
+}
+.step-num.done { background: var(--success); color: #fff; }
+.section-meta { display: flex; align-items: center; gap: 8px; }
+.section-chevron { color: var(--muted); transition: transform 0.2s ease; width: 16px; height: 16px; opacity: 0.4; }
+.section-chevron.open { transform: rotate(90deg); opacity: 0.7; }
+
+.section-body {
+  display: none; padding: 14px;
+  border-top: 1px solid var(--bg);
+  background: #fafafa;
+}
+.section-body.open { display: block; }
+
+/* ═══════════════════════════════════════════
+   FORM FIELDS
+   ═══════════════════════════════════════════ */
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block; font-size: 12px; font-weight: 500; color: var(--muted);
+  margin-bottom: 5px;
+}
+.field label .req { color: var(--accent); }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; font-family: var(--font); color: var(--fg);
+  background: var(--surface); outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.field input::placeholder, .field textarea::placeholder { color: #c7c7cc; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-10);
+}
+.field input.mono, .field textarea.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.01em; }
+.field textarea { resize: vertical; min-height: 60px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+.input-group {
+  display: flex; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.input-group:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-10); }
+.input-group input { border: none; border-radius: 0; flex: 1; background: transparent; }
+.input-group input:focus { box-shadow: none; }
+.input-group .unit-tag {
+  display: flex; align-items: center; padding: 0 10px;
+  background: var(--bg); color: var(--muted); font-size: 11px;
+  font-weight: 500; border-left: 1px solid var(--border); white-space: nowrap;
+}
+
+/* Radio group */
+.radio-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.radio-card { flex: 1; min-width: 60px; position: relative; }
+.radio-card input { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio-card label {
+  display: flex; align-items: center; justify-content: center;
+  padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  background: var(--surface); transition: all 0.12s ease; text-align: center; margin: 0;
+}
+.radio-card input:checked + label {
+  border-color: var(--accent); background: var(--accent-5); color: var(--accent);
+}
+.radio-card label:hover { border-color: var(--border-strong); }
+
+/* Weighing table */
+.weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.weighing-table th {
+  padding: 7px 8px; background: var(--bg); font-weight: 600; font-size: 11px;
+  color: var(--muted); text-align: left; border-bottom: 1px solid var(--border);
+}
+.weighing-table td { padding: 1px; border-bottom: 1px solid #f0f0f2; }
+.weighing-table td:first-child {
+  background: #f9f9fb; font-weight: 600; font-size: 10px;
+  color: var(--muted); width: 28px; text-align: center;
+}
+.weighing-table td:last-child { text-align: center; width: 32px; }
+.weighing-table input {
+  border: none; border-radius: 0; padding: 6px 6px; font-family: var(--mono);
+  font-size: 11px; width: 100%; background: transparent; outline: none; text-align: center;
+}
+.weighing-table input:focus { background: var(--accent-5); }
+.weighing-table .pass { color: var(--success); font-weight: 600; }
+.weighing-table .fail { color: var(--danger); font-weight: 600; }
+
+/* Result badges */
+.result-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.result-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.result-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.result-badge.pass { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.result-badge.fail { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.result-badge.info { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+
+/* Position diagram (form) */
+.exc-diagram-wrap {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px; margin-bottom: 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+}
+.exc-diagram-svg { flex-shrink: 0; width: 100px; height: 100px; }
+.exc-diagram-legend { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.exc-diagram-legend strong { color: var(--fg); font-weight: 600; }
+
+/* ═══════════════════════════════════════════
+   SAVED PANEL
+   ═══════════════════════════════════════════ */
+.saved-panel {
+  width: 300px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto; display: none; flex-direction: column;
+}
+.saved-panel.open { display: flex; }
+.saved-panel-header {
+  padding: 16px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.saved-panel-header h2 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.saved-count { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 8px; border-radius: 10px; }
+.saved-list { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.saved-list::-webkit-scrollbar { width: 5px; }
+.saved-list::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+.saved-card {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 12px; cursor: pointer; transition: all 0.12s ease;
+  background: var(--surface);
+}
+.saved-card:hover { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-10); }
+.saved-card-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.saved-card-meta { font-size: 11px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+.saved-card-actions { display: flex; gap: 6px; margin-top: 8px; }
+.saved-card-actions button {
+  flex: 1; padding: 5px; font-size: 11px; font-weight: 500;
+  border-radius: var(--radius-sm); cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface);
+  font-family: var(--font); transition: all 0.12s ease;
+}
+.saved-card-actions .load:hover { background: var(--accent-5); border-color: var(--accent); color: var(--accent); }
+.saved-card-actions .delete:hover { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+
+.saved-empty { text-align: center; padding: 40px 16px; color: var(--muted); }
+.saved-empty svg { width: 32px; height: 32px; margin-bottom: 12px; opacity: 0.25; }
+.saved-empty p { font-size: 12px; line-height: 1.6; }
+
+/* ═══════════════════════════════════════════
+   PREVIEW PANEL
+   ═══════════════════════════════════════════ */
+.preview-panel {
+  flex: 1; overflow: auto; padding: 24px;
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--bg);
+  min-width: 0;
+}
+.preview-panel > .preview-label,
+.preview-panel > .cert-wrap {
+  flex-shrink: 0;
+}
+.preview-panel::-webkit-scrollbar { width: 6px; }
+.preview-panel::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+.preview-label {
+  font-size: 12px; color: var(--muted); font-weight: 500;
+  margin-bottom: 12px; align-self: flex-start;
+  max-width: var(--cert-w); width: 100%;
+}
+
+/* ═══════════════════════════════════════════
+   A4 CERTIFICATE
+   ═══════════════════════════════════════════ */
+/* A4 CERTIFICATE — preview card */
+.cert-wrap {
+  --cert-w: 740px;
+  width: var(--cert-w); flex-shrink: 0;
+  background: #fff;
+  box-shadow: var(--shadow-lg);
+  min-height: calc(var(--cert-w) * 297 / 210);
+  border-radius: 3px;
+  position: relative;
+}
+.cert-wrap::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--cert-w) * 297 / 210);
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #b0b0b8 15%, #b0b0b8 85%, transparent);
+  pointer-events: none;
+  z-index: 10;
+}
+@media (max-width: 900px) {
+  .cert-wrap::before { display: none; }
+}
+.cert {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 9.5px; line-height: 1.5; color: #111;
+  font-family: var(--font);
+  background: #fff;
+}
+.cert > thead { display: table-header-group; }
+.cert > thead > tr > td { padding: 36px 40px 0 40px; }
+.cert > tbody > tr > td { padding: 14px 40px 8px 40px; }
+.cert > tfoot { display: table-footer-group; }
+.cert > tfoot > tr > td { padding: 0 40px 36px 40px; }
+.cert-running-head { background: #fff; }
+.cert-running-foot { background: #fff; }
+
+/* Cert header */
+.cert-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px; padding-bottom: 14px;
+  border-bottom: 2.5px solid var(--accent);
+}
+.cert-logo { display: flex; flex-direction: row; align-items: center; gap: 14px; flex-shrink: 0; }
+.cert-logo-img { height: 64px; width: auto; max-width: none; display: block; object-fit: contain; flex-shrink: 0; }
+.cert-logo-sub {
+  font-size: 8.5px; color: var(--muted); font-weight: 400; letter-spacing: 0.02em;
+  line-height: 1.5; display: flex; flex-direction: column;
+}
+.cert-logo-sub span { display: block; }
+.cert-title-block { text-align: right; padding-top: 4px; }
+.cert-title {
+  font-size: 22px; font-weight: 700; color: var(--accent);
+  letter-spacing: -0.025em; line-height: 1.05;
+}
+.cert-cert-num { font-size: 8.5px; color: var(--muted); margin-top: 4px; font-family: var(--mono); letter-spacing: 0.02em; }
+
+/* Cert meta grid */
+.cert-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin-bottom: 14px; }
+.cert-meta-item { display: flex; flex-direction: column; gap: 1px; }
+.cert-meta-label {
+  font-size: 8px; font-weight: 600; color: #9ca3af; letter-spacing: 0.02em;
+}
+.cert-meta-value { font-size: 10px; font-weight: 500; color: var(--fg); }
+.cert-meta-value.mono { font-family: var(--mono); font-size: 9px; }
+.cert-empty { color: #d1d1d6; font-style: italic; }
+
+/* Cert sections */
+.cert-section { margin-bottom: 12px; }
+.cert-section-header {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; color: var(--fg);
+  margin-bottom: 6px; padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--accent);
+}
+.cert-section-header::before {
+  content: ''; display: block; width: 3px; height: 11px;
+  background: var(--accent); border-radius: 1px; flex-shrink: 0;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* Cert excentrisch layout */
+.cert-exc-row {
+  display: grid; grid-template-columns: 90px 1fr; gap: 14px; align-items: center;
+}
+.cert-exc-diagram { width: 90px; height: 90px; flex-shrink: 0; }
+
+/* Cert tables */
+.cert-table { width: 100%; border-collapse: collapse; font-size: 8.5px; }
+.cert-table th {
+  padding: 4px 6px; background: #f8f8fa; font-weight: 600; font-size: 8px;
+  color: #6b7280; letter-spacing: 0.01em;
+  border: 0.5px solid #e5e5e8; text-align: left;
+}
+.cert-table td {
+  padding: 3px 6px; border: 0.5px solid #e5e5e8; font-size: 8.5px;
+}
+.cert-table th.center { text-align: center; }
+.cert-table td.center { text-align: center; }
+.cert-table td.mono { font-family: var(--mono); font-size: 8px; }
+.cert-table tr:nth-child(even) td { background: #fafafa; }
+.cert-table .pass { color: var(--success); font-weight: 600; }
+.cert-table .fail { color: var(--danger); font-weight: 600; }
+
+/* Conclusion */
+.cert-conclusion {
+  background: #fafafa; border: 1px solid #e5e5e8; border-radius: 4px;
+  padding: 10px 12px; margin-top: 8px;
+}
+.cert-conclusion-row {
+  display: flex; gap: 10px; align-items: baseline; margin-bottom: 4px;
+  justify-content: flex-start;
+}
+.cert-conclusion-row:last-child { margin-bottom: 0; }
+.cert-conclusion-label {
+  font-size: 9px; font-weight: 600; color: #6b7280; letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+.cert-conclusion-value { font-size: 10px; font-weight: 700; }
+.cert-conclusion-value.pass { color: var(--success); }
+.cert-conclusion-value.fail { color: var(--danger); }
+.cert-conclusion-value.info { color: var(--muted); }
+.cert-remark { font-size: 8.5px; color: #6b7280; margin-top: 6px; font-style: italic; line-height: 1.5; }
+
+/* Signatures */
+.cert-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; padding-top: 8px; }
+.cert-sig { text-align: left; position: relative; }
+.cert-sig-img-area {
+  height: 64px;
+  display: flex; align-items: flex-end; justify-content: flex-start;
+  padding-left: 0;
+  overflow: visible;
+}
+.cert-sig-img { max-height: 100%; width: auto; opacity: 1; display: block; }
+.cert-sig-img.hidden { display: none; }
+.cert-sig-line { display: none; }
+.cert-sig-info {
+  display: flex; gap: 8px; align-items: baseline;
+  font-size: 9px; padding-top: 5px;
+}
+.cert-sig-label { font-size: 9px; color: #6b7280; font-weight: 500; }
+.cert-sig-name { font-size: 9.5px; font-weight: 600; color: var(--fg); }
+
+/* Print tip dialog */
+@keyframes spin { to { transform: rotate(360deg) } }
+.print-tip-overlay {
+  position: fixed; inset: 0; background: rgba(17,17,17,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+  animation: tipFade 0.18s ease;
+}
+@keyframes tipFade { from { opacity: 0 } to { opacity: 1 } }
+.print-tip-card {
+  background: var(--surface); border-radius: 12px;
+  padding: 24px; max-width: 420px; width: 100%;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+}
+.print-tip-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--accent-5); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.print-tip-icon svg { width: 22px; height: 22px; }
+.print-tip-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+.print-tip-body { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+.print-tip-body strong { color: var(--fg); font-weight: 600; }
+.print-tip-actions { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 12px; }
+.print-tip-remember {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+}
+.print-tip-remember input { accent-color: var(--accent); cursor: pointer; }
+
+/* Cert footer */
+.cert-footer {
+  margin-top: 12px; padding-top: 8px;
+  border-top: 0.5px solid #e5e5e8;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 7px; color: #9ca3af;
+}
+
+/* ═══════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════ */
+@page {
+  size: A4;
+  margin: 0 0 12mm 0;
+  /* Overwrite browser-injected header/footer slots */
+  @top-left { content: ""; }
+  @top-center { content: ""; }
+  @top-right { content: ""; }
+  @bottom-left { content: ""; }
+  @bottom-center { content: ""; }
+  @bottom-right { content: ""; }
+}
+
+@media print {
+  html, body {
+    background: white !important; height: auto !important;
+    overflow: visible !important; margin: 0 !important; padding: 0 !important;
+  }
+  .app { height: auto !important; overflow: visible !important; display: block !important; }
+  .topbar, .form-panel, .saved-panel, .preview-label { display: none !important; }
+  .main { display: block !important; overflow: visible !important; }
+  .preview-panel {
+    padding: 0 !important; background: white !important;
+    display: block !important; overflow: visible !important;
+    align-items: stretch !important;
+  }
+  .cert-wrap {
+    width: 100% !important; max-width: 100% !important;
+    --cert-w: 100%;
+    box-shadow: none !important; border-radius: 0 !important;
+    min-height: 0 !important; background: white !important;
+    margin: 0 !important; padding: 0 !important;
+  }
+  /* page margins live inside .cert so @page can stay margin:0 (suppresses browser header/footer) */
+  .cert {
+    padding: 0 !important; margin: 0 !important;
+    height: auto !important; min-height: 0 !important;
+    font-size: 10pt; line-height: 1.45;
+  }
+  .cert > thead > tr > td { padding: 14mm 14mm 6pt 14mm !important; }
+  .cert > tbody > tr > td { padding: 6pt 14mm 4mm 14mm !important; }
+  .cert > tfoot > tr > td { padding: 0 14mm 8mm 14mm !important; }
+  .cert-running-head { display: table-header-group !important; }
+  .cert-running-foot { display: table-footer-group !important; }
+  .cert-wrap::before { display: none !important; }
+  .cert-page-nr { display: none !important; }
+  .cert-header { margin-bottom: 10pt; padding-bottom: 10pt; }
+  .cert-logo-img { height: 72pt !important; }
+  .cert-title { font-size: 24pt !important; }
+  .cert-cert-num { font-size: 9.5pt !important; }
+  .cert-logo-sub { font-size: 8.5pt !important; }
+  .cert-meta-label { font-size: 8pt !important; }
+  .cert-meta-value { font-size: 10pt !important; }
+  .cert-meta-value.mono { font-size: 9.5pt !important; }
+  .cert-section-header { font-size: 11pt !important; }
+  .cert-table { font-size: 9pt !important; }
+  .cert-table th { font-size: 8.5pt !important; }
+  .cert-table td { font-size: 9pt !important; padding: 4pt 6pt !important; }
+  .cert-conclusion-label { font-size: 9.5pt !important; }
+  .cert-conclusion-value { font-size: 11pt !important; }
+  .cert-remark { font-size: 9.5pt !important; }
+  .cert-sig-label { font-size: 8.5pt !important; }
+  .cert-sig-name { font-size: 10pt !important; }
+  .cert-sig-img { height: 72pt !important; }
+  .cert-footer {
+    display: flex !important;
+    font-size: 8pt !important;
+    border-top: 0.5pt solid #e5e5e8;
+    padding-top: 6pt;
+  }
+  .cert-page-nr { font-size: 8pt !important; }
+  /* keep sections together where possible */
+  .cert-section { page-break-inside: avoid; break-inside: avoid; }
+  .cert-signatures { page-break-inside: avoid; break-inside: avoid; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media screen and (min-width: 1920px) {
+  .cert-wrap { zoom: 1.6; }
+}
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .cert-wrap { zoom: 1.2; }
+}
+@media (max-width: 1100px) {
+  .cert-wrap { --cert-w: 600px; }
+}
+@media (max-width: 900px) {
+  .app { overflow: auto; height: auto; }
+  .main { flex-direction: column; overflow: visible; }
+  .form-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); overflow: visible; }
+  .preview-panel { padding: 12px; }
+  .cert-wrap { --cert-w: 100%; max-width: 560px; }
+  .saved-panel { width: 100%; border-right: none; border-top: 1px solid var(--border); max-height: 360px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a class="wordmark" href="#">
+      <img src="assets/logo-de-jong.png" alt="De Jong Weegsystemen">
+      <span class="wordmark-divider"></span>
+      <span class="wordmark-app">Kalibratiecertificaat</span>
+    </a>
+
+    <nav class="topbar-nav"></nav>
+
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="newCert()" title="Begin een nieuw, leeg certificaat">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
+        Nieuw
+      </button>
+      <button class="btn btn-ghost" onclick="loadFromFile()" title="Open een opgeslagen certificaat (.json)">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7v8a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-5L8 5H5a2 2 0 00-2 2z"/></svg>
+        Laden
+      </button>
+      <button class="btn btn-ghost" onclick="saveToFile()" title="Sla op als bestand op je computer">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7l-2-4z"/><path d="M14 3v4H7V3M7 13h6"/></svg>
+        Opslaan
+      </button>
+      <button class="btn btn-primary" id="printBtn" onclick="openPrint()">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V3h8v6M6 13H4a1 1 0 01-1-1v-3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-1 1h-2M6 17v2m8-2v2"/></svg>
+        Afdrukken
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- FORM PANEL -->
+    <aside class="form-panel" id="formPanel">
+      <div class="form-header">
+        <h1>Nieuw certificaat</h1>
+        <p>Vul de gegevens in — het certificaat wordt live bijgewerkt.</p>
+      </div>
+
+      <div class="form-scroll">
+
+        <!-- S1: Opdrachtgever -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn1">1</span>
+              Opdrachtgever
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body open">
+            <div class="field">
+              <label>Bedrijfsnaam <span class="req">*</span></label>
+              <input type="text" id="f-bedrijf" placeholder="Bijv. Albert Heijn B.V." oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>Adres</label>
+              <input type="text" id="f-adres" placeholder="Straat 1" oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>Postcode / plaats</label>
+              <input type="text" id="f-postcode" placeholder="1234 AB Plaats" oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>Contactpersoon</label>
+              <input type="text" id="f-contact" placeholder="Naam" oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>E-mailadres</label>
+              <input type="email" id="f-email" placeholder="naam@bedrijf.nl" oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>Order-/factuurnummer</label>
+              <input type="text" id="f-order" class="mono" placeholder="Bijv. 2025-0042" oninput="syncToCert()">
+            </div>
+          </div>
+        </div>
+
+        <!-- S2: Weegwerktuig -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn2">2</span>
+              Weegwerktuig
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field">
+              <label>Eenheid — belasting / gewicht</label>
+              <div class="radio-group">
+                <div class="radio-card"><input type="radio" name="eenheid_w" id="unitWkg" value="kg" checked onchange="onUnitChange()"><label for="unitWkg">kilogram (kg)</label></div>
+                <div class="radio-card"><input type="radio" name="eenheid_w" id="unitWg" value="g" onchange="onUnitChange()"><label for="unitWg">gram (g)</label></div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Eenheid — MTF / d (afwijking)</label>
+              <div class="radio-group">
+                <div class="radio-card"><input type="radio" name="eenheid_m" id="unitMkg" value="kg" checked onchange="onUnitChange()"><label for="unitMkg">kilogram (kg)</label></div>
+                <div class="radio-card"><input type="radio" name="eenheid_m" id="unitMg" value="g" onchange="onUnitChange()"><label for="unitMg">gram (g)</label></div>
+              </div>
+              <div class="hint">Tip: bij precisieweegschalen vaak gram, zelfs als de belasting in kg is.</div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Fabrikaat</label>
+                <input type="text" id="f-fabrikaat" placeholder="Bijv. Mettler Toledo" oninput="syncToCert()">
+              </div>
+              <div class="field">
+                <label>Type</label>
+                <input type="text" id="f-type" placeholder="Bijv. IND331" oninput="syncToCert()">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Serienummer</label>
+                <input type="text" id="f-serienr" class="mono" placeholder="S/N" oninput="syncToCert()">
+              </div>
+              <div class="field">
+                <label>Bereik (Max)</label>
+                <div class="input-group">
+                  <input type="number" id="f-bereik" placeholder="150" oninput="onCapacityChange()">
+                  <span class="unit-tag" data-unit="w">kg</span>
+                </div>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Schaalindeling (d)</label>
+                <div class="input-group">
+                  <input type="number" id="f-d" placeholder="0.05" step="0.01" oninput="syncToCert()">
+                  <span class="unit-tag" data-unit="m">kg</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>IJkeenheid (e)</label>
+                <div class="input-group">
+                  <input type="number" id="f-e" placeholder="= d" step="0.01" oninput="syncToCert()">
+                  <span class="unit-tag" data-unit="m">kg</span>
+                </div>
+                <div class="hint">Leeg = gelijk aan d</div>
+              </div>
+            </div>
+            <div id="oiml-info" style="display:none; margin-top:8px; padding:10px 12px; background:var(--bg-sec); border:1px solid var(--border); border-radius:var(--radius-sm); font-size:12px; line-height:1.6">
+              <div id="oiml-info-body"></div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Klasse</label>
+                <div class="radio-group">
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseI" value="I" onchange="syncToCert()"><label for="klasseI">I</label></div>
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseII" value="II" onchange="syncToCert()"><label for="klasseII">II</label></div>
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseIII" value="III" checked onchange="syncToCert()"><label for="klasseIII">III</label></div>
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseIIII" value="IIII" onchange="syncToCert()"><label for="klasseIIII">IIII</label></div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Soort</label>
+                <div class="radio-group">
+                  <div class="radio-card"><input type="radio" name="soort" id="soortElek" value="Elektronisch" checked onchange="syncToCert()"><label for="soortElek">Elek.</label></div>
+                  <div class="radio-card"><input type="radio" name="soort" id="soortMech" value="Mechanisch" onchange="syncToCert()"><label for="soortMech">Mech.</label></div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Locatie / afdeling</label>
+              <input type="text" id="f-locatie" placeholder="Bijv. Distributiecentrum, Laadperron 3" oninput="syncToCert()">
+            </div>
+          </div>
+        </div>
+
+        <!-- S3: Certificaatgegevens -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn3">3</span>
+              Certificaatgegevens
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field-row">
+              <div class="field">
+                <label>Certificaatnummer <span class="req">*</span></label>
+                <input type="text" id="f-certnr" class="mono" placeholder="2025-K-0042" oninput="syncToCert()">
+              </div>
+              <div class="field">
+                <label>Plaats kalibratie</label>
+                <input type="text" id="f-plaats" placeholder="Hengelo" oninput="syncToCert()">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Kalibratiedatum</label>
+                <input type="date" id="f-kaldate" oninput="syncToCert()">
+              </div>
+              <div class="field">
+                <label>Volgende kalibratie</label>
+                <input type="date" id="f-volgende" oninput="syncToCert()">
+              </div>
+            </div>
+            <div class="field">
+              <label>Omstandigheden — Temperatuur</label>
+              <div class="input-group">
+                <input type="number" id="f-temp" placeholder="20" oninput="syncToCert()">
+                <span class="unit-tag">°C</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Referentie-standaard</label>
+              <input type="text" id="f-refstd" placeholder="Bijv. Gekalibreerde gewichtenset klasse F1" oninput="syncToCert()">
+            </div>
+            <div class="field">
+              <label>Opmerkingen</label>
+              <textarea id="f-opmerkingen" placeholder="Bijzonderheden, afwijkingen, aanbevelingen…" oninput="syncToCert()"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- S4: Weegproef -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn4">4</span>
+              Weegproef
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field">
+              <label>Aantal regels (1–15)</label>
+              <div class="input-group" style="max-width:120px">
+                <input type="number" id="f-rows" value="10" min="1" max="15" oninput="syncToCert(); buildTable()">
+                <span class="unit-tag">regels</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto; margin-top:8px">
+              <table class="weighing-table" id="weighingTable">
+                <thead>
+                  <tr>
+                    <th>Nr</th>
+                    <th>Nominaal (<span data-unit="w">kg</span>)</th>
+                    <th>Voor just. (<span data-unit="w">kg</span>)</th>
+                    <th>Na just. (<span data-unit="w">kg</span>)</th>
+                    <th>Afwijking (<span data-unit="m">kg</span>)</th>
+                    <th>MTF (<span data-unit="m">kg</span>)</th>
+                    <th>✓</th>
+                  </tr>
+                </thead>
+                <tbody id="wbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- S5: Excentrisch -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn5">5</span>
+              Excentrische belasting
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field">
+              <label>Platform-vorm</label>
+              <div class="radio-group">
+                <div class="radio-card"><input type="radio" name="excshape" id="excSquare" value="square" checked onchange="syncToCert(); renderDiagrams()"><label for="excSquare">Vierkant</label></div>
+                <div class="radio-card"><input type="radio" name="excshape" id="excRound" value="round" onchange="syncToCert(); renderDiagrams()"><label for="excRound">Rond</label></div>
+              </div>
+            </div>
+            <div class="exc-diagram-wrap">
+              <div class="exc-diagram-svg" id="excDiagramForm"></div>
+              <div class="exc-diagram-legend">
+                Plaats de testlast achtereenvolgens op de <strong>5 posities</strong>. Positie&nbsp;1 is het midden; 2&ndash;5 zijn de hoeken/randen op ca. ⅓ van Max.
+              </div>
+            </div>
+            <div class="field">
+              <label>Belasting (⅓ van Max)</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-bel" placeholder="50" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="w">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Positie 1 — midden (afwijking)</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-p1" placeholder="0" step="0.001" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Positie 2 — afwijking</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-p2" placeholder="0" step="0.001" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Positie 3 — afwijking</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-p3" placeholder="0" step="0.001" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Positie 4 — afwijking</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-p4" placeholder="0" step="0.001" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Positie 5 — afwijking</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-p5" placeholder="0" step="0.001" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>MTF</label>
+              <div class="input-group">
+                <input type="number" id="f-exc-tol" placeholder="1d" oninput="syncToCert()">
+                <span class="unit-tag" data-unit="m">kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S6: Herhaalbaarheid -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn6">6</span>
+              Herhaalbaarheid
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field-row">
+              <div class="field">
+                <label>Testbelasting</label>
+                <div class="input-group">
+                  <input type="number" id="f-herh-bel" placeholder="100" oninput="syncToCert()">
+                  <span class="unit-tag" data-unit="w">kg</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>Aantal metingen</label>
+                <div class="input-group">
+                  <input type="number" id="f-herh-n" value="3" min="3" max="10" oninput="syncToCert(); buildRepeatTable()">
+                  <span class="unit-tag">×</span>
+                </div>
+              </div>
+            </div>
+            <div style="overflow-x:auto; margin-top:8px">
+              <table class="weighing-table" id="repeatTable">
+                <thead>
+                  <tr>
+                    <th>Nr</th>
+                    <th>Afgelezen bij <span id="form-herh-bel">—</span> <span data-unit="w">kg</span></th>
+                  </tr>
+                </thead>
+                <tbody id="rbody"></tbody>
+              </table>
+            </div>
+            <div class="result-row">
+              <div class="result-badge info" id="herh-result">
+                <span class="dot"></span>Bereken na invullen
+              </div>
+              <span class="field hint">Maximaal verschil tussen metingen, moet ≤ 1d zijn</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- S7: Conclusie -->
+        <div class="section">
+          <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+              <span class="step-num" id="sn7">7</span>
+              Conclusie
+            </div>
+            <div class="section-meta">
+              <svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="field">
+              <label>Eindoordeel</label>
+              <div class="radio-group">
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordGoed" value="Goedgekeurd" checked onchange="syncToCert()"><label for="ordGoed">✓ Goedgekeurd</label></div>
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordAfge" value="Afgekeurd" onchange="syncToCert()"><label for="ordAfge">✗ Afgekeurd</label></div>
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordVoorw" value="Voorwaardelijk" onchange="syncToCert()"><label for="ordVoorw">~ Voorwaardelijk</label></div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Conclusietekst</label>
+              <textarea id="f-conclusie-tekst" rows="4" oninput="syncToCert()">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</textarea>
+            </div>
+            <div class="field">
+              <label>Technicus</label>
+              <input type="text" id="f-kalibrateur" placeholder="Naam technicus" oninput="syncToCert()">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label>Handtekening (naam)</label>
+                <input type="text" id="f-sig-name" placeholder="Naam" oninput="syncToCert()">
+              </div>
+              <div class="field">
+                <label>Datum</label>
+                <input type="date" id="f-sig-date" oninput="syncToCert()">
+              </div>
+            </div>
+            <div class="field">
+              <label style="display:flex; align-items:center; gap:8px; text-transform:none; letter-spacing:0; font-size:12px; font-weight:500; color:var(--fg); cursor:pointer">
+                <input type="checkbox" id="f-sig-show" checked oninput="syncToCert()" style="width:14px; height:14px; accent-color:var(--accent); cursor:pointer">
+                Handtekening-afbeelding tonen op certificaat
+              </label>
+            </div>
+            <div class="result-row" id="overall-result">
+              <div class="result-badge pass"><span class="dot"></span>Goedgekeurd</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- SAVED PANEL (removed: file-based save/load instead) -->
+
+    <!-- PREVIEW PANEL -->
+    <section class="preview-panel">
+      <div class="preview-label">Live preview — A4 formaat</div>
+      <div class="cert-wrap">
+        <table class="cert" id="cert">
+          <thead class="cert-running-head">
+            <tr><td>
+
+          <!-- Header -->
+          <div class="cert-header">
+            <div class="cert-logo">
+              <img src="assets/logo-de-jong.png" alt="De Jong Weegsystemen" class="cert-logo-img">
+              <div class="cert-logo-sub">
+                <span>Westermaatsweg 6</span>
+                <span>7556 BT Hengelo</span>
+                <span>www.dj.nl</span>
+              </div>
+            </div>
+            <div class="cert-title-block">
+              <div class="cert-title">Kalibratiecertificaat</div>
+              <div class="cert-cert-num" id="c-certnr">— / —</div>
+              <div class="cert-cert-num" style="margin-top:2px; font-family: var(--font); letter-spacing: 0;">Conform OIML R76-1:2006 · NEN-EN 45501:2015 · ISO/IEC 17025</div>
+            </div>
+          </div>
+
+            </td></tr>
+          </thead>
+          <tbody>
+            <tr><td class="cert-body-cell">
+
+          <!-- Meta -->
+          <div class="cert-meta">
+            <div class="cert-meta-item">
+              <div class="cert-meta-label">Opdrachtgever</div>
+              <div class="cert-meta-value" id="c-bedrijf"><span class="cert-empty">Niet ingevuld</span></div>
+            </div>
+            <div class="cert-meta-item">
+              <div class="cert-meta-label">Locatie</div>
+              <div class="cert-meta-value" id="c-locatie"><span class="cert-empty">—</span></div>
+            </div>
+            <div class="cert-meta-item">
+              <div class="cert-meta-label">Kalibratiedatum</div>
+              <div class="cert-meta-value mono" id="c-kaldate"><span class="cert-empty">—</span></div>
+            </div>
+            <div class="cert-meta-item">
+              <div class="cert-meta-label">Volgende kalibratie</div>
+              <div class="cert-meta-value mono" id="c-volgende"><span class="cert-empty">—</span></div>
+            </div>
+          </div>
+
+          <!-- Weegwerktuig -->
+          <div class="cert-section">
+            <div class="cert-section-header">Weegwerktuig</div>
+            <div class="cert-meta" style="gap:4px 16px">
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Fabrikaat / Type</div>
+                <div class="cert-meta-value" id="c-fabrikaat"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Serienummer</div>
+                <div class="cert-meta-value mono" id="c-serienr"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Bereik / Schaalindeling</div>
+                <div class="cert-meta-value" id="c-bereik"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Klasse / Soort</div>
+                <div class="cert-meta-value" id="c-klasse"><span class="cert-empty">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Methode -->
+          <div class="cert-section">
+            <div class="cert-section-header">Omstandigheden</div>
+            <div class="cert-meta" style="gap:4px 16px">
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Referentie-standaard</div>
+                <div class="cert-meta-value" id="c-refstd"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Temperatuur</div>
+                <div class="cert-meta-value" id="c-temp"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-meta-item">
+                <div class="cert-meta-label">Gravitatie</div>
+                <div class="cert-meta-value">g ≈ 9,81214582 m/s²</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weegproef -->
+          <div class="cert-section">
+            <div class="cert-section-header">Meetresultaten — Weegproef</div>
+            <table class="cert-table" id="c-wtable">
+              <thead>
+                <tr>
+                  <th>Nr</th>
+                  <th>Nominaal (<span data-unit="w">kg</span>)</th>
+                  <th>Voor justering (<span data-unit="w">kg</span>)</th>
+                  <th>Na justering (<span data-unit="w">kg</span>)</th>
+                  <th>Afwijking (<span data-unit="m">kg</span>)</th>
+                  <th>MTF (<span data-unit="m">kg</span>)</th>
+                  <th>V</th>
+                </tr>
+              </thead>
+              <tbody id="c-wbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Excentrisch -->
+          <div class="cert-section">
+            <div class="cert-section-header">Excentrische belasting</div>
+            <div class="cert-exc-row">
+              <div class="cert-exc-diagram" id="excDiagramCert"></div>
+              <table class="cert-table">
+                <thead>
+                  <tr>
+                    <th class="center">Positie</th>
+                    <th class="center">1</th>
+                    <th class="center">2</th>
+                    <th class="center">3</th>
+                    <th class="center">4</th>
+                    <th class="center">5</th>
+                    <th class="center">MTF</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="center">Afwijking (<span data-unit="m">kg</span>)</td>
+                    <td class="center mono" id="c-exc-p1"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-p2"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-p3"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-p4"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-p5"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-tol"><span class="cert-empty">—</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Herhaalbaarheid -->
+          <div class="cert-section">
+            <div class="cert-section-header">Herhaalbaarheid</div>
+            <table class="cert-table" id="c-rtable">
+              <thead>
+                <tr>
+                  <th>Nr</th>
+                  <th colspan="5" style="text-align:center">Metingen bij testbelasting <span id="c-herh-bel">—</span> <span data-unit="w">kg</span></th>
+                  <th>Max. verschil</th>
+                </tr>
+              </thead>
+              <tbody id="c-rbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Conclusie -->
+          <div class="cert-section">
+            <div class="cert-section-header">Conclusie</div>
+            <div class="cert-conclusion">
+              <div class="cert-conclusion-row">
+                <div class="cert-conclusion-label">Eindoordeel</div>
+                <div class="cert-conclusion-value pass" id="c-eindoordeel">Goedgekeurd</div>
+              </div>
+              <div class="cert-conclusion-row">
+                <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">—</span></div>
+              </div>
+              <div class="cert-remark" id="c-conclusie-tekst">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
+            </div>
+          </div>
+
+          <!-- Signatures -->
+          <div class="cert-signatures">
+            <div class="cert-sig">
+              <div class="cert-sig-img-area">
+                <img src="assets/handtekening-technicus.png" alt="" class="cert-sig-img" id="c-sig-img">
+              </div>
+              <div class="cert-sig-line"></div>
+              <div class="cert-sig-info">
+                <span class="cert-sig-name" id="c-sig-name"><span class="cert-empty">—</span></span>
+              </div>
+            </div>
+            <div class="cert-sig">
+              <div class="cert-sig-img-area"></div>
+              <div class="cert-sig-line"></div>
+              <div class="cert-sig-info">
+                <span class="cert-sig-label">Datum:</span>
+                <span class="cert-sig-name mono" id="c-sig-date"><span class="cert-empty">—</span></span>
+              </div>
+            </div>
+          </div>
+
+            </td></tr>
+          </tbody>
+          <tfoot class="cert-running-foot">
+            <tr><td>
+          <div class="cert-footer">
+            <span>De Jong Weegsystemen · Kalibratiecertificaat: <span id="c-footer-nr">—</span></span>
+            <span class="cert-page-nr">Pagina <span class="page-current">1</span> van <span class="page-total">?</span></span>
+          </div>
+            </td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ── SECTION TOGGLE ──
+function toggleSection(headerEl) {
+  try {
+    const section = headerEl.closest('.section');
+    if (!section) return;
+    const body = section.querySelector('.section-body');
+    const chev = headerEl.querySelector('.section-chevron');
+    if (body) {
+      const isOpen = body.classList.contains('open');
+      if (isOpen) {
+        body.classList.remove('open');
+        body.style.display = 'none';
+      } else {
+        body.classList.add('open');
+        body.style.display = 'block';
+      }
+    }
+    if (chev) chev.classList.toggle('open');
+  } catch(e) {
+    console.error('toggleSection error:', e);
+  }
+}
+
+// ── PANEL SWITCH (removed: no more tabs) ──
+
+// ── OIML R76 MTF & KLASSE BEREKENING ──
+function _cvUnit(val, from, to) {
+  if (from === to) return val;
+  return from === 'kg' ? val * 1000 : val / 1000;
+}
+
+function _numStr(v) {
+  if (v === 0) return '0';
+  return parseFloat(v.toPrecision(4)).toString();
+}
+
+function computeOIML() {
+  const bereikVal = parseFloat(document.getElementById('f-bereik')?.value);
+  const dStr = document.getElementById('f-d')?.value;
+  if (!bereikVal || !dStr) return null;
+  const dVal = parseFloat(dStr);
+  if (!dVal || dVal <= 0) return null;
+  const eStr = document.getElementById('f-e')?.value;
+  const eVal = eStr ? parseFloat(eStr) : dVal;
+  if (!eVal || eVal <= 0) return null;
+
+  const uw = unitW(), um = unitM();
+  const max_g = _cvUnit(bereikVal, uw, 'g');
+  const e_g   = _cvUnit(eVal, um, 'g');
+
+  const n = max_g / e_g;
+
+  let klasse = null;
+  if      (n >= 50000 && e_g >= 0.000001) klasse = 'I';
+  else if (n >= 100   && n <= 100000 && e_g >= 0.001) klasse = 'II';
+  else if (n >= 500   && n <= 10000  && e_g >= 0.1)   klasse = 'III';
+  else if (n >= 100   && n <= 1000   && e_g >= 5)     klasse = 'IIII';
+
+  const ratioOk = [1, 2, 5, 10].some(r => Math.abs(eVal / dVal - r) < 0.0001);
+  const minMult = { 'I': 100, 'II': 20, 'III': 20, 'IIII': 10 };
+  const minLoad = klasse ? minMult[klasse] * eVal : null;
+
+  return { klasse, n, eVal, dVal, ratioOk, minLoad, um, uw };
+}
+
+function getOIMLMTF(nomInUnitW, oiml) {
+  if (!oiml || !oiml.klasse) return null;
+  const load = _cvUnit(nomInUnitW, oiml.uw, oiml.um);
+  const e = oiml.eVal;
+  const m = load / e;
+  const bounds = { 'I': [50000, 200000], 'II': [500, 2000], 'III': [500, 2000], 'IIII': [50, 200] };
+  const [z1, z2] = bounds[oiml.klasse];
+  if (m <= z1) return 0.5 * e;
+  if (m <= z2) return 1.0 * e;
+  return 1.5 * e;
+}
+
+// ── WEIGHING TABLE BUILD ──
+function onCapacityChange() {
+  const max = parseFloat(document.getElementById('f-bereik')?.value) || 0;
+  if (max > 0) document.getElementById('f-rows').value = computeIdealRowCount(max);
+  syncToCert();
+  buildTable();
+}
+function _weightSeq(max) {
+  const seq = [];
+  for (let dec = 0.001; ; dec *= 10) {
+    for (const s of [1, 2, 5]) {
+      const v = parseFloat((s * dec).toPrecision(6));
+      if (v > max + 1e-9) break;
+      seq.push(v);
+    }
+    if (5 * dec >= max - 1e-9) break;
+  }
+  if (!seq.length || Math.abs(seq[seq.length - 1] - max) > 1e-9) seq.push(max);
+  // Start bij grootste waarde ≤ max/100 (bijv. 120g → 1g, niet 2g)
+  const overIdx = seq.findIndex(v => v > max / 100 + 1e-9);
+  const startIdx = overIdx <= 0 ? 0 : overIdx - 1;
+  return seq.slice(startIdx);
+}
+function computeNominals(max, n) {
+  if (!max || max <= 0) return new Array(n).fill(0);
+  const relevant = _weightSeq(max);
+  const dataRows = Math.max(0, n - 1);
+  let data;
+  if (relevant.length <= dataRows) {
+    data = [...new Array(dataRows - relevant.length).fill(0), ...relevant];
+  } else {
+    data = relevant.slice(-dataRows);
+  }
+  return [0, ...data];
+}
+function computeIdealRowCount(max) {
+  if (!max || max <= 0) return 1;
+  return _weightSeq(max).length + 1; // +1 voor de nulrij
+}
+function buildTable() {
+  const n = parseInt(document.getElementById('f-rows').value) || 5;
+  const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const max = parseFloat(document.getElementById('f-bereik')?.value) || 0;
+  const oiml = computeOIML();
+  const nominals = computeNominals(max, n);
+  let html = '';
+  for (let i = 1; i <= n; i++) {
+    const nom = nominals[i - 1];
+    const mtfVal = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
+    const tol = _numStr(mtfVal);
+    html += `<tr>
+      <td>${i}</td>
+      <td><input type="number" value="${nom}" step="any" id="wn${i}" oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wb${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wr${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRow(${i})"></td>
+      <td class="mono" id="wd${i}">—</td>
+      <td class="mono" id="wt${i}">±${tol}</td>
+      <td id="wv${i}">—</td>
+    </tr>`;
+  }
+  document.getElementById('wbody').innerHTML = html;
+  syncToCert();
+}
+buildTable();
+
+function calcRow(i) {
+  const nom = parseFloat(document.getElementById(`wn${i}`).value) || 0;
+  const read = parseFloat(document.getElementById(`wr${i}`).value) || 0;
+  const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const oiml = computeOIML();
+  const tol = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
+  const tolEl = document.getElementById(`wt${i}`);
+  if (tolEl) tolEl.textContent = `±${_numStr(tol)}`;
+  const dev = read - nom;
+  const absDev = Math.abs(dev);
+  const pass = absDev <= tol;
+  const devEl = document.getElementById(`wd${i}`);
+  const vEl = document.getElementById(`wv${i}`);
+  devEl.textContent = dev >= 0 ? `+${dev.toFixed(3)}` : dev.toFixed(3);
+  devEl.className = absDev > tol ? 'mono fail' : 'mono pass';
+  vEl.textContent = pass ? '✓' : '✗';
+  vEl.className = pass ? 'pass' : 'fail';
+}
+
+// ── REPEAT TABLE BUILD ──
+function buildRepeatTable() {
+  const n = parseInt(document.getElementById('f-herh-n').value) || 3;
+  let html = '';
+  for (let i = 1; i <= n; i++) {
+    html += `<tr><td>${i}</td><td><input type="number" id="rr${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRepeat()"></td></tr>`;
+  }
+  html += `<tr style="font-weight:600"><td>Max. verschil</td><td class="mono" id="r-diff">—</td></tr>`;
+  document.getElementById('rbody').innerHTML = html;
+  syncToCert();
+}
+buildRepeatTable();
+
+function calcRepeat() {
+  const n = parseInt(document.getElementById('f-herh-n').value) || 3;
+  const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const vals = [];
+  for (let i = 1; i <= n; i++) {
+    const v = parseFloat(document.getElementById(`rr${i}`).value);
+    if (!isNaN(v)) vals.push(v);
+  }
+  let diff = 0;
+  if (vals.length >= 2) diff = Math.max(...vals) - Math.min(...vals);
+  const pass = diff <= d;
+  const el = document.getElementById('r-diff');
+  el.textContent = diff > 0 ? diff.toFixed(3) : '—';
+  el.className = diff > 0 && !pass ? 'mono fail' : 'mono pass';
+  const resultEl = document.getElementById('herh-result');
+  if (vals.length >= 2) {
+    resultEl.className = pass ? 'result-badge pass' : 'result-badge fail';
+    resultEl.innerHTML = `<span class="dot"></span>${pass ? 'Voldoet' : 'Overschreden'}`;
+  }
+}
+
+// ── SYNC FORM → CERTIFICATE ──
+function g(id) { return document.getElementById(id); }
+function fv(id) { return g(id).value || ''; }
+
+function fmtDate(id) {
+  const v = fv(id);
+  if (!v) return '';
+  const d = new Date(v + 'T00:00:00');
+  return d.toLocaleDateString('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function syncToCert() {
+  const d = fv('f-d');
+  const oiml = computeOIML();
+  // Section badges
+  const sections = [
+    ['f-bedrijf', 'sn1'], ['f-fabrikaat', 'sn2'], ['f-certnr', 'sn3'],
+    ['wn1', 'sn4'], ['f-exc-p1', 'sn5'], ['rr1', 'sn6'], ['f-eindoordeel', 'sn7'],
+  ];
+  sections.forEach(([fid, numId]) => {
+    const el = document.getElementById(fid);
+    const num = document.getElementById(numId);
+    if (el && num) {
+      if (el.value) num.classList.add('done');
+      else num.classList.remove('done');
+    }
+  });
+
+  g('c-certnr').textContent = fv('f-certnr') || '— / —';
+  g('c-footer-nr').textContent = fv('f-certnr') || '—';
+
+  // Opdrachtgever
+  const bedrijf = fv('f-bedrijf');
+  const adres = fv('f-adres');
+  const postcode = fv('f-postcode');
+  const contact = fv('f-contact');
+  const lines = [];
+  if (bedrijf) lines.push(`<div>${escapeHtml(bedrijf)}</div>`);
+  if (adres) lines.push(`<div>${escapeHtml(adres)}</div>`);
+  if (postcode) lines.push(`<div>${escapeHtml(postcode)}</div>`);
+  if (contact) lines.push(`<div style="margin-top:2px; color:#6b7280;">t.a.v. ${escapeHtml(contact)}</div>`);
+  setCertHtml('c-bedrijf', lines.join('') || null);
+  setCert('c-locatie', fv('f-locatie') || null);
+  setCert('c-kaldate', fmtDate('f-kaldate') || null);
+  setCert('c-volgende', fmtDate('f-volgende') || null);
+
+  // Weegwerktuig
+  const fab = fv('f-fabrikaat');
+  const type = fv('f-type');
+  setCert('c-fabrikaat', (fab || type) ? `${fab}${type ? ' / ' + type : ''}` : null);
+  setCert('c-serienr', fv('f-serienr') || null);
+  const bereik = fv('f-bereik');
+  const eInput = fv('f-e');
+  const eDisplay = (eInput && parseFloat(eInput) !== parseFloat(d)) ? ` / e = ${eInput} ${unitM()}` : '';
+  setCert('c-bereik', (bereik || d) ? `${bereik || '?'} ${unitW()} / d = ${d || '?'} ${unitM()}${eDisplay}` : null);
+
+  // Auto-set klasse from OIML calculation
+  if (oiml && oiml.klasse) {
+    const el = document.querySelector(`input[name="klasse"][value="${oiml.klasse}"]`);
+    if (el) el.checked = true;
+  }
+  const klasse = document.querySelector('input[name="klasse"]:checked')?.value || '';
+  const soort = document.querySelector('input[name="soort"]:checked')?.value || '';
+  setCert('c-klasse', (klasse || soort) ? `${klasse} · ${soort}` : null);
+
+  // OIML info panel
+  const infoEl = document.getElementById('oiml-info');
+  const infoBody = document.getElementById('oiml-info-body');
+  if (infoEl && infoBody) {
+    if (oiml) {
+      infoEl.style.display = 'block';
+      const um = oiml.um;
+      const e = oiml.eVal;
+      const nFmt = Math.round(oiml.n).toLocaleString('nl-NL');
+      let h = `<div style="display:flex;gap:14px;align-items:center;margin-bottom:6px;flex-wrap:wrap">`;
+      if (oiml.klasse) {
+        h += `<strong style="color:var(--accent)">Klasse ${oiml.klasse}</strong>`;
+      } else {
+        h += `<strong style="color:var(--danger)">Niet classificeerbaar</strong>`;
+      }
+      h += `<span style="color:var(--muted)">n = Max/e = ${nFmt}</span>`;
+      if (!oiml.ratioOk) h += `<span style="color:var(--danger)">⚠ e/d verhouding ongeldig (toegestaan: 1, 2, 5, 10)</span>`;
+      if (oiml.klasse) {
+        const setName = (oiml.klasse === 'I' || oiml.klasse === 'II') ? 'KERN 323-064 (F1)' : 'KERN 343-074 (M1)';
+        h += `<span style="color:var(--muted)">Gewichtenset: ${setName}</span>`;
+      }
+      h += `</div>`;
+      if (oiml.klasse) {
+        const bnd = { 'I': [50000, 200000], 'II': [500, 2000], 'III': [500, 2000], 'IIII': [50, 200] };
+        const [z1, z2] = bnd[oiml.klasse];
+        const b1 = _numStr(z1 * e), b2 = _numStr(z2 * e);
+        const m05 = _numStr(0.5*e), m10 = _numStr(1.0*e), m15 = _numStr(1.5*e);
+        h += `<table style="width:100%;border-collapse:collapse;font-size:11px">`;
+        h += `<tr style="color:var(--muted)"><th style="text-align:left;padding:1px 6px 3px 0">Zone</th><th style="text-align:right;padding:1px 6px 3px">MTF (1e verif.)</th><th style="text-align:right;padding:1px 0 3px">MTF (gebruik)</th></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">0 – ${b1} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m05} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(e)} ${um}</td></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">${b1} – ${b2} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m10} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(2*e)} ${um}</td></tr>`;
+        h += `<tr><td style="padding:1px 6px 1px 0">&gt; ${b2} ${um}</td><td style="text-align:right;padding:1px 6px 1px">±${m15} ${um}</td><td style="text-align:right;padding:1px 0 1px">±${_numStr(3*e)} ${um}</td></tr>`;
+        if (oiml.minLoad !== null) h += `<tr><td colspan="3" style="padding:4px 0 0;color:var(--muted)">Min. belasting: ${_numStr(oiml.minLoad)} ${um}</td></tr>`;
+        h += `</table>`;
+      }
+      infoBody.innerHTML = h;
+    } else {
+      infoEl.style.display = 'none';
+    }
+  }
+
+  // Methode (now: Omstandigheden — no Pagina's)
+  setCert('c-refstd', fv('f-refstd') || null);
+  const temp = fv('f-temp');
+  setCert('c-temp', temp ? `${temp} °C` : null);
+
+  // Weegproef table
+  const unitTxt = currentUnit();
+  const n = parseInt(document.getElementById('f-rows').value) || 5;
+  let whtml = '';
+  let tol = _numStr(parseFloat(d) * 1.5 || 0.075);
+  for (let i = 1; i <= n; i++) {
+    const nom = parseFloat(g(`wn${i}`)?.value) || 0;
+    const beforeRaw = g(`wb${i}`)?.value;
+    const before = parseFloat(beforeRaw);
+    const read = parseFloat(g(`wr${i}`)?.value) || 0;
+    const dev = read - nom;
+    const absDev = Math.abs(dev);
+    const rowMtf = oiml ? (getOIMLMTF(nom, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
+    tol = _numStr(rowMtf);
+    // also sync the editor MTF cell
+    const tolEl = g(`wt${i}`);
+    if (tolEl) tolEl.textContent = `±${tol}`;
+    const pass = absDev <= rowMtf;
+    const devStr = isNaN(dev) ? '—' : (dev >= 0 ? `+${dev.toFixed(3)}` : dev.toFixed(3));
+    const vStr = isNaN(read) ? '—' : (pass ? '✓' : '✗');
+    const beforeStr = (beforeRaw === '' || isNaN(before)) ? '—' : before.toFixed(3);
+    whtml += `<tr>
+      <td class="center">${i}</td>
+      <td class="center mono">${nom || '—'}</td>
+      <td class="center mono">${beforeStr}</td>
+      <td class="center mono">${read || '—'}</td>
+      <td class="center mono ${absDev > rowMtf && !isNaN(read) ? 'fail' : 'pass'}">${devStr}</td>
+      <td class="center mono">±${tol}</td>
+      <td class="center ${isNaN(read) ? '' : (pass ? 'pass' : 'fail')}" style="font-weight:700">${vStr}</td>
+    </tr>`;
+  }
+  g('c-wbody').innerHTML = whtml;
+
+  // Excentrisch
+  const excT = fv('f-exc-tol') || tol;
+  ['p1','p2','p3','p4','p5'].forEach(p => setCert(`c-exc-${p}`, fv(`f-exc-${p}`) || null));
+  setCert('c-exc-tol', `±${excT}`);
+
+  // Herhaalbaarheid
+  const bel = fv('f-herh-bel');
+  setCert('c-herh-bel', bel || '—');
+  const formBelEl = g('form-herh-bel');
+  if (formBelEl) formBelEl.textContent = bel || '—';
+  const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
+  let rhtml = '<tr><td class="center">Nr</td>';
+  for (let i = 1; i <= rn; i++) rhtml += `<td class="center">${i}</td>`;
+  rhtml += '<td class="center">R</td></tr><tr><td class="center">Waarde</td>';
+  const vals = [];
+  for (let i = 1; i <= rn; i++) {
+    const v = parseFloat(g(`rr${i}`)?.value);
+    rhtml += `<td class="center mono">${v || '—'}</td>`;
+    if (!isNaN(v)) vals.push(v);
+  }
+  let maxDiff = 0;
+  if (vals.length >= 2) maxDiff = Math.max(...vals) - Math.min(...vals);
+  const rPass = maxDiff <= (parseFloat(d) || 0.05);
+  rhtml += `<td class="center mono ${vals.length >= 2 ? (rPass ? 'pass' : 'fail') : ''}">${vals.length >= 2 ? maxDiff.toFixed(3) : '—'}</td></tr>`;
+  g('c-rbody').innerHTML = rhtml;
+
+  // Plaats kalibratie (used in sig area)
+  setCert('c-plaats', fv('f-plaats') || null);
+
+  // Conclusie
+  const oordeel = document.querySelector('input[name="eindoordeel"]:checked')?.value || 'Goedgekeurd';
+  const oel = g('c-eindoordeel');
+  oel.textContent = oordeel;
+  const oordeelClass = oordeel === 'Goedgekeurd' ? 'pass'
+    : oordeel === 'Afgekeurd' ? 'fail'
+    : 'info';
+  oel.className = 'cert-conclusion-value ' + oordeelClass;
+  setCert('c-kalibrateur', fv('f-kalibrateur') || null);
+  setCert('c-sig-name', fv('f-sig-name') || null);
+  setCert('c-sig-date', fmtDate('f-sig-date') || null);
+  const userConc = (g('f-conclusie-tekst')?.value || '').trim();
+  const defaultConc = 'Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.';
+  g('c-conclusie-tekst').textContent = userConc || defaultConc;
+
+  // Signature image toggle
+  const sigImg = g('c-sig-img');
+  if (sigImg) {
+    const showSig = g('f-sig-show')?.checked ?? true;
+    sigImg.classList.toggle('hidden', !showSig);
+  }
+
+  // Overall result
+  const overallEl = document.getElementById('overall-result');
+  const ordCls = oordeel === 'Goedgekeurd' ? 'pass' : oordeel === 'Afgekeurd' ? 'fail' : 'info';
+  overallEl.innerHTML = `<div class="result-badge ${ordCls}">
+    <span class="dot"></span>${oordeel}
+  </div>`;
+}
+
+function setCert(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (val === null || val === '') {
+    el.innerHTML = '<span class="cert-empty">—</span>';
+  } else {
+    el.textContent = val;
+  }
+}
+function setCertHtml(id, html) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (html === null || html === '') {
+    el.innerHTML = '<span class="cert-empty">—</span>';
+  } else {
+    el.innerHTML = html;
+  }
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ── UNIT (kg / g) HANDLING ─ separate for weight (w) and MTF (m) ──
+function unitW() {
+  return document.querySelector('input[name="eenheid_w"]:checked')?.value || 'kg';
+}
+function unitM() {
+  return document.querySelector('input[name="eenheid_m"]:checked')?.value || 'kg';
+}
+// legacy alias still used in a few places (= weight unit)
+function currentUnit() { return unitW(); }
+function onUnitChange() {
+  const w = unitW(), m = unitM();
+  document.querySelectorAll('[data-unit="w"]').forEach(el => { el.textContent = w; });
+  document.querySelectorAll('[data-unit="m"]').forEach(el => { el.textContent = m; });
+  syncToCert();
+}
+
+// ── SAVE / LOAD ──
+function getFormData() {
+  const data = {};
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.id && el.id.startsWith('f-')) data[el.id] = el.value;
+  });
+  data['_rows'] = document.getElementById('f-rows')?.value;
+  data['_herh-n'] = document.getElementById('f-herh-n')?.value;
+  ['klasse', 'soort', 'eindoordeel', 'excshape', 'eenheid_w', 'eenheid_m'].forEach(name => {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (checked) data[`_${name}`] = checked.value;
+  });
+  const wdata = {};
+  const n = parseInt(document.getElementById('f-rows')?.value) || 5;
+  for (let i = 1; i <= n; i++) {
+    wdata[`wb${i}`] = g(`wb${i}`)?.value || '';
+    wdata[`wr${i}`] = g(`wr${i}`)?.value || '';
+  }
+  data._weighings = wdata;
+  const rdata = {};
+  const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
+  for (let i = 1; i <= rn; i++) rdata[`rr${i}`] = g(`rr${i}`)?.value || '';
+  data._repeat = rdata;
+  return data;
+}
+
+function loadFormData(data) {
+  Object.keys(data).forEach(key => {
+    if (key.startsWith('_')) return;
+    const el = document.getElementById(key);
+    if (el) el.value = data[key];
+  });
+  onCapacityChange();
+  if (data._weighings) {
+    Object.keys(data._weighings).forEach(k => {
+      if (k.startsWith('wn')) return;
+      const el = document.getElementById(k);
+      if (el) el.value = data._weighings[k];
+    });
+  }
+  if (data['_herh-n']) { document.getElementById('f-herh-n').value = data['_herh-n']; buildRepeatTable(); }
+  if (data._repeat) {
+    Object.keys(data._repeat).forEach(k => {
+      const el = document.getElementById(k);
+      if (el) el.value = data._repeat[k];
+    });
+  }
+  ['klasse', 'soort', 'eindoordeel', 'eenheid_w', 'eenheid_m'].forEach(name => {
+    if (data[`_${name}`]) {
+      const el = document.querySelector(`input[name="${name}"][value="${data[`_${name}`]}"]`);
+      if (el) el.checked = true;
+    }
+  });
+  if (data._excshape) {
+    const el = document.querySelector(`input[name="excshape"][value="${data._excshape}"]`);
+    if (el) el.checked = true;
+  }
+  renderDiagrams();
+  onUnitChange();
+  syncToCert();
+}
+
+// ── FILE-BASED SAVE / LOAD / NEW ──
+const SESSION_KEY = 'djw_session_v2';
+
+function saveToFile() {
+  const data = getFormData();
+  const certnr = (fv('f-certnr') || 'Kalibratiecertificaat').trim();
+  const client = (fv('f-bedrijf') || '').trim();
+  const namePart = client ? `${client} - ${certnr}` : certnr;
+  const safe = namePart.replace(/[\\/?%*:|"<>]/g, '-').trim();
+  const fname = `${safe}.json`;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fname;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 500);
+  flashButton(event?.target?.closest('.btn'), 'Opgeslagen!');
+}
+
+function loadFromFile() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.style.display = 'none';
+  document.body.appendChild(input);
+  input.onchange = (e) => {
+    const file = e.target.files?.[0];
+    document.body.removeChild(input);
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        loadFormData(data);
+      } catch (err) {
+        alert('Fout bij het laden van het bestand.\nZorg dat het een geldig JSON-certificaatbestand is.');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function newCert() {
+  if (!confirm('Wilt u een nieuw, leeg certificaat starten?\nAlle niet-opgeslagen wijzigingen gaan verloren.')) return;
+  // Clear text/number/date/email fields
+  document.querySelectorAll('.form-scroll input, .form-scroll select, .form-scroll textarea').forEach(el => {
+    if (el.type === 'radio' || el.type === 'checkbox') return;
+    el.value = '';
+  });
+  // Restore radio defaults
+  document.querySelectorAll('input[type="radio"]').forEach(r => { r.checked = false; });
+  document.getElementById('klasseIII').checked = true;
+  document.getElementById('soortElek').checked = true;
+  document.getElementById('ordGoed').checked = true;
+  document.getElementById('excSquare').checked = true;
+  // Restore checkbox defaults
+  const sigShow = document.getElementById('f-sig-show'); if (sigShow) sigShow.checked = true;
+  // Restore counters
+  const rows = document.getElementById('f-rows'); if (rows) rows.value = 5;
+  const hn = document.getElementById('f-herh-n'); if (hn) hn.value = 3;
+  const pag = document.getElementById('f-paginas'); if (pag) pag.value = 1;
+  // Re-init dates + cert number
+  initDefaults();
+  buildTable();
+  buildRepeatTable();
+  renderDiagrams();
+  syncToCert();
+  // Clear session so reload doesn't restore old data
+  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  flashButton(event?.target?.closest('.btn'), 'Nieuw');
+}
+
+function initDefaults() {
+  const today = new Date().toISOString().split('T')[0];
+  const nextYear = new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0];
+  const k = document.getElementById('f-kaldate'); if (k && !k.value) k.value = today;
+  const v = document.getElementById('f-volgende'); if (v && !v.value) v.value = nextYear;
+  const s = document.getElementById('f-sig-date'); if (s && !s.value) s.value = today;
+  const c = document.getElementById('f-certnr');
+  if (c && !c.value) {
+    const yy = new Date().getFullYear();
+    const seq = String(Math.floor(Math.random() * 900) + 100);
+    c.value = `${yy}-K-${seq}`;
+  }
+}
+
+function flashButton(btn, label) {
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.innerHTML = `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l4 4 6-8"/></svg> ${label}`;
+  const origBg = btn.style.background, origBorder = btn.style.borderColor, origColor = btn.style.color;
+  btn.style.background = 'var(--success)';
+  btn.style.borderColor = 'var(--success)';
+  btn.style.color = '#fff';
+  setTimeout(() => {
+    btn.innerHTML = orig;
+    btn.style.background = origBg;
+    btn.style.borderColor = origBorder;
+    btn.style.color = origColor;
+  }, 1400);
+}
+
+// ── SESSION AUTO-SAVE (so a reload doesn't lose work) ──
+function saveSession() {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(getFormData())); } catch (e) {}
+}
+function restoreSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    loadFormData(data);
+    return true;
+  } catch (e) { return false; }
+}
+document.addEventListener('input', () => { clearTimeout(window._sessionTimer); window._sessionTimer = setTimeout(saveSession, 400); });
+document.addEventListener('change', () => { clearTimeout(window._sessionTimer); window._sessionTimer = setTimeout(saveSession, 200); });
+
+// ── EXCENTRIC POSITION DIAGRAM ──
+function diagramSVG(shape) {
+  // 5 positions: 1 center, 2 bottom-left, 3 top-left, 4 top-right, 5 bottom-right
+  // Label offsets differ for round (inside circle) vs square (outside dots)
+  const positions = shape === 'round' ? [
+    { n: '1', x: 60, y: 60, lx: 70, ly: 67 },
+    { n: '2', x: 38, y: 82, lx: 47, ly: 86 },
+    { n: '3', x: 38, y: 38, lx: 47, ly: 42 },
+    { n: '4', x: 82, y: 38, lx: 65, ly: 42 },
+    { n: '5', x: 82, y: 82, lx: 65, ly: 86 },
+  ] : [
+    { n: '1', x: 60, y: 60, lx: 70, ly: 67 },
+    { n: '2', x: 32, y: 88, lx: 22, ly: 102 },
+    { n: '3', x: 32, y: 32, lx: 22, ly: 24 },
+    { n: '4', x: 88, y: 32, lx: 96, ly: 24 },
+    { n: '5', x: 88, y: 88, lx: 96, ly: 102 },
+  ];
+  const outline = shape === 'round'
+    ? '<circle cx="60" cy="60" r="50" fill="none" stroke="#111" stroke-width="2"/>'
+    : '<rect x="10" y="10" width="100" height="100" fill="none" stroke="#111" stroke-width="2" rx="1"/>';
+  const dashLen = shape === 'round' ? 44 : 50;
+  const dots = positions.map(p => `
+    <circle cx="${p.x}" cy="${p.y}" r="5" fill="#111"/>
+    <text x="${p.lx}" y="${p.ly}" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#111">${p.n}</text>
+  `).join('');
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; aspect-ratio:1; display:block">
+    ${outline}
+    <line x1="60" y1="${60-dashLen}" x2="60" y2="${60+dashLen}" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="3 3"/>
+    <line x1="${60-dashLen}" y1="60" x2="${60+dashLen}" y2="60" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="3 3"/>
+    ${dots}
+  </svg>`;
+}
+function renderDiagrams() {
+  const shape = document.querySelector('input[name="excshape"]:checked')?.value || 'square';
+  const svg = diagramSVG(shape);
+  const a = document.getElementById('excDiagramForm');
+  const b = document.getElementById('excDiagramCert');
+  if (a) a.innerHTML = svg;
+  if (b) b.innerHTML = svg;
+}
+renderDiagrams();
+
+// ── PRINT FLOW: native browser print (matches reference app behavior) ──
+function openPrint() {
+  window.print();
+}
+
+// ── PRINT: suppress browser header/footer and estimate page count ──
+(function() {
+  let _origTitle = null;
+
+  function estimatePageCount() {
+    const certWrap = document.querySelector('.cert-wrap');
+    if (!certWrap) return 1;
+    const a4H = certWrap.clientWidth * 297 / 210;
+    return Math.max(1, Math.ceil((certWrap.scrollHeight * 1.15) / a4H));
+  }
+
+  function updatePageTotal() {
+    const pages = estimatePageCount();
+    document.querySelectorAll('.page-total').forEach(el => el.textContent = pages);
+  }
+
+  window.addEventListener('beforeprint', () => {
+    _origTitle = document.title;
+    document.title = '';
+    const pages = estimatePageCount();
+    // Inject @page margin-box rule — counter(page) works in @page context in Chrome
+    const style = document.createElement('style');
+    style.id = 'djw-pagnr';
+    style.textContent = `@page { @bottom-right {
+      content: "Pagina " counter(page) " van ${pages}";
+      font-size: 7pt; color: #9ca3af;
+      font-family: 'Inter', system-ui, sans-serif;
+      padding-right: 14mm;
+    }}`;
+    document.head.appendChild(style);
+    document.querySelectorAll('.page-total').forEach(el => el.textContent = pages);
+  });
+
+  window.addEventListener('afterprint', () => {
+    if (_origTitle !== null) document.title = _origTitle;
+    const s = document.getElementById('djw-pagnr');
+    if (s) s.remove();
+  });
+
+  // Keep screen preview count in sync after every render
+  document.addEventListener('input', () => setTimeout(updatePageTotal, 100));
+  document.addEventListener('change', () => setTimeout(updatePageTotal, 100));
+  setTimeout(updatePageTotal, 300);
+})();
+
+// ── INIT ──
+try {
+  initDefaults();
+  // Restore session if available
+  const restored = restoreSession();
+  if (!restored) syncToCert();
+} catch(e) {
+  console.error('Init error:', e);
+}
+</script>
+</body>
+</html>
