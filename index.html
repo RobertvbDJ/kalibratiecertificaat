@@ -342,7 +342,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 8pt; line-height: 1.45; color: #111;
+  font-size: 9.5px; line-height: 1.5; color: #111;
   font-family: var(--font);
   background: #fff;
 }
@@ -356,42 +356,40 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
 /* Cert header */
 .cert-header {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: flex-start; justify-content: space-between;
   gap: 16px;
   margin-bottom: 14px; padding-bottom: 14px;
   border-bottom: 2.5px solid var(--accent);
 }
 .cert-logo { display: flex; flex-direction: row; align-items: center; gap: 14px; flex-shrink: 0; }
-.cert-logo-img { height: 48pt; width: auto; max-width: none; display: block; object-fit: contain; flex-shrink: 0; }
+.cert-logo-img { height: 64px; width: auto; max-width: none; display: block; object-fit: contain; flex-shrink: 0; }
 .cert-logo-sub {
-  font-size: 8.5pt; color: var(--muted); font-weight: 400; letter-spacing: 0.02em;
+  font-size: 8.5px; color: var(--muted); font-weight: 400; letter-spacing: 0.02em;
   line-height: 1.5; display: flex; flex-direction: column;
 }
 .cert-logo-sub span { display: block; }
 .cert-title-block { text-align: right; padding-top: 4px; }
 .cert-title {
-  font-size: 16pt; font-weight: 700; color: var(--accent);
+  font-size: 22px; font-weight: 700; color: var(--accent);
   letter-spacing: -0.025em; line-height: 1.05;
 }
-.cert-cert-num { font-size: 9.5pt; color: var(--muted); margin-top: 4px; font-family: var(--mono); letter-spacing: 0.02em; }
-.cert-conform { font-size: 8pt; }
-.cert-cert-num:not(.cert-conform)::before { content: "Certificaatnummer "; font-family: var(--font); font-weight: 500; letter-spacing: 0; }
+.cert-cert-num { font-size: 8.5px; color: var(--muted); margin-top: 4px; font-family: var(--mono); letter-spacing: 0.02em; }
 
 /* Cert meta grid */
 .cert-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin-bottom: 14px; }
 .cert-meta-item { display: flex; flex-direction: column; gap: 1px; }
 .cert-meta-label {
-  font-size: 8pt; font-weight: 600; color: #9ca3af; letter-spacing: 0.02em;
+  font-size: 8px; font-weight: 600; color: #9ca3af; letter-spacing: 0.02em;
 }
-.cert-meta-value { font-size: 8pt; font-weight: 500; color: var(--fg); }
-.cert-meta-value.mono { font-family: var(--mono); font-size: 9.5pt; }
+.cert-meta-value { font-size: 10px; font-weight: 500; color: var(--fg); }
+.cert-meta-value.mono { font-family: var(--mono); font-size: 9px; }
 .cert-empty { color: #d1d1d6; font-style: italic; }
 
 /* Cert sections */
 .cert-section { margin-bottom: 12px; }
 .cert-section-header {
   display: flex; align-items: center; gap: 6px;
-  font-size: 10pt; font-weight: 700; color: var(--fg);
+  font-size: 10px; font-weight: 700; color: var(--fg);
   margin-bottom: 6px; padding-bottom: 4px;
   border-bottom: 1.5px solid var(--accent);
 }
@@ -408,18 +406,18 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-exc-diagram { width: 90px; height: 90px; flex-shrink: 0; }
 
 /* Cert tables */
-.cert-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.cert-table { width: 100%; border-collapse: collapse; font-size: 8.5px; }
 .cert-table th {
-  padding: 4px 6px; background: #f8f8fa; font-weight: 600; font-size: 8.5pt;
+  padding: 4px 6px; background: #f8f8fa; font-weight: 600; font-size: 8px;
   color: #6b7280; letter-spacing: 0.01em;
   border: 0.5px solid #e5e5e8; text-align: left;
 }
 .cert-table td {
-  padding: 3px 6px; border: 0.5px solid #e5e5e8; font-size: 9pt;
+  padding: 3px 6px; border: 0.5px solid #e5e5e8; font-size: 8.5px;
 }
 .cert-table th.center { text-align: center; }
 .cert-table td.center { text-align: center; }
-.cert-table td.mono { font-family: var(--mono); font-size: 8.5pt; }
+.cert-table td.mono { font-family: var(--mono); font-size: 8px; }
 .cert-table tr:nth-child(even) td { background: #fafafa; }
 .cert-table .pass { color: var(--success); font-weight: 600; }
 .cert-table .fail { color: var(--danger); font-weight: 600; }
@@ -435,15 +433,14 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 }
 .cert-conclusion-row:last-child { margin-bottom: 0; }
 .cert-conclusion-label {
-  font-size: 9.5pt; font-weight: 600; color: #6b7280; letter-spacing: 0.01em;
+  font-size: 9px; font-weight: 600; color: #6b7280; letter-spacing: 0.01em;
   flex-shrink: 0;
 }
-.cert-conclusion-value { font-size: 11pt; font-weight: 700; }
-.cert-conclusion-value.normal { font-weight: 400; }
+.cert-conclusion-value { font-size: 10px; font-weight: 700; }
 .cert-conclusion-value.pass { color: var(--success); }
 .cert-conclusion-value.fail { color: var(--danger); }
 .cert-conclusion-value.info { color: var(--muted); }
-.cert-remark { font-size: 9.5pt; color: #6b7280; margin-top: 6px; font-style: italic; line-height: 1.5; }
+.cert-remark { font-size: 8.5px; color: #6b7280; margin-top: 6px; font-style: italic; line-height: 1.5; }
 
 /* Signatures */
 .cert-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; padding-top: 8px; }
@@ -459,10 +456,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-sig-line { display: none; }
 .cert-sig-info {
   display: flex; gap: 8px; align-items: baseline;
-  font-size: 9pt; padding-top: 5px;
+  font-size: 9px; padding-top: 5px;
 }
-.cert-sig-label { font-size: 8.5pt; color: #6b7280; font-weight: 500; }
-.cert-sig-name { font-size: 10pt; font-weight: 600; color: var(--fg); }
+.cert-sig-label { font-size: 9px; color: #6b7280; font-weight: 500; }
+.cert-sig-name { font-size: 9.5px; font-weight: 600; color: var(--fg); }
 
 /* Print tip dialog */
 @keyframes spin { to { transform: rotate(360deg) } }
@@ -500,7 +497,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   margin-top: 12px; padding-top: 8px;
   border-top: 0.5px solid #e5e5e8;
   display: flex; justify-content: space-between; align-items: center;
-  font-size: 8pt; color: #9ca3af;
+  font-size: 7px; color: #9ca3af;
 }
 
 /* ═══════════════════════════════════════════
@@ -542,6 +539,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert {
     padding: 0 !important; margin: 0 !important;
     height: auto !important; min-height: 0 !important;
+    font-size: 10pt; line-height: 1.45;
   }
   .cert > thead > tr > td { padding: 14mm 14mm 6pt 14mm !important; }
   .cert > tbody > tr > td { padding: 6pt 14mm 4mm 14mm !important; }
@@ -551,14 +549,30 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-wrap::before { display: none !important; }
   .cert-page-nr { display: none !important; }
   .cert-header { margin-bottom: 10pt; padding-bottom: 10pt; }
-  .cert-logo-img { height: 48pt !important; }
+  .cert-logo-img { height: 72pt !important; }
+  .cert-title { font-size: 24pt !important; }
+  .cert-cert-num { font-size: 9.5pt !important; }
+  .cert-logo-sub { font-size: 8.5pt !important; }
+  .cert-meta-label { font-size: 8pt !important; }
+  .cert-meta-value { font-size: 10pt !important; }
+  .cert-meta-value.mono { font-size: 9.5pt !important; }
+  .cert-section-header { font-size: 11pt !important; }
+  .cert-table { font-size: 9pt !important; }
+  .cert-table th { font-size: 8.5pt !important; }
+  .cert-table td { font-size: 9pt !important; padding: 4pt 6pt !important; }
+  .cert-conclusion-label { font-size: 9.5pt !important; }
+  .cert-conclusion-value { font-size: 11pt !important; }
+  .cert-remark { font-size: 9.5pt !important; }
+  .cert-sig-label { font-size: 8.5pt !important; }
+  .cert-sig-name { font-size: 10pt !important; }
   .cert-sig-img { height: 72pt !important; }
-  .cert-table td { padding: 4pt 6pt !important; }
   .cert-footer {
     display: flex !important;
+    font-size: 8pt !important;
     border-top: 0.5pt solid #e5e5e8;
     padding-top: 6pt;
   }
+  .cert-page-nr { font-size: 8pt !important; }
   /* keep sections together where possible */
   .cert-section { page-break-inside: avoid; break-inside: avoid; }
   .cert-signatures { page-break-inside: avoid; break-inside: avoid; }
@@ -797,27 +811,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <input type="date" id="f-volgende" oninput="syncToCert()">
               </div>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Temperatuur van</label>
-                <div class="input-group">
-                  <input type="number" id="f-temp-van" placeholder="22.8" step="0.1" oninput="syncToCert()">
-                  <span class="unit-tag">°C</span>
-                </div>
-              </div>
-              <div class="field">
-                <label>Temperatuur tot</label>
-                <div class="input-group">
-                  <input type="number" id="f-temp-tot" placeholder="23.0" step="0.1" oninput="syncToCert()">
-                  <span class="unit-tag">°C</span>
-                </div>
-              </div>
-              <div class="field">
-                <label>Onzekerheid</label>
-                <div class="input-group">
-                  <input type="number" id="f-temp-unc" placeholder="0.1" step="0.1" oninput="syncToCert()">
-                  <span class="unit-tag">°C</span>
-                </div>
+            <div class="field">
+              <label>Omstandigheden — Temperatuur</label>
+              <div class="input-group">
+                <input type="number" id="f-temp" placeholder="20" oninput="syncToCert()">
+                <span class="unit-tag">°C</span>
               </div>
             </div>
             <div class="field">
@@ -855,11 +853,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <thead>
                   <tr>
                     <th>Nr</th>
-                    <th>Richting</th>
                     <th>Nominaal (<span data-unit="w">kg</span>)</th>
-                    <th>MTF (<span data-unit="m">kg</span>)</th>
                     <th>Voor just. (<span data-unit="m">kg</span>)</th>
                     <th>Na just. (<span data-unit="m">kg</span>)</th>
+                    <th>MTF (<span data-unit="m">kg</span>)</th>
                     <th>✓</th>
                   </tr>
                 </thead>
@@ -960,17 +957,17 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           <div class="section-body">
             <div class="field-row">
               <div class="field">
-                <label>Belasting 1 (~50% van Max)</label>
+                <label>Testbelasting</label>
                 <div class="input-group">
-                  <input type="number" id="f-herh-bel1" placeholder="50" oninput="syncToCert()">
+                  <input type="number" id="f-herh-bel" placeholder="100" oninput="syncToCert()">
                   <span class="unit-tag" data-unit="w">kg</span>
                 </div>
               </div>
               <div class="field">
-                <label>Belasting 2 (~80% van Max)</label>
+                <label>Aantal metingen</label>
                 <div class="input-group">
-                  <input type="number" id="f-herh-bel2" placeholder="80" oninput="syncToCert()">
-                  <span class="unit-tag" data-unit="w">kg</span>
+                  <input type="number" id="f-herh-n" value="3" min="3" max="10" oninput="syncToCert(); buildRepeatTable()">
+                  <span class="unit-tag">×</span>
                 </div>
               </div>
             </div>
@@ -978,13 +975,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <table class="weighing-table" id="repeatTable">
                 <thead>
                   <tr>
-                    <th>Belasting</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
+                    <th>Nr</th>
+                    <th>Afgelezen bij <span id="form-herh-bel">—</span> <span data-unit="w">kg</span></th>
                   </tr>
                 </thead>
                 <tbody id="rbody"></tbody>
@@ -1075,7 +1067,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="cert-title-block">
               <div class="cert-title">Kalibratiecertificaat</div>
               <div class="cert-cert-num" id="c-certnr">— / —</div>
-              <div class="cert-cert-num cert-conform" style="margin-top:2px; font-family: var(--font); letter-spacing: 0;">Conform OIML R76-1:2006 · NEN-EN 45501:2015 · ISO/IEC 17025</div>
+              <div class="cert-cert-num" style="margin-top:2px; font-family: var(--font); letter-spacing: 0;">Conform OIML R76-1:2006 · NEN-EN 45501:2015 · ISO/IEC 17025</div>
             </div>
           </div>
 
@@ -1148,7 +1140,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
           <!-- Weegproef -->
           <div class="cert-section">
-            <div class="cert-section-header">Meetresultaten — Weegproef <span style="font-weight: 400; font-size: 8pt;">(EN 45501, A4.4)</span></div>
+            <div class="cert-section-header">Meetresultaten — Weegproef</div>
             <table class="cert-table" id="c-wtable">
               <thead>
                 <tr>
@@ -1166,8 +1158,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
           <!-- Excentrisch -->
           <div class="cert-section">
-            <div class="cert-section-header">Excentrische belasting <span style="font-weight: 400; font-size: 8pt;">(EN 45501, A4.7)</span></div>
-            <div style="font-size: 8pt; margin-bottom: 4px;">Belasting: <strong id="c-exc-bel">—</strong> <span data-unit="w">kg</span></div>
+            <div class="cert-section-header">Excentrische belasting</div>
             <div class="cert-exc-row">
               <div class="cert-exc-diagram" id="excDiagramCert"></div>
               <table class="cert-table">
@@ -1199,9 +1190,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
           <!-- Herhaalbaarheid -->
           <div class="cert-section">
-            <div class="cert-section-header">Herhaalbaarheid <span style="font-weight: 400; font-size: 8pt;">(EN 45501, A4.10)</span></div>
+            <div class="cert-section-header">Herhaalbaarheid</div>
             <table class="cert-table" id="c-rtable">
-              <thead id="c-rhead"></thead>
+              <thead id="c-rhead">
+                <!-- Header wordt dynamisch gevuld in syncToCert -->
+              </thead>
               <tbody id="c-rbody"></tbody>
             </table>
           </div>
@@ -1215,8 +1208,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <div class="cert-conclusion-value pass" id="c-eindoordeel">Goedgekeurd</div>
               </div>
               <div class="cert-conclusion-row">
-                <div class="cert-conclusion-label">Technicus</div>
-                <div class="cert-conclusion-value normal" id="c-kalibrateur"><span class="cert-empty">—</span></div>
+                <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">—</span></div>
               </div>
               <div class="cert-remark">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
               <div class="cert-remark" id="c-conclusie-tekst" style="margin-top:8px; font-style:normal; color:var(--fg)"></div>
@@ -1477,48 +1469,40 @@ function calcRow(i) {
 
 // ── REPEAT TABLE BUILD ──
 function buildRepeatTable() {
+  const n = parseInt(document.getElementById('f-herh-n').value) || 3;
   let html = '';
-  for (let t = 1; t <= 2; t++) {
-    const bel = fv(`f-herh-bel${t}`);
-    html += `<tr><td>${bel || '—'} ${unitW()}</td>`;
-    for (let i = 1; i <= 6; i++) {
-      html += `<td><input type="number" id="rr${t}${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRepeat()"></td>`;
-    }
-    html += `<td class="mono" id="r-diff${t}">—</td></tr>`;
+  for (let i = 1; i <= n; i++) {
+    html += `<tr><td>${i}</td><td><input type="number" id="rr${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRepeat()"></td></tr>`;
   }
+  html += `<tr style="font-weight:600"><td>Max. verschil</td><td class="mono" id="r-diff">—</td></tr>`;
   document.getElementById('rbody').innerHTML = html;
   syncToCert();
 }
 buildRepeatTable();
 
 function calcRepeat() {
+  const n = parseInt(document.getElementById('f-herh-n').value) || 3;
   const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const bel = parseFloat(document.getElementById('f-herh-bel').value) || 0;
   const oiml = computeOIML();
-  let anyPass = null;
-
-  for (let t = 1; t <= 2; t++) {
-    const bel = parseFloat(document.getElementById(`f-herh-bel${t}`).value) || 0;
-    const mtf = oiml ? (getOIMLMTF(bel, oiml) ?? d * 1.5) : d * 1.5;
-    const vals = [];
-    for (let i = 1; i <= 6; i++) {
-      const v = parseFloat(document.getElementById(`rr${t}${i}`).value);
-      if (!isNaN(v)) vals.push(v);
-    }
-    let diff = 0;
-    if (vals.length >= 2) diff = Math.max(...vals) - Math.min(...vals);
-    const pass = diff <= mtf;
-    const el = document.getElementById(`r-diff${t}`);
-    el.textContent = diff > 0 ? diff.toFixed(3) : '—';
-    el.className = diff > 0 && !pass ? 'mono fail' : 'mono pass';
-    if (vals.length >= 2) {
-      if (anyPass === null) anyPass = pass;
-      else anyPass = anyPass && pass;
-    }
+  // Gebruik MTF op testbelasting, of fallback naar 1.5*d als OIML niet beschikbaar
+  const mtf = oiml ? (getOIMLMTF(bel, oiml) ?? d * 1.5) : d * 1.5;
+  const vals = [];
+  for (let i = 1; i <= n; i++) {
+    const v = parseFloat(document.getElementById(`rr${i}`).value);
+    if (!isNaN(v)) vals.push(v);
   }
+  let diff = 0;
+  if (vals.length >= 2) diff = Math.max(...vals) - Math.min(...vals);
+  // Herhaalbaarheid: max verschil moet <= MTF zijn (niet <= d)
+  const pass = diff <= mtf;
+  const el = document.getElementById('r-diff');
+  el.textContent = diff > 0 ? diff.toFixed(3) : '—';
+  el.className = diff > 0 && !pass ? 'mono fail' : 'mono pass';
   const resultEl = document.getElementById('herh-result');
-  if (anyPass !== null) {
-    resultEl.className = anyPass ? 'result-badge pass' : 'result-badge fail';
-    resultEl.innerHTML = `<span class="dot"></span>${anyPass ? 'Voldoet' : 'Overschreden'}`;
+  if (vals.length >= 2) {
+    resultEl.className = pass ? 'result-badge pass' : 'result-badge fail';
+    resultEl.innerHTML = `<span class="dot"></span>${pass ? 'Voldoet' : 'Overschreden'}`;
   }
 }
 
@@ -1539,7 +1523,7 @@ function syncToCert() {
   // Section badges
   const sections = [
     ['f-bedrijf', 'sn1'], ['f-fabrikaat', 'sn2'], ['f-certnr', 'sn3'],
-    ['wn1', 'sn4'], ['f-exc-p1', 'sn5'], ['rr11', 'sn6'], ['f-eindoordeel', 'sn7'],
+    ['wn1', 'sn4'], ['f-exc-p1', 'sn5'], ['rr1', 'sn6'], ['f-eindoordeel', 'sn7'],
   ];
   sections.forEach(([fid, numId]) => {
     const el = document.getElementById(fid);
@@ -1635,19 +1619,8 @@ function syncToCert() {
 
   // Methode (now: Omstandigheden — no Pagina's)
   setCert('c-refstd', fv('f-refstd') || null);
-  const tempVan = fv('f-temp-van');
-  const tempTot = fv('f-temp-tot');
-  const tempUnc = fv('f-temp-unc');
-  let tempStr = '';
-  if (tempVan || tempTot) {
-    if (tempVan && tempTot && tempVan !== tempTot) {
-      tempStr = `${tempVan} – ${tempTot} °C`;
-    } else {
-      tempStr = `${tempVan || tempTot} °C`;
-    }
-    if (tempUnc) tempStr += ` ± ${tempUnc} °C`;
-  }
-  setCert('c-temp', tempStr || null);
+  const temp = fv('f-temp');
+  setCert('c-temp', temp ? `${temp} °C` : null);
 
   // Weegproef table
   const unitTxt = currentUnit();
@@ -1695,36 +1668,40 @@ function syncToCert() {
   g('c-wbody').innerHTML = whtml;
 
   // Excentrisch
-  const excBel = fv('f-exc-bel');
-  setCert('c-exc-bel', excBel || '—');
   const excT = fv('f-exc-tol') || tol;
   ['p1','p2','p3','p4','p5'].forEach(p => setCert(`c-exc-${p}`, fv(`f-exc-${p}`) || null));
   setCert('c-exc-tol', `±${excT}`);
 
-  // Herhaalbaarheid — 1 tabel, 2 rijen (50% en 80%)
-  let rheadHtml = '<tr><th>Belasting</th><th class="center">1</th><th class="center">2</th><th class="center">3</th><th class="center">4</th><th class="center">5</th><th class="center">6</th><th>Max. verschil</th></tr>';
+  // Herhaalbaarheid
+  const bel = fv('f-herh-bel');
+  setCert('c-herh-bel', bel || '—');
+  const formBelEl = g('form-herh-bel');
+  if (formBelEl) formBelEl.textContent = bel || '—';
+  const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
+  // Bereken MTF voor herhaalbaarheid beoordeling
+  const belNum = parseFloat(bel) || 0;
+  const herhMtf = oiml ? (getOIMLMTF(belNum, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
+  
+  // Bouw thead dynamisch zodat kolommen matchen met tbody
+  let rheadHtml = '<tr>';
+  rheadHtml += '<th>Nr</th>';
+  for (let i = 1; i <= rn; i++) rheadHtml += `<th class="center">${i}</th>`;
+  rheadHtml += '<th>Max. verschil</th>';
+  rheadHtml += '</tr>';
+  rheadHtml += `<tr><th colspan="${rn + 2}" style="text-align:center;font-weight:normal;color:var(--muted)">Metingen bij testbelasting ${bel || '—'} ${unitW()}</th></tr>`;
   g('c-rhead').innerHTML = rheadHtml;
-
-  let rhtml = '';
-  for (let t = 1; t <= 2; t++) {
-    const bel = fv(`f-herh-bel${t}`);
-    const belNum = parseFloat(bel) || 0;
-    const herhMtf = oiml ? (getOIMLMTF(belNum, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
-
-    rhtml += '<tr>';
-    rhtml += `<td>${bel || '—'} ${unitW()}</td>`;
-    const vals = [];
-    for (let i = 1; i <= 6; i++) {
-      const v = parseFloat(g(`rr${t}${i}`)?.value);
-      rhtml += `<td class="center mono">${v || '—'}</td>`;
-      if (!isNaN(v)) vals.push(v);
-    }
-    let maxDiff = 0;
-    if (vals.length >= 2) maxDiff = Math.max(...vals) - Math.min(...vals);
-    const rPass = maxDiff <= herhMtf;
-    rhtml += `<td class="center mono ${vals.length >= 2 ? (rPass ? 'pass' : 'fail') : ''}">${vals.length >= 2 ? maxDiff.toFixed(3) : '—'}</td>`;
-    rhtml += '</tr>';
+  
+  let rhtml = '<tr><td class="center">Waarde</td>';
+  const vals = [];
+  for (let i = 1; i <= rn; i++) {
+    const v = parseFloat(g(`rr${i}`)?.value);
+    rhtml += `<td class="center mono">${v || '—'}</td>`;
+    if (!isNaN(v)) vals.push(v);
   }
+  let maxDiff = 0;
+  if (vals.length >= 2) maxDiff = Math.max(...vals) - Math.min(...vals);
+  const rPass = maxDiff <= herhMtf;
+  rhtml += `<td class="center mono ${vals.length >= 2 ? (rPass ? 'pass' : 'fail') : ''}">${vals.length >= 2 ? maxDiff.toFixed(3) : '—'}</td></tr>`;
   g('c-rbody').innerHTML = rhtml;
 
   // Plaats kalibratie (used in sig area)
@@ -1808,6 +1785,7 @@ function getFormData() {
     if (el.id && el.id.startsWith('f-')) data[el.id] = el.value;
   });
   data['_rows'] = document.getElementById('f-rows')?.value;
+  data['_herh-n'] = document.getElementById('f-herh-n')?.value;
   ['klasse', 'soort', 'eindoordeel', 'excshape', 'eenheid_w', 'eenheid_m'].forEach(name => {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
     if (checked) data[`_${name}`] = checked.value;
@@ -1820,9 +1798,8 @@ function getFormData() {
   }
   data._weighings = wdata;
   const rdata = {};
-  for (let t = 1; t <= 2; t++) {
-    for (let i = 1; i <= 6; i++) rdata[`rr${t}${i}`] = g(`rr${t}${i}`)?.value || '';
-  }
+  const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
+  for (let i = 1; i <= rn; i++) rdata[`rr${i}`] = g(`rr${i}`)?.value || '';
   data._repeat = rdata;
   return data;
 }
@@ -1841,6 +1818,7 @@ function loadFormData(data) {
       if (el) el.value = data._weighings[k];
     });
   }
+  if (data['_herh-n']) { document.getElementById('f-herh-n').value = data['_herh-n']; buildRepeatTable(); }
   if (data._repeat) {
     Object.keys(data._repeat).forEach(k => {
       const el = document.getElementById(k);
@@ -1922,6 +1900,7 @@ function newCert() {
   const sigShow = document.getElementById('f-sig-show'); if (sigShow) sigShow.checked = true;
   // Restore counters
   const rows = document.getElementById('f-rows'); if (rows) rows.value = 5;
+  const hn = document.getElementById('f-herh-n'); if (hn) hn.value = 3;
   const pag = document.getElementById('f-paginas'); if (pag) pag.value = 1;
   // Re-init dates + cert number
   initDefaults();
