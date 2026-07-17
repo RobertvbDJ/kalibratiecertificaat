@@ -1369,8 +1369,8 @@ function getDecimalsFromE(eVal) {
 function onCapacityChange() {
   const max = parseFloat(document.getElementById('f-bereik')?.value) || 0;
   if (max > 0) document.getElementById('f-rows').value = computeIdealRowCount(max);
-  syncToCert();
   buildTable();
+  syncToCert();
 }
 function _weightSeq(max) {
   const seq = [];
@@ -1658,7 +1658,7 @@ function syncToCert() {
     
     whtml += `<tr>
       <td class="center">${i}</td>
-      <td class="center mono">${nom || '—'}</td>
+      <td class="center mono">${nom !== undefined && nom !== null ? nom : '—'}</td>
       <td class="center mono">${beforeStr}</td>
       <td class="center mono">${afterStr}</td>
       <td class="center mono">±${tol}</td>
