@@ -210,7 +210,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
 .weighing-table th {
   padding: 7px 8px; background: var(--bg); font-weight: 600; font-size: 11px;
-  color: var(--muted); text-align: left; border-bottom: 1px solid var(--border);
+  color: var(--muted); text-align: center; border-bottom: 1px solid var(--border);
 }
 .weighing-table td { padding: 1px; border-bottom: 1px solid #f0f0f2; }
 .weighing-table td:first-child {
@@ -852,12 +852,20 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <table class="weighing-table" id="weighingTable">
                 <thead>
                   <tr>
-                    <th>Nr</th>
-                    <th>Nominaal (<span data-unit="w">kg</span>)</th>
-                    <th>Voor just. (<span data-unit="m">kg</span>)</th>
-                    <th>Na just. (<span data-unit="m">kg</span>)</th>
-                    <th>MTF (<span data-unit="m">kg</span>)</th>
-                    <th>✓</th>
+                    <th rowspan="3">Nr</th>
+                    <th rowspan="3">L<br><span data-unit="w">kg</span></th>
+                    <th rowspan="3">MTF<br><span data-unit="m">kg</span></th>
+                    <th colspan="4">AFWIJKING</th>
+                  </tr>
+                  <tr>
+                    <th colspan="2">OP</th>
+                    <th colspan="2">NEER</th>
+                  </tr>
+                  <tr>
+                    <th>v.j.</th>
+                    <th>n.j.</th>
+                    <th>v.j.</th>
+                    <th>n.j.</th>
                   </tr>
                 </thead>
                 <tbody id="wbody"></tbody>
@@ -1144,12 +1152,21 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <table class="cert-table" id="c-wtable">
               <thead>
                 <tr>
-                  <th>Nr</th>
-                  <th>Nominaal (<span data-unit="w">kg</span>)</th>
-                  <th>Voor justering (<span data-unit="m">kg</span>)</th>
-                  <th>Na justering (<span data-unit="m">kg</span>)</th>
-                  <th>MTF (<span data-unit="m">kg</span>)</th>
-                  <th>V</th>
+                  <th rowspan="3">Nr</th>
+                  <th rowspan="3">L (<span data-unit="w">kg</span>)</th>
+                  <th rowspan="3">MTF (<span data-unit="m">kg</span>)</th>
+                  <th colspan="4">AFWIJKING</th>
+                  <th rowspan="3">✓</th>
+                </tr>
+                <tr>
+                  <th colspan="2">OP</th>
+                  <th colspan="2">NEER</th>
+                </tr>
+                <tr>
+                  <th>v.j.</th>
+                  <th>n.j.</th>
+                  <th>v.j.</th>
+                  <th>n.j.</th>
                 </tr>
               </thead>
               <tbody id="c-wbody"></tbody>
@@ -1419,10 +1436,11 @@ function buildTable() {
     html += `<tr>
       <td>${i}</td>
       <td><input type="number" value="${nom}" step="any" id="wn${i}" oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wb${i}" step="0.001" placeholder="Afw." oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wr${i}" step="0.001" placeholder="Afw." oninput="syncToCert(); calcRow(${i})"></td>
       <td class="mono" id="wt${i}">±${tol}</td>
-      <td id="wv${i}">—</td>
+      <td><input type="number" id="wbo${i}" step="0.001" placeholder="OP v.j." oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wao${i}" step="0.001" placeholder="OP n.j." oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wbn${i}" step="0.001" placeholder="NE v.j." oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wan${i}" step="0.001" placeholder="NE n.j." oninput="syncToCert(); calcRow(${i})"></td>
     </tr>`;
   }
   document.getElementById('wbody').innerHTML = html;
@@ -1432,10 +1450,14 @@ buildTable();
 
 function calcRow(i) {
   const nom = parseFloat(document.getElementById(`wn${i}`).value) || 0;
-  const beforeRaw = document.getElementById(`wb${i}`).value;
-  const afterRaw = document.getElementById(`wr${i}`).value;
-  const before = parseFloat(beforeRaw);
-  const after = parseFloat(afterRaw);
+  const opBeforeRaw = document.getElementById(`wbo${i}`)?.value || '';
+  const opAfterRaw = document.getElementById(`wao${i}`)?.value || '';
+  const neBeforeRaw = document.getElementById(`wbn${i}`)?.value || '';
+  const neAfterRaw = document.getElementById(`wan${i}`)?.value || '';
+  const opBefore = parseFloat(opBeforeRaw);
+  const opAfter = parseFloat(opAfterRaw);
+  const neBefore = parseFloat(neBeforeRaw);
+  const neAfter = parseFloat(neAfterRaw);
   const d = parseFloat(document.getElementById('f-d').value) || 0.05;
   const oiml = computeOIML();
   const tol = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
@@ -1443,27 +1465,26 @@ function calcRow(i) {
   const tolEl = document.getElementById(`wt${i}`);
   if (tolEl) tolEl.textContent = `±${_numStr(tol, eDecimals)}`;
   
-  // Bepaal welke afwijking te gebruiken voor beoordeling:
-  // - Als "Na just." is ingevuld, gebruik die
-  // - Anders als "Voor just." is ingevuld, gebruik die
-  // - Anders geen beoordeling
-  let dev = null;
-  if (afterRaw !== '' && !isNaN(after)) {
-    dev = after;
-  } else if (beforeRaw !== '' && !isNaN(before)) {
-    dev = before;
-  }
+  // Alle 4 afwijkingen verzamelen
+  const deviations = [
+    { raw: opBeforeRaw, val: opBefore },
+    { raw: opAfterRaw, val: opAfter },
+    { raw: neBeforeRaw, val: neBefore },
+    { raw: neAfterRaw, val: neAfter }
+  ];
+  const filled = deviations.filter(d => d.raw !== '' && !isNaN(d.val));
+  const maxAbs = filled.length > 0 ? Math.max(...filled.map(d => Math.abs(d.val))) : null;
+  const pass = maxAbs !== null && maxAbs <= tol;
   
   const vEl = document.getElementById(`wv${i}`);
-  
-  if (dev !== null) {
-    const absDev = Math.abs(dev);
-    const pass = absDev <= tol;
-    vEl.textContent = pass ? '✓' : '✗';
-    vEl.className = pass ? 'pass' : 'fail';
-  } else {
-    vEl.textContent = '—';
-    vEl.className = '';
+  if (vEl) {
+    if (maxAbs !== null) {
+      vEl.textContent = pass ? '✓' : '✗';
+      vEl.className = pass ? 'pass' : 'fail';
+    } else {
+      vEl.textContent = '—';
+      vEl.className = '';
+    }
   }
 }
 
@@ -1630,39 +1651,42 @@ function syncToCert() {
   let tol = _numStr(parseFloat(d) * 1.5 || 0.075, eDecimals);
   for (let i = 1; i <= n; i++) {
     const nom = parseFloat(g(`wn${i}`)?.value) || 0;
-    const beforeRaw = g(`wb${i}`)?.value || '';
-    const afterRaw = g(`wr${i}`)?.value || '';
-    const before = parseFloat(beforeRaw);
-    const after = parseFloat(afterRaw);
+    const opBeforeRaw = g(`wbo${i}`)?.value || '';
+    const opAfterRaw = g(`wao${i}`)?.value || '';
+    const neBeforeRaw = g(`wbn${i}`)?.value || '';
+    const neAfterRaw = g(`wan${i}`)?.value || '';
+    const opBefore = parseFloat(opBeforeRaw);
+    const opAfter = parseFloat(opAfterRaw);
+    const neBefore = parseFloat(neBeforeRaw);
+    const neAfter = parseFloat(neAfterRaw);
     const rowMtf = oiml ? (getOIMLMTF(nom, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
     tol = _numStr(rowMtf, eDecimals);
     // also sync the editor MTF cell
     const tolEl = g(`wt${i}`);
     if (tolEl) tolEl.textContent = `±${tol}`;
     
-    // Bepaal welke afwijking te gebruiken voor beoordeling
-    let dev = null;
-    let devStr = '—';
-    if (afterRaw !== '' && !isNaN(after)) {
-      dev = after;
-      devStr = after >= 0 ? `+${after.toFixed(3)}` : after.toFixed(3);
-    } else if (beforeRaw !== '' && !isNaN(before)) {
-      dev = before;
-      devStr = before >= 0 ? `+${before.toFixed(3)}` : before.toFixed(3);
-    }
+    // Alle 4 afwijkingen formatteren
+    const fmt = (raw, val) => (raw === '' || isNaN(val)) ? '—' : (val >= 0 ? `+${val.toFixed(3)}` : val.toFixed(3));
+    const opBeforeStr = fmt(opBeforeRaw, opBefore);
+    const opAfterStr = fmt(opAfterRaw, opAfter);
+    const neBeforeStr = fmt(neBeforeRaw, neBefore);
+    const neAfterStr = fmt(neAfterRaw, neAfter);
     
-    const pass = dev !== null && Math.abs(dev) <= rowMtf;
-    const beforeStr = (beforeRaw === '' || isNaN(before)) ? '—' : (before >= 0 ? `+${before.toFixed(3)}` : before.toFixed(3));
-    const afterStr = (afterRaw === '' || isNaN(after)) ? '—' : (after >= 0 ? `+${after.toFixed(3)}` : after.toFixed(3));
-    const vStr = dev === null ? '—' : (pass ? '✓' : '✗');
+    // Beoordeling: max afwijking van alle 4
+    const deviations = [opBefore, opAfter, neBefore, neAfter].filter(v => !isNaN(v));
+    const maxAbs = deviations.length > 0 ? Math.max(...deviations.map(v => Math.abs(v))) : null;
+    const pass = maxAbs !== null && maxAbs <= rowMtf;
+    const vStr = maxAbs === null ? '—' : (pass ? '✓' : '✗');
     
     whtml += `<tr>
       <td class="center">${i}</td>
       <td class="center mono">${nom !== undefined && nom !== null ? nom : '—'}</td>
-      <td class="center mono">${beforeStr}</td>
-      <td class="center mono">${afterStr}</td>
       <td class="center mono">±${tol}</td>
-      <td class="center ${dev === null ? '' : (pass ? 'pass' : 'fail')}" style="font-weight:700">${vStr}</td>
+      <td class="center mono">${opBeforeStr}</td>
+      <td class="center mono">${opAfterStr}</td>
+      <td class="center mono">${neBeforeStr}</td>
+      <td class="center mono">${neAfterStr}</td>
+      <td class="center ${maxAbs === null ? '' : (pass ? 'pass' : 'fail')}" style="font-weight:700">${vStr}</td>
     </tr>`;
   }
   g('c-wbody').innerHTML = whtml;
@@ -1793,8 +1817,10 @@ function getFormData() {
   const wdata = {};
   const n = parseInt(document.getElementById('f-rows')?.value) || 5;
   for (let i = 1; i <= n; i++) {
-    wdata[`wb${i}`] = g(`wb${i}`)?.value || '';
-    wdata[`wr${i}`] = g(`wr${i}`)?.value || '';
+    wdata[`wbo${i}`] = g(`wbo${i}`)?.value || '';
+    wdata[`wao${i}`] = g(`wao${i}`)?.value || '';
+    wdata[`wbn${i}`] = g(`wbn${i}`)?.value || '';
+    wdata[`wan${i}`] = g(`wan${i}`)?.value || '';
   }
   data._weighings = wdata;
   const rdata = {};
