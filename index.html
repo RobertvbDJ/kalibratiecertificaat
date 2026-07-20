@@ -122,7 +122,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
    ═══════════════════════════════════════════ */
 .section {
   border: 1px solid var(--border); border-radius: var(--radius);
-  margin-bottom: 8px; overflow: hidden;
+  margin-bottom: 12px; overflow: hidden;
   transition: border-color 0.15s ease;
 }
 .section:hover { border-color: var(--border-strong); }
@@ -175,7 +175,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 }
 .field input.mono, .field textarea.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.01em; }
 .field textarea { resize: vertical; min-height: 60px; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .field .hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 .input-group {
@@ -192,7 +193,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 }
 
 /* Radio group */
-.radio-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
 .radio-card { flex: 1; min-width: 60px; position: relative; }
 .radio-card input { position: absolute; opacity: 0; width: 0; height: 0; }
 .radio-card label {
@@ -207,7 +208,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .radio-card label:hover { border-color: var(--border-strong); }
 
 /* Weighing table */
-.weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; table-layout: fixed; }
 .weighing-table th {
   padding: 7px 8px; background: var(--bg); font-weight: 600; font-size: 11px;
   color: var(--muted); text-align: center; border-bottom: 1px solid var(--border);
@@ -215,7 +216,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .weighing-table td { padding: 1px; border-bottom: 1px solid #f0f0f2; }
 .weighing-table td:first-child {
   background: #f9f9fb; font-weight: 600; font-size: 10px;
-  color: var(--muted); width: 28px; text-align: center;
+  color: var(--muted); text-align: center;
 }
 .weighing-table td:last-child { text-align: center; width: 32px; }
 .weighing-table input {
@@ -225,6 +226,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .weighing-table input:focus { background: var(--accent-5); }
 .weighing-table .pass { color: var(--success); font-weight: 600; }
 .weighing-table .fail { color: var(--danger); font-weight: 600; }
+/* Last-kolom gecentreerd */
+#c-wtable tbody td:nth-child(2) { text-align: center; padding-right: 10px; }
 
 /* Result badges */
 .result-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
@@ -308,7 +311,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
 .preview-label {
   font-size: 12px; color: var(--muted); font-weight: 500;
-  margin-bottom: 12px; align-self: flex-start;
+  margin-bottom: 12px; text-align: left;
   max-width: var(--cert-w); width: 100%;
 }
 
@@ -398,6 +401,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   background: var(--accent); border-radius: 1px; flex-shrink: 0;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
+.cert-section-sub {
+  font-size: 8px; font-weight: 200; color: var(--muted);
+  margin-left: 3px; white-space: nowrap;
+}
 
 /* Cert excentrisch layout */
 .cert-exc-row {
@@ -410,7 +417,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-table th {
   padding: 4px 6px; background: #f8f8fa; font-weight: 600; font-size: 8px;
   color: #6b7280; letter-spacing: 0.01em;
-  border: 0.5px solid #e5e5e8; text-align: left;
+  border: 0.5px solid #e5e5e8; text-align: center;
 }
 .cert-table td {
   padding: 3px 6px; border: 0.5px solid #e5e5e8; font-size: 8.5px;
@@ -421,6 +428,9 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-table tr:nth-child(even) td { background: #fafafa; }
 .cert-table .pass { color: var(--success); font-weight: 600; }
 .cert-table .fail { color: var(--danger); font-weight: 600; }
+
+/* Weegproef tabel */
+#c-wtable { table-layout: fixed; margin-top: 6px; }
 
 /* Conclusion */
 .cert-conclusion {
@@ -557,6 +567,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-meta-value { font-size: 10pt !important; }
   .cert-meta-value.mono { font-size: 9.5pt !important; }
   .cert-section-header { font-size: 11pt !important; }
+  .cert-section-sub { font-size: 9pt !important; }
   .cert-table { font-size: 9pt !important; }
   .cert-table th { font-size: 8.5pt !important; }
   .cert-table td { font-size: 9pt !important; padding: 4pt 6pt !important; }
@@ -751,26 +762,47 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <div class="hint">Leeg = gelijk aan d</div>
               </div>
             </div>
+            <div class="field-row-3">
+              <div class="field">
+                <label>Min. belasting</label>
+                <div class="input-group">
+                  <input type="number" id="f-min" step="any" placeholder="—" oninput="syncToCert()">
+                  <span class="unit-tag" data-unit="w">kg</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>Tarra</label>
+                <div class="input-group">
+                  <input type="number" id="f-tarra" step="any" placeholder="—" oninput="syncToCert()">
+                  <span class="unit-tag" data-unit="w">kg</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>Bouwjaar</label>
+                <input type="number" id="f-bouwjaar" placeholder="jjjj" oninput="syncToCert()">
+              </div>
+            </div>
             <div id="oiml-info" style="display:none; margin-top:8px; padding:10px 12px; background:var(--bg-sec); border:1px solid var(--border); border-radius:var(--radius-sm); font-size:12px; line-height:1.6">
               <div id="oiml-info-body"></div>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Klasse</label>
-                <div class="radio-group">
+            <div class="field">
+              <label>Klasse</label>
+              <div class="radio-group" style="margin-bottom:10px">
                   <div class="radio-card"><input type="radio" name="klasse" id="klasseI" value="I" onchange="syncToCert()"><label for="klasseI">I</label></div>
                   <div class="radio-card"><input type="radio" name="klasse" id="klasseII" value="II" onchange="syncToCert()"><label for="klasseII">II</label></div>
                   <div class="radio-card"><input type="radio" name="klasse" id="klasseIII" value="III" checked onchange="syncToCert()"><label for="klasseIII">III</label></div>
-                  <div class="radio-card"><input type="radio" name="klasse" id="klasseIIII" value="IIII" onchange="syncToCert()"><label for="klasseIIII">IIII</label></div>
                 </div>
-              </div>
-              <div class="field">
-                <label>Soort</label>
                 <div class="radio-group">
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseIIII" value="IIII" onchange="syncToCert()"><label for="klasseIIII">IIII</label></div>
+                  <div class="radio-card"><input type="radio" name="klasse" id="klasseNVH" value="NVH" onchange="syncToCert()"><label for="klasseNVH">NVH</label></div>
+                </div>
+            </div>
+            <div class="field">
+              <label>Soort</label>
+              <div class="radio-group">
                   <div class="radio-card"><input type="radio" name="soort" id="soortElek" value="Elektronisch" checked onchange="syncToCert()"><label for="soortElek">Elek.</label></div>
                   <div class="radio-card"><input type="radio" name="soort" id="soortMech" value="Mechanisch" onchange="syncToCert()"><label for="soortMech">Mech.</label></div>
                 </div>
-              </div>
             </div>
             <div class="field">
               <label>Locatie / afdeling</label>
@@ -850,10 +882,19 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             </div>
             <div style="overflow-x:auto; margin-top:8px">
               <table class="weighing-table" id="weighingTable">
+                <colgroup>
+                  <col style="width:7%">
+                  <col style="width:19%">
+                  <col style="width:12%">
+                  <col style="width:15.5%">
+                  <col style="width:15.5%">
+                  <col style="width:15.5%">
+                  <col style="width:15.5%">
+                </colgroup>
                 <thead>
                   <tr>
                     <th rowspan="3">Nr</th>
-                    <th rowspan="3">L<br><span data-unit="w">kg</span></th>
+                    <th rowspan="3">Last<br><span data-unit="w">kg</span></th>
                     <th rowspan="3">MTF<br><span data-unit="m">kg</span></th>
                     <th colspan="4">AFWIJKING</th>
                   </tr>
@@ -862,10 +903,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                     <th colspan="2">NEER</th>
                   </tr>
                   <tr>
-                    <th>v.j.</th>
-                    <th>n.j.</th>
-                    <th>v.j.</th>
-                    <th>n.j.</th>
+                    <th>voor<br>justering</th>
+                    <th>na<br>justering</th>
+                    <th>voor<br>justering</th>
+                    <th>na<br>justering</th>
                   </tr>
                 </thead>
                 <tbody id="wbody"></tbody>
@@ -1148,25 +1189,35 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
           <!-- Weegproef -->
           <div class="cert-section">
-            <div class="cert-section-header">Meetresultaten — Weegproef</div>
+            <div class="cert-section-header">Meetresultaten — Weegproef <span class="cert-section-sub">(EN 45501, A4.4)</span></div>
             <table class="cert-table" id="c-wtable">
+              <colgroup>
+                <col style="width:7%">
+                <col style="width:15%">
+                <col style="width:10%">
+                <col style="width:14.5%">
+                <col style="width:14.5%">
+                <col style="width:14.5%">
+                <col style="width:14.5%">
+                <col style="width:10%">
+              </colgroup>
               <thead>
                 <tr>
-                  <th rowspan="3">Nr</th>
-                  <th rowspan="3">L (<span data-unit="w">kg</span>)</th>
-                  <th rowspan="3">MTF (<span data-unit="m">kg</span>)</th>
-                  <th colspan="4">AFWIJKING</th>
-                  <th rowspan="3">✓</th>
+                  <th class="center" rowspan="3">Nr</th>
+                  <th class="center" rowspan="3">Last<br>(<span data-unit="w">kg</span>)</th>
+                  <th class="center" rowspan="3">MTF<br>(<span data-unit="m">kg</span>)</th>
+                  <th class="center" colspan="4">AFWIJKING</th>
+                  <th class="center" rowspan="3"></th>
                 </tr>
                 <tr>
-                  <th colspan="2">OP</th>
-                  <th colspan="2">NEER</th>
+                  <th class="center" colspan="2">OP</th>
+                  <th class="center" colspan="2">NEER</th>
                 </tr>
                 <tr>
-                  <th>v.j.</th>
-                  <th>n.j.</th>
-                  <th>v.j.</th>
-                  <th>n.j.</th>
+                  <th class="center">voor<br>justering</th>
+                  <th class="center">na<br>justering</th>
+                  <th class="center">voor<br>justering</th>
+                  <th class="center">na<br>justering</th>
                 </tr>
               </thead>
               <tbody id="c-wbody"></tbody>
@@ -1368,16 +1419,15 @@ function getOIMLMTF(loadInUnit, oiml) {
   return _cvUnit(mtfInGram, 'g', um);
 }
 
-// Bepaal aantal decimalen gebaseerd op de e-waarde
+// Bepaal aantal decimalen voor MTF-weergave op basis van e
+// MTF-waarden zijn 0,5×e, 1,0×e en 1,5×e; 0,5×e heeft de meeste decimalen
 function getDecimalsFromE(eVal) {
   if (!eVal || eVal <= 0) return 2;
-  // Tel aantal decimalen in e-waarde
-  const eStr = eVal.toString();
-  if (eStr.includes('.')) {
-    return eStr.split('.')[1].length;
-  }
-  if (eStr.includes(',')) {
-    return eStr.split(',')[1].length;
+  // Gebruik 0.5 × e als referentie — dat is de kleinste MTF-waarde met de meeste decimalen
+  const ref = eVal * 0.5;
+  const refStr = ref.toString();
+  if (refStr.includes('.')) {
+    return refStr.split('.')[1].length;
   }
   return 0;
 }
@@ -1423,7 +1473,8 @@ function computeIdealRowCount(max) {
 }
 function buildTable() {
   const n = parseInt(document.getElementById('f-rows').value) || 5;
-  const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const dRaw = document.getElementById('f-d').value;
+  const d = parseFloat(dRaw) || 0.05;
   const max = parseFloat(document.getElementById('f-bereik')?.value) || 0;
   const oiml = computeOIML();
   const nominals = computeNominals(max, n);
@@ -1432,15 +1483,15 @@ function buildTable() {
   for (let i = 1; i <= n; i++) {
     const nom = nominals[i - 1];
     const mtfVal = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
-    const tol = _numStr(mtfVal, eDecimals);
+    const tol = dRaw ? _numStr(mtfVal, eDecimals) : '-';
     html += `<tr>
       <td>${i}</td>
       <td><input type="number" value="${nom}" step="any" id="wn${i}" oninput="syncToCert(); calcRow(${i})"></td>
-      <td class="mono" id="wt${i}">±${tol}</td>
-      <td><input type="number" id="wbo${i}" step="0.001" placeholder="OP v.j." oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wao${i}" step="0.001" placeholder="OP n.j." oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wbn${i}" step="0.001" placeholder="NE v.j." oninput="syncToCert(); calcRow(${i})"></td>
-      <td><input type="number" id="wan${i}" step="0.001" placeholder="NE n.j." oninput="syncToCert(); calcRow(${i})"></td>
+      <td class="mono" id="wt${i}">${dRaw ? '±' + tol : '-'}</td>
+      <td><input type="number" id="wbo${i}" step="0.001" placeholder="-" oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wao${i}" step="0.001" placeholder="-" oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wbn${i}" step="0.001" placeholder="-" oninput="syncToCert(); calcRow(${i})"></td>
+      <td><input type="number" id="wan${i}" step="0.001" placeholder="-" oninput="syncToCert(); calcRow(${i})"></td>
     </tr>`;
   }
   document.getElementById('wbody').innerHTML = html;
@@ -1458,12 +1509,13 @@ function calcRow(i) {
   const opAfter = parseFloat(opAfterRaw);
   const neBefore = parseFloat(neBeforeRaw);
   const neAfter = parseFloat(neAfterRaw);
-  const d = parseFloat(document.getElementById('f-d').value) || 0.05;
+  const dRaw = document.getElementById('f-d').value;
+  const d = parseFloat(dRaw) || 0.05;
   const oiml = computeOIML();
   const tol = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
   const eDecimals = getDecimalsFromE(oiml?.eVal || d);
   const tolEl = document.getElementById(`wt${i}`);
-  if (tolEl) tolEl.textContent = `±${_numStr(tol, eDecimals)}`;
+  if (tolEl) tolEl.textContent = dRaw ? `±${_numStr(tol, eDecimals)}` : '-';
   
   // Alle 4 afwijkingen verzamelen
   const deviations = [
@@ -1482,7 +1534,7 @@ function calcRow(i) {
       vEl.textContent = pass ? '✓' : '✗';
       vEl.className = pass ? 'pass' : 'fail';
     } else {
-      vEl.textContent = '—';
+      vEl.textContent = '-';
       vEl.className = '';
     }
   }
@@ -1506,6 +1558,7 @@ function calcRepeat() {
   const d = parseFloat(document.getElementById('f-d').value) || 0.05;
   const bel = parseFloat(document.getElementById('f-herh-bel').value) || 0;
   const oiml = computeOIML();
+  const eDecimals = getDecimalsFromE(oiml?.eVal || d);
   // Gebruik MTF op testbelasting, of fallback naar 1.5*d als OIML niet beschikbaar
   const mtf = oiml ? (getOIMLMTF(bel, oiml) ?? d * 1.5) : d * 1.5;
   const vals = [];
@@ -1518,7 +1571,7 @@ function calcRepeat() {
   // Herhaalbaarheid: max verschil moet <= MTF zijn (niet <= d)
   const pass = diff <= mtf;
   const el = document.getElementById('r-diff');
-  el.textContent = diff > 0 ? diff.toFixed(3) : '—';
+  el.textContent = diff > 0 ? diff.toFixed(eDecimals) : '—';
   el.className = diff > 0 && !pass ? 'mono fail' : 'mono pass';
   const resultEl = document.getElementById('herh-result');
   if (vals.length >= 2) {
@@ -1583,8 +1636,9 @@ function syncToCert() {
   const eDisplay = (eInput && parseFloat(eInput) !== parseFloat(d)) ? ` / e = ${eInput} ${unitM()}` : '';
   setCert('c-bereik', (bereik || d) ? `${bereik || '?'} ${unitW()} / d = ${d || '?'} ${unitM()}${eDisplay}` : null);
 
-  // Auto-set klasse from OIML calculation
-  if (oiml && oiml.klasse) {
+  // Auto-set klasse from OIML calculation (tenzij gebruiker NVH heeft gekozen)
+  const currentKlasse = document.querySelector('input[name="klasse"]:checked')?.value;
+  if (oiml && oiml.klasse && currentKlasse !== 'NVH') {
     const el = document.querySelector(`input[name="klasse"][value="${oiml.klasse}"]`);
     if (el) el.checked = true;
   }
@@ -1648,7 +1702,7 @@ function syncToCert() {
   const n = parseInt(document.getElementById('f-rows').value) || 5;
   const eDecimals = getDecimalsFromE(oiml?.eVal || parseFloat(d) || 0.05);
   let whtml = '';
-  let tol = _numStr(parseFloat(d) * 1.5 || 0.075, eDecimals);
+  let tol = d ? _numStr(parseFloat(d) * 1.5, eDecimals) : '-';
   for (let i = 1; i <= n; i++) {
     const nom = parseFloat(g(`wn${i}`)?.value) || 0;
     const opBeforeRaw = g(`wbo${i}`)?.value || '';
@@ -1660,13 +1714,13 @@ function syncToCert() {
     const neBefore = parseFloat(neBeforeRaw);
     const neAfter = parseFloat(neAfterRaw);
     const rowMtf = oiml ? (getOIMLMTF(nom, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
-    tol = _numStr(rowMtf, eDecimals);
+    tol = d ? _numStr(rowMtf, eDecimals) : '-';
     // also sync the editor MTF cell
     const tolEl = g(`wt${i}`);
-    if (tolEl) tolEl.textContent = `±${tol}`;
+    if (tolEl) tolEl.textContent = d ? `±${tol}` : '-';
     
     // Alle 4 afwijkingen formatteren
-    const fmt = (raw, val) => (raw === '' || isNaN(val)) ? '—' : (val >= 0 ? `+${val.toFixed(3)}` : val.toFixed(3));
+    const fmt = (raw, val) => (raw === '' || isNaN(val)) ? '-' : (val >= 0 ? `+${val.toFixed(eDecimals)}` : val.toFixed(eDecimals));
     const opBeforeStr = fmt(opBeforeRaw, opBefore);
     const opAfterStr = fmt(opAfterRaw, opAfter);
     const neBeforeStr = fmt(neBeforeRaw, neBefore);
@@ -1676,12 +1730,12 @@ function syncToCert() {
     const deviations = [opBefore, opAfter, neBefore, neAfter].filter(v => !isNaN(v));
     const maxAbs = deviations.length > 0 ? Math.max(...deviations.map(v => Math.abs(v))) : null;
     const pass = maxAbs !== null && maxAbs <= rowMtf;
-    const vStr = maxAbs === null ? '—' : (pass ? '✓' : '✗');
+    const vStr = maxAbs === null ? '-' : (pass ? '✓' : '✗');
     
     whtml += `<tr>
       <td class="center">${i}</td>
       <td class="center mono">${nom !== undefined && nom !== null ? nom : '—'}</td>
-      <td class="center mono">±${tol}</td>
+      <td class="center mono">${d ? '±' + tol : '-'}</td>
       <td class="center mono">${opBeforeStr}</td>
       <td class="center mono">${opAfterStr}</td>
       <td class="center mono">${neBeforeStr}</td>
@@ -1692,9 +1746,9 @@ function syncToCert() {
   g('c-wbody').innerHTML = whtml;
 
   // Excentrisch
-  const excT = fv('f-exc-tol') || tol;
+  const excT = fv('f-exc-tol') || (d ? tol : '-');
   ['p1','p2','p3','p4','p5'].forEach(p => setCert(`c-exc-${p}`, fv(`f-exc-${p}`) || null));
-  setCert('c-exc-tol', `±${excT}`);
+  setCert('c-exc-tol', excT === '-' ? excT : `±${excT}`);
 
   // Herhaalbaarheid
   const bel = fv('f-herh-bel');
@@ -1704,7 +1758,7 @@ function syncToCert() {
   const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
   // Bereken MTF voor herhaalbaarheid beoordeling
   const belNum = parseFloat(bel) || 0;
-  const herhMtf = oiml ? (getOIMLMTF(belNum, oiml) ?? parseFloat(d) * 1.5) : (parseFloat(d) * 1.5 || 0.075);
+  const herhMtf = oiml ? (getOIMLMTF(belNum, oiml) ?? (d ? parseFloat(d) * 1.5 : 0.075)) : (d ? parseFloat(d) * 1.5 : 0.075);
   
   // Bouw thead dynamisch zodat kolommen matchen met tbody
   let rheadHtml = '<tr>';
