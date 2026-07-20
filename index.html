@@ -35,6 +35,50 @@
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
 }
 
+/* ═══════════════════════════════════════════
+   DARK MODE (editor-chrome)
+   ═══════════════════════════════════════════ */
+:root[data-theme="dark"] {
+  --bg: #1c1c1e;
+  --surface: #2c2c2e;
+  --fg: #f5f5f7;
+  --muted: #a1a1a6;
+  --border: #3a3a3c;
+  --border-strong: #48484a;
+  --accent: #ff813d;
+  --accent-hover: #ff9a5e;
+  --accent-5: rgba(255,129,61,0.12);
+  --accent-10: rgba(255,129,61,0.22);
+  --success: #30d158;
+  --success-bg: #0e2a17;
+  --success-border: #1c4d2b;
+  --danger: #ff453a;
+  --danger-bg: #2e1313;
+  --danger-border: #5a2222;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.55);
+}
+/* Cert-preview blijft een wit vel papier, ook in dark mode */
+:root[data-theme="dark"] .cert {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --fg: #111111;
+  --muted: #6e6e73;
+  --border: #e5e5e7;
+  --border-strong: #d2d2d7;
+  --accent: #ff813d;
+  --accent-hover: #e96e2a;
+  --accent-5: rgba(255,129,61,0.05);
+  --accent-10: rgba(255,129,61,0.10);
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+}
+
 html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--fg); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 
 .app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -148,7 +192,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .section-body {
   display: none; padding: 14px;
   border-top: 1px solid var(--bg);
-  background: #fafafa;
+  background: var(--bg);
 }
 .section-body.open { display: block; }
 
@@ -206,6 +250,12 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   border-color: var(--accent); background: var(--accent-5); color: var(--accent);
 }
 .radio-card label:hover { border-color: var(--border-strong); }
+.btn-link {
+  align-self: center; margin-left: 4px; padding: 4px 8px; font-size: 11px;
+  font-family: var(--font); color: var(--muted); background: none; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; transition: all 0.12s ease;
+}
+.btn-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-5); }
 
 /* Weighing table */
 .weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; table-layout: fixed; }
@@ -213,9 +263,9 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   padding: 7px 8px; background: var(--bg); font-weight: 600; font-size: 11px;
   color: var(--muted); text-align: center; border-bottom: 1px solid var(--border);
 }
-.weighing-table td { padding: 1px; border-bottom: 1px solid #f0f0f2; }
+.weighing-table td { padding: 1px; border-bottom: 1px solid var(--border); }
 .weighing-table td:first-child {
-  background: #f9f9fb; font-weight: 600; font-size: 10px;
+  background: var(--bg); font-weight: 600; font-size: 10px;
   color: var(--muted); text-align: center;
 }
 .weighing-table td:last-child { text-align: center; width: 32px; }
@@ -247,7 +297,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   padding: 10px; margin-bottom: 10px;
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
 }
-.exc-diagram-svg { flex-shrink: 0; width: 100px; height: 100px; }
+.exc-diagram-svg { flex-shrink: 0; width: 100px; height: 100px; color: var(--fg); }
 .exc-diagram-legend { font-size: 11px; color: var(--muted); line-height: 1.5; }
 .exc-diagram-legend strong { color: var(--fg); font-weight: 600; }
 
@@ -411,7 +461,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-exc-row {
   display: grid; grid-template-columns: 90px 1fr; gap: 14px; align-items: center;
 }
-.cert-exc-diagram { width: 90px; height: 90px; flex-shrink: 0; }
+.cert-exc-diagram { width: 90px; height: 90px; flex-shrink: 0; color: #111; }
 
 /* Cert tables */
 .cert-table { width: 100%; border-collapse: collapse; font-size: 8.5px; }
@@ -626,6 +676,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
     <nav class="topbar-nav"></nav>
 
     <div class="topbar-actions">
+      <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()" title="Wissel licht/donker thema" aria-label="Wissel thema">
+        <svg id="themeIcon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3a7 7 0 100 14 7 7 0 000-14zM10 3v14"/></svg>
+        <span id="themeLabel">Donker</span>
+      </button>
       <button class="btn btn-ghost" onclick="newCert()" title="Begin een nieuw, leeg certificaat">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
         Nieuw
@@ -1048,9 +1102,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="field">
               <label>Eindoordeel</label>
               <div class="radio-group">
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordGoed" value="Goedgekeurd" checked onchange="syncToCert()"><label for="ordGoed">✓ Goedgekeurd</label></div>
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordAfge" value="Afgekeurd" onchange="syncToCert()"><label for="ordAfge">✗ Afgekeurd</label></div>
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordVoorw" value="Voorwaardelijk" onchange="syncToCert()"><label for="ordVoorw">~ Voorwaardelijk</label></div>
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordGoed" value="Goedgekeurd" checked onchange="onEindoordeelChange()"><label for="ordGoed">✓ Goedgekeurd</label></div>
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordAfge" value="Afgekeurd" onchange="onEindoordeelChange()"><label for="ordAfge">✗ Afgekeurd</label></div>
+                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordVoorw" value="Voorwaardelijk" onchange="onEindoordeelChange()"><label for="ordVoorw">~ Voorwaardelijk</label></div>
+                <button type="button" class="btn-link" onclick="resetEindoordeelAuto()" title="Zet terug op automatisch oordeel (op basis van meetresultaten)">↺ auto</button>
               </div>
             </div>
             <div class="field">
@@ -1090,7 +1145,6 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
     <!-- PREVIEW PANEL -->
     <section class="preview-panel">
-      <div class="preview-label">Live preview — A4 formaat</div>
       <div class="cert-wrap">
         <table class="cert" id="cert">
           <thead class="cert-running-head">
@@ -1109,7 +1163,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="cert-title-block">
               <div class="cert-title">Kalibratiecertificaat</div>
               <div class="cert-cert-num" id="c-certnr">— / —</div>
-              <div class="cert-cert-num" style="margin-top:2px; font-family: var(--font); letter-spacing: 0;">Conform OIML R76-1:2006 · NEN-EN 45501:2015 · ISO/IEC 17025</div>
+              <div class="cert-cert-num" style="margin-top:2px; font-family: var(--font); letter-spacing: 0;">Conform OIML R76-1:2006 · NEN-EN 45501:2015</div>
             </div>
           </div>
 
@@ -1297,7 +1351,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="cert-conclusion-row">
                 <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">—</span></div>
               </div>
-              <div class="cert-remark">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006, NEN-EN 45501:2015 en ISO/IEC 17025. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
+              <div class="cert-remark" id="c-conclusie-verklaring">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
               <div class="cert-remark" id="c-conclusie-tekst" style="margin-top:8px; font-style:normal; color:var(--fg)"></div>
             </div>
           </div>
@@ -1344,6 +1398,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 // Herhaalbaarheid: bijgehouden of gebruiker het aantal metingen handmatig heeft aangepast.
 // Boven gedeclareerd om TDZ te voorkomen (syncToCert draait al bij buildTable()).
 let herhNTouched = false;
+// Eindoordeel: false = automatisch afgeleid uit meetresultaten, true = handmatig overschreven.
+let oordeelOverridden = false;
 const repeatSeries = [
   { s: 1, label: 'ca. 50% max', belId: 'f-herh-bel1' },
   { s: 2, label: 'ca. 80% max', belId: 'f-herh-bel2' }
@@ -1650,6 +1706,45 @@ function calcRepeat() {
 }
 buildRepeatTable();
 
+// ── AUTO EINDORDEEL (afgeleid uit meetresultaten) ──
+// Goedgekeurd zolang alle ingevulde meetpunten binnen de MTF vallen;
+// Afgekeurd zodra één meetpunt buiten de MTF valt. Lege rijen tellen niet mee.
+function computeAutoVerdict() {
+  const d = parseFloat(document.getElementById('f-d')?.value) || 0.05;
+  const oiml = computeOIML();
+  let fail = false;
+
+  // Weegproef (lineariteit)
+  const n = parseInt(document.getElementById('f-rows')?.value) || 5;
+  for (let i = 1; i <= n; i++) {
+    const nom = parseFloat(g(`wn${i}`)?.value) || 0;
+    const devs = [g(`wbo${i}`), g(`wao${i}`), g(`wbn${i}`), g(`wan${i}`)]
+      .map(e => parseFloat(e?.value)).filter(v => !isNaN(v));
+    if (devs.length === 0) continue;
+    const rowMtf = oiml ? (getOIMLMTF(nom, oiml) ?? d * 1.5) : d * 1.5;
+    const maxAbs = Math.max(...devs.map(v => Math.abs(v)));
+    if (maxAbs > rowMtf) fail = true;
+  }
+
+  // Excentrische belasting
+  const excRaw = document.getElementById('f-exc-tol')?.value;
+  const excMtf = excRaw !== undefined && excRaw !== '' ? parseFloat(excRaw) : (d ? d * 1.5 : NaN);
+  if (!isNaN(excMtf)) {
+    ['p1', 'p2', 'p3', 'p4', 'p5'].forEach(p => {
+      const v = parseFloat(g(`f-exc-${p}`)?.value);
+      if (!isNaN(v) && Math.abs(v) > excMtf) fail = true;
+    });
+  }
+
+  // Herhaalbaarheid (beide reeksen)
+  repeatSeries.forEach(({ s }) => {
+    const { pass } = evalRepeatSeries(s);
+    if (pass === false) fail = true;
+  });
+
+  return fail ? 'Afgekeurd' : 'Goedgekeurd';
+}
+
 // ── SYNC FORM → CERTIFICATE ──
 function g(id) { return document.getElementById(id); }
 function fv(id) { return g(id).value || ''; }
@@ -1863,7 +1958,16 @@ function syncToCert() {
   // Plaats kalibratie (used in sig area)
   setCert('c-plaats', fv('f-plaats') || null);
 
-  // Conclusie
+  // Conclusie — automatisch oordeel t.o.v. meetresultaten, tenzij handmatig overschreven
+  if (!oordeelOverridden) {
+    const auto = computeAutoVerdict();
+    const radioMap = { 'Goedgekeurd': 'ordGoed', 'Afgekeurd': 'ordAfge', 'Voorwaardelijk': 'ordVoorw' };
+    const target = radioMap[auto] || 'ordGoed';
+    ['ordGoed', 'ordAfge', 'ordVoorw'].forEach(id => {
+      const el = g(id);
+      if (el) el.checked = (el.id === target);
+    });
+  }
   const oordeel = document.querySelector('input[name="eindoordeel"]:checked')?.value || 'Goedgekeurd';
   const oel = g('c-eindoordeel');
   oel.textContent = oordeel;
@@ -1871,6 +1975,14 @@ function syncToCert() {
     : oordeel === 'Afgekeurd' ? 'fail'
     : 'info';
   oel.className = 'cert-conclusion-value ' + oordeelClass;
+  // Verklaringstekst onder Conclusie — afhankelijk van het eindoordeel (binnen/buiten MTF)
+  const verklaringen = {
+    'Goedgekeurd': 'Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.',
+    'Afgekeurd': 'Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen overschrijden op een of meer meetpunten de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.',
+    'Voorwaardelijk': 'Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen bevinden zich gedeeltelijk buiten de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.'
+  };
+  const verklEl = g('c-conclusie-verklaring');
+  if (verklEl) verklEl.textContent = verklaringen[oordeel] || verklaringen['Goedgekeurd'];
   setCert('c-kalibrateur', fv('f-kalibrateur') || null);
   setCert('c-sig-name', fv('f-sig-name') || null);
   setCert('c-sig-date', fmtDate('f-sig-date') || null);
@@ -1894,6 +2006,17 @@ function syncToCert() {
   overallEl.innerHTML = `<div class="result-badge ${ordCls}">
     <span class="dot"></span>${oordeel}
   </div>`;
+}
+
+// Eindoordeel: handmatige wijziging via de radio's overschrijft het automatische oordeel
+function onEindoordeelChange() {
+  oordeelOverridden = true;
+  syncToCert();
+}
+// Herstel het automatische oordeel (afgeleid uit meetresultaten)
+function resetEindoordeelAuto() {
+  oordeelOverridden = false;
+  syncToCert();
 }
 
 function setCert(id, val) {
@@ -1957,6 +2080,7 @@ function getFormData() {
   data._weighings = wdata;
   const rdata = {};
   data['_herh-touched'] = herhNTouched ? '1' : '';
+  data['_oordeel-overridden'] = oordeelOverridden ? '1' : '';
   rdata['f-herh-bel1'] = g('f-herh-bel1')?.value || '';
   rdata['f-herh-bel2'] = g('f-herh-bel2')?.value || '';
   const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
@@ -1983,6 +2107,7 @@ function loadFormData(data) {
     });
   }
   herhNTouched = data['_herh-touched'] === '1';
+  oordeelOverridden = data['_oordeel-overridden'] === '1';
   if (data['_herh-n']) { document.getElementById('f-herh-n').value = data['_herh-n']; }
   buildRepeatTable();
   if (data._repeat) {
@@ -2062,6 +2187,7 @@ function newCert() {
   document.getElementById('klasseIII').checked = true;
   document.getElementById('soortElek').checked = true;
   document.getElementById('ordGoed').checked = true;
+  oordeelOverridden = false;
   document.getElementById('excSquare').checked = true;
   // Restore checkbox defaults
   const sigShow = document.getElementById('f-sig-show'); if (sigShow) sigShow.checked = true;
@@ -2145,17 +2271,17 @@ function diagramSVG(shape) {
     { n: '5', x: 88, y: 88, lx: 96, ly: 102 },
   ];
   const outline = shape === 'round'
-    ? '<circle cx="60" cy="60" r="50" fill="none" stroke="#111" stroke-width="2"/>'
-    : '<rect x="10" y="10" width="100" height="100" fill="none" stroke="#111" stroke-width="2" rx="1"/>';
+    ? '<circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2"/>'
+    : '<rect x="10" y="10" width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" rx="1"/>';
   const dashLen = shape === 'round' ? 44 : 50;
   const dots = positions.map(p => `
-    <circle cx="${p.x}" cy="${p.y}" r="5" fill="#111"/>
-    <text x="${p.lx}" y="${p.ly}" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="#111">${p.n}</text>
+    <circle cx="${p.x}" cy="${p.y}" r="5" fill="currentColor"/>
+    <text x="${p.lx}" y="${p.ly}" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="600" fill="currentColor">${p.n}</text>
   `).join('');
   return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; aspect-ratio:1; display:block">
     ${outline}
-    <line x1="60" y1="${60-dashLen}" x2="60" y2="${60+dashLen}" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="3 3"/>
-    <line x1="${60-dashLen}" y1="60" x2="${60+dashLen}" y2="60" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="3 3"/>
+    <line x1="60" y1="${60-dashLen}" x2="60" y2="${60+dashLen}" stroke="currentColor" stroke-opacity="0.45" stroke-width="0.8" stroke-dasharray="3 3"/>
+    <line x1="${60-dashLen}" y1="60" x2="${60+dashLen}" y2="60" stroke="currentColor" stroke-opacity="0.45" stroke-width="0.8" stroke-dasharray="3 3"/>
     ${dots}
   </svg>`;
 }
@@ -2219,8 +2345,25 @@ function openPrint() {
   setTimeout(updatePageTotal, 300);
 })();
 
+// ── THEME (licht / donker) ──
+const THEME_KEY = 'djw-theme';
+function applyTheme(theme) {
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+  else document.documentElement.removeAttribute('data-theme');
+  const label = document.getElementById('themeLabel');
+  if (label) label.textContent = theme === 'dark' ? 'Licht' : 'Donker';
+}
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+}
+
 // ── INIT ──
 try {
+  const savedTheme = (() => { try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; } })();
+  if (savedTheme) applyTheme(savedTheme);
   initDefaults();
   // Restore session if available
   const restored = restoreSession();
