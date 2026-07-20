@@ -484,6 +484,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 #c-wtable { table-layout: fixed; margin-top: 6px; }
 
 /* Conclusion */
+.cert-section.conclusie { margin-top: 4rem; }
 .cert-conclusion {
   background: #fafafa; border: 1px solid #e5e5e8; border-radius: 4px;
   padding: 10px 12px; margin-top: 8px;
@@ -507,12 +508,12 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; padding-top: 8px; }
 .cert-sig { text-align: left; position: relative; }
 .cert-sig-img-area {
-  height: 64px;
+  height: 128px;
   display: flex; align-items: flex-end; justify-content: flex-start;
   padding-left: 0;
   overflow: visible;
 }
-.cert-sig-img { max-height: 100%; width: auto; opacity: 1; display: block; }
+.cert-sig-img { height: 128px; width: auto; opacity: 1; display: block; }
 .cert-sig-img.hidden { display: none; }
 .cert-sig-line { display: none; }
 .cert-sig-info {
@@ -627,7 +628,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-remark { font-size: 9.5pt !important; }
   .cert-sig-label { font-size: 8.5pt !important; }
   .cert-sig-name { font-size: 10pt !important; }
-  .cert-sig-img { height: 72pt !important; }
+  .cert-sig-img-area { height: 96pt !important; }
+  .cert-sig-img { height: 96pt !important; }
   .cert-footer {
     display: flex !important;
     font-size: 8pt !important;
@@ -903,6 +905,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="input-group">
                 <input type="number" id="f-temp" placeholder="20" oninput="syncToCert()">
                 <span class="unit-tag">°C</span>
+                <span class="unit-tag" style="opacity:.7; border-left:none; padding-left:2px">± 0,5 °C</span>
               </div>
             </div>
             <div class="field">
@@ -1184,18 +1187,26 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <div class="cert-meta-value" id="c-contact"><span class="cert-empty">—</span></div>
               </div>
               <div>
+                <div class="cert-meta-label">E-mail</div>
+                <div class="cert-meta-value" id="c-email"><span class="cert-empty">—</span></div>
+              </div>
+              <div>
                 <div class="cert-meta-label">Locatie</div>
                 <div class="cert-meta-value" id="c-locatie"><span class="cert-empty">—</span></div>
               </div>
             </div>
             <div class="cert-meta-item" style="grid-column: 3; gap: 4px">
               <div>
+                <div class="cert-meta-label">Order-/factuurnummer</div>
+                <div class="cert-meta-value mono" id="c-order"><span class="cert-empty">—</span></div>
+              </div>
+              <div>
                 <div class="cert-meta-label">Kalibratiedatum</div>
                 <div class="cert-meta-value mono" id="c-kaldate"><span class="cert-empty">—</span></div>
               </div>
               <div>
                 <div class="cert-meta-label">Volgende kalibratie</div>
-                <div class="cert-meta-value mono" id="c-volgende"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value mono" id="c-volgende" style="font-weight:700"><span class="cert-empty">—</span></div>
               </div>
             </div>
           </div>
@@ -1262,7 +1273,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
           <!-- Weegproef -->
           <div class="cert-section">
-            <div class="cert-section-header">Meetresultaten — Weegproef <span class="cert-section-sub">(EN 45501, A4.4)</span></div>
+            <div class="cert-section-header">Weegproef <span class="cert-section-sub">(EN 45501, A4.4)</span></div>
             <table class="cert-table" id="c-wtable">
               <colgroup>
                 <col style="width:7%">
@@ -1341,7 +1352,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           </div>
 
           <!-- Conclusie -->
-          <div class="cert-section">
+          <div class="cert-section conclusie">
             <div class="cert-section-header">Conclusie</div>
             <div class="cert-conclusion">
               <div class="cert-conclusion-row">
@@ -1787,7 +1798,9 @@ function syncToCert() {
   if (postcode) lines.push(`<div>${escapeHtml(postcode)}</div>`);
   setCertHtml('c-bedrijf', lines.join('') || null);
   setCert('c-contact', contact || null);
+  setCert('c-email', fv('f-email') || null);
   setCert('c-locatie', fv('f-locatie') || null);
+  setCert('c-order', fv('f-order') || null);
   setCert('c-kaldate', fmtDate('f-kaldate') || null);
   setCert('c-volgende', fmtDate('f-volgende') || null);
 
@@ -1867,7 +1880,7 @@ function syncToCert() {
   // Methode (now: Omstandigheden — no Pagina's)
   setCert('c-refstd', fv('f-refstd') || null);
   const temp = fv('f-temp');
-  setCert('c-temp', temp ? `${temp} °C` : null);
+  setCert('c-temp', temp ? `${temp} °C ± 0,5 °C` : null);
 
   // Weegproef table
   const unitTxt = currentUnit();
