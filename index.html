@@ -648,13 +648,16 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 /* ═══════════════════════════════════════════
    CONCLUSIE CHECKLIST (formulier)
    ═══════════════════════════════════════════ */
-.conclusie-checklist { display: flex; flex-direction: column; gap: 6px; }
-.checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.conclusie-checklist { display: flex; flex-direction: column; gap: 0; }
+.checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
 .checklist-item:last-child { border-bottom: none; }
-.checklist-label { font-size: 12px; font-weight: 500; color: var(--fg); min-width: 180px; }
-.radio-group-sm { gap: 4px !important; }
-.radio-group-sm .radio-card { padding: 2px 6px !important; }
-.radio-group-sm .radio-card label { font-size: 11px !important; padding: 2px 4px !important; }
+.checklist-label { font-size: 12px; font-weight: 500; color: var(--fg); flex: 1; }
+.checklist-opts { display: flex; gap: 6px; }
+.checklist-opt { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer; background: var(--surface); transition: all 0.12s ease; color: var(--fg); }
+.checklist-opt:hover { border-color: var(--border-strong); }
+.checklist-opt.selected-goed { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+.checklist-opt.selected-nw { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+.checklist-icon { width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
 
 @media screen and (min-width: 1920px) {
   .cert-wrap { zoom: 1.6; }
@@ -1147,70 +1150,14 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="field" style="margin-top:4px">
               <label>Checklist onderzoek</label>
               <div class="conclusie-checklist">
-                <div class="checklist-item">
-                  <span class="checklist-label">Nauwkeurigheid nulstellen</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-ak" value="akkoord" onchange="syncToCert()"><label for="conn-nulst-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-nulst-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-nulst-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Nauwkeurigheid nulstellen tarra</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-ak" value="akkoord" onchange="syncToCert()"><label for="conn-nulst-t-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-nulst-t-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-nulst-t-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Beweeglijkheid</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-ak" value="akkoord" onchange="syncToCert()"><label for="conn-beweg-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-beweg-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-beweg-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Max + 9e</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-ak" value="akkoord" onchange="syncToCert()"><label for="conn-max9e-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-max9e-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-max9e-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Opschriften & Merktekens</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-ak" value="akkoord" onchange="syncToCert()"><label for="conn-opschr-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-opschr-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-opschr-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Metrologische staat</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-ak" value="akkoord" onchange="syncToCert()"><label for="conn-metrolog-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-metrolog-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-metrolog-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Technische staat</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-ak" value="akkoord" onchange="syncToCert()"><label for="conn-techn-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-techn-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-techn-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
-                <div class="checklist-item">
-                  <span class="checklist-label">Gebruiksomstandigheden</span>
-                  <div class="radio-group radio-group-sm">
-                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-ak" value="akkoord" onchange="syncToCert()"><label for="conn-gebruik-ak">Akkoord</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-gebruik-nvt">N.v.t.</label></div>
-                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-gebruik-nw">Niet akkoord</label></div>
-                  </div>
-                </div>
+                <div class="checklist-item"><span class="checklist-label">Nauwkeurigheid nulstellen</span><div class="checklist-opts"><input type="hidden" id="f-conn-nulst" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-nulst','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-nulst','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Nauwkeurigheid nulstellen tarra</span><div class="checklist-opts"><input type="hidden" id="f-conn-nulst-t" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-nulst-t','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-nulst-t','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Beweeglijkheid</span><div class="checklist-opts"><input type="hidden" id="f-conn-beweg" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-beweg','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-beweg','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Max + 9e</span><div class="checklist-opts"><input type="hidden" id="f-conn-max9e" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-max9e','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-max9e','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Opschriften & Merktekens</span><div class="checklist-opts"><input type="hidden" id="f-conn-opschr" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-opschr','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-opschr','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Metrologische staat</span><div class="checklist-opts"><input type="hidden" id="f-conn-metrolog" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-metrolog','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-metrolog','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Technische staat</span><div class="checklist-opts"><input type="hidden" id="f-conn-techn" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-techn','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-techn','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
+                <div class="checklist-item"><span class="checklist-label">Gebruiksomstandigheden</span><div class="checklist-opts"><input type="hidden" id="f-conn-gebruik" value=""><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-gebruik','goed')"><span class="checklist-icon">✓</span> Akkoord</span><span class="checklist-opt" onclick="toggleCheck(this,'f-conn-gebruik','niet-goed')"><span class="checklist-icon">✗</span> Niet akkoord</span></div></div>
               </div>
             </div>
             <div class="field">
@@ -1869,6 +1816,44 @@ function computeAutoVerdict() {
   return fail ? 'Afgekeurd' : 'Goedgekeurd';
 }
 
+// ── CHECKLIST TOGGLE ──
+function toggleCheck(el, inputId, value) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  // Klik op dezelfde waarde = deselecteer (terug naar leeg = NVT)
+  if (inp.value === value) {
+    inp.value = '';
+  } else {
+    inp.value = value;
+  }
+  // Update visuele state van alle opties in deze groep
+  const opts = el.parentElement.querySelectorAll('.checklist-opt');
+  opts.forEach(opt => {
+    opt.classList.remove('selected-goed', 'selected-nw');
+  });
+  if (inp.value === 'goed') {
+    el.classList.add('selected-goed');
+  } else if (inp.value === 'niet-goed') {
+    el.classList.add('selected-nw');
+  }
+  syncToCert();
+}
+
+function updateChecklistVisuals() {
+  const ids = ['f-conn-nulst','f-conn-nulst-t','f-conn-beweg','f-conn-max9e','f-conn-opschr','f-conn-metrolog','f-conn-techn','f-conn-gebruik'];
+  ids.forEach(id => {
+    const inp = document.getElementById(id);
+    if (!inp) return;
+    const opts = inp.parentElement.querySelectorAll('.checklist-opt');
+    opts.forEach(opt => opt.classList.remove('selected-goed', 'selected-nw'));
+    if (inp.value === 'goed') {
+      opts[0]?.classList.add('selected-goed');
+    } else if (inp.value === 'niet-goed') {
+      opts[1]?.classList.add('selected-nw');
+    }
+  });
+}
+
 // ── SYNC FORM → CERTIFICATE ──
 function g(id) { return document.getElementById(id); }
 function fv(id) { return g(id).value || ''; }
@@ -2133,27 +2118,27 @@ function syncToCert() {
     concEl.textContent = userConc;
     concEl.style.display = userConc ? 'block' : 'none';
   }
-  // Conclusie-checklist: toon alleen items die niet "n.v.t." zijn
+  // Conclusie-checklist: toon alleen items die niet leeg (NVT) zijn
   const checklistItems = [
-    { name: 'conn-nulst', label: 'Nauwkeurigheid nulstellen' },
-    { name: 'conn-nulst-t', label: 'Nauwkeurigheid nulstellen tarra' },
-    { name: 'conn-beweg', label: 'Beweeglijkheid' },
-    { name: 'conn-max9e', label: 'Max + 9e' },
-    { name: 'conn-opschr', label: 'Opschriften & Merktekens' },
-    { name: 'conn-metrolog', label: 'Metrologische staat' },
-    { name: 'conn-techn', label: 'Technische staat' },
-    { name: 'conn-gebruik', label: 'Gebruiksomstandigheden' },
+    { id: 'f-conn-nulst', label: 'Nauwkeurigheid nulstellen' },
+    { id: 'f-conn-nulst-t', label: 'Nauwkeurigheid nulstellen tarra' },
+    { id: 'f-conn-beweg', label: 'Beweeglijkheid' },
+    { id: 'f-conn-max9e', label: 'Max + 9e' },
+    { id: 'f-conn-opschr', label: 'Opschriften & Merktekens' },
+    { id: 'f-conn-metrolog', label: 'Metrologische staat' },
+    { id: 'f-conn-techn', label: 'Technische staat' },
+    { id: 'f-conn-gebruik', label: 'Gebruiksomstandigheden' },
   ];
   const checkEl = g('c-conclusie-checklist');
   if (checkEl) {
     let chtml = '';
-    checklistItems.forEach(({ name, label }) => {
-      const checked = document.querySelector(`input[name="${name}"]:checked`);
-      const val = checked ? checked.value : 'n.v.t.';
-      if (val === 'n.v.t.') return; // NVT = niet tonen in certificaat
-      const icon = val === 'akkoord' ? '✓' : '✗';
-      const cls = val === 'akkoord' ? 'pass' : 'fail';
-      chtml += `<div style="display:flex;align-items:center;gap:6px;font-size:9.5pt;margin-bottom:3px"><span style="font-weight:700;min-width:16px" class="${cls}">${icon}</span><span>${escapeHtml(label)}</span><span style="color:var(--muted);font-size:8pt">(${escapeHtml(val)})</span></div>`;
+    checklistItems.forEach(({ id, label }) => {
+      const val = g(id)?.value || '';
+      if (!val) return; // leeg = NVT = niet tonen
+      const isGoed = val === 'goed';
+      const icon = isGoed ? '✓' : '✗';
+      const cls = isGoed ? 'pass' : 'fail';
+      chtml += `<div style="display:flex;align-items:center;gap:6px;font-size:9.5pt;margin-bottom:3px"><span style="font-weight:700;min-width:16px" class="${cls}">${icon}</span><span>${escapeHtml(label)}</span></div>`;
     });
     checkEl.innerHTML = chtml;
     checkEl.style.display = chtml ? 'block' : 'none';
@@ -2280,13 +2265,24 @@ function loadFormData(data) {
   }
   herhNTouched = data['_herh-touched'] === '1';
   oordeelOverridden = data['_oordeel-overridden'] === '1';
-  // Conclusie-checklist herstellen
-  ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'].forEach(name => {
-    if (data[`_${name}`]) {
-      const el = document.querySelector(`input[name="${name}"][value="${data[`_${name}`]}"]`);
-      if (el) el.checked = true;
+  // Conclusie-checklist herstellen (nieuw formaat: f-conn-* hidden inputs)
+  // Oud formaat (_conn-* radio's) wordt ook ondersteund voor backward compat
+  ['nulst','nulst-t','beweg','max9e','opschr','metrolog','techn','gebruik'].forEach(name => {
+    const newKey = `f-conn-${name}`;
+    const oldKey = `_conn-${name}`;
+    const inp = document.getElementById(newKey);
+    if (inp) {
+      if (data[newKey] !== undefined) {
+        // Nieuw formaat: waarde is al correct ("", "goed", "niet-goed")
+        inp.value = data[newKey];
+      } else if (data[oldKey]) {
+        // Oud formaat: converteer naar nieuw
+        const map = { 'akkoord': 'goed', 'niet akkoord': 'niet-goed', 'n.v.t.': '' };
+        inp.value = map[data[oldKey]] || '';
+      }
     }
   });
+  updateChecklistVisuals();
   if (data['_herh-n']) { document.getElementById('f-herh-n').value = data['_herh-n']; }
   buildRepeatTable();
   if (data._repeat) {
@@ -2368,11 +2364,12 @@ function newCert() {
   document.getElementById('ordGoed').checked = true;
   oordeelOverridden = false;
   document.getElementById('excSquare').checked = true;
-  // Reset conclusie-checklist naar N.v.t.
-  ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'].forEach(name => {
-    const nvt = document.querySelector(`input[name="${name}"][value="n.v.t."]`);
-    if (nvt) nvt.checked = true;
+  // Reset checklist hidden inputs en visuals
+  ['f-conn-nulst','f-conn-nulst-t','f-conn-beweg','f-conn-max9e','f-conn-opschr','f-conn-metrolog','f-conn-techn','f-conn-gebruik'].forEach(id => {
+    const inp = document.getElementById(id);
+    if (inp) inp.value = '';
   });
+  updateChecklistVisuals();
   // Restore checkbox defaults
   const sigShow = document.getElementById('f-sig-show'); if (sigShow) sigShow.checked = true;
   // Restore counters
