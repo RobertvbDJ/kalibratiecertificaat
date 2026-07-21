@@ -645,6 +645,17 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 /* ═══════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   CONCLUSIE CHECKLIST (formulier)
+   ═══════════════════════════════════════════ */
+.conclusie-checklist { display: flex; flex-direction: column; gap: 6px; }
+.checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-label { font-size: 12px; font-weight: 500; color: var(--fg); min-width: 180px; }
+.radio-group-sm { gap: 4px !important; }
+.radio-group-sm .radio-card { padding: 2px 6px !important; }
+.radio-group-sm .radio-card label { font-size: 11px !important; padding: 2px 4px !important; }
+
 @media screen and (min-width: 1920px) {
   .cert-wrap { zoom: 1.6; }
 }
@@ -902,10 +913,28 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             </div>
             <div class="field">
               <label>Omstandigheden — Temperatuur</label>
-              <div class="input-group">
-                <input type="number" id="f-temp" placeholder="20" oninput="syncToCert()">
-                <span class="unit-tag">°C</span>
-                <span class="unit-tag" style="opacity:.7; border-left:none; padding-left:2px">± 0,5 °C</span>
+              <div class="field-row" style="margin-top:4px">
+                <div class="field" style="margin-bottom:0">
+                  <label style="font-size:10px">Van (°C)</label>
+                  <div class="input-group">
+                    <input type="number" id="f-temp-van" placeholder="22,8" step="0.1" oninput="syncToCert()">
+                    <span class="unit-tag">°C</span>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:0">
+                  <label style="font-size:10px">Tot (°C)</label>
+                  <div class="input-group">
+                    <input type="number" id="f-temp-tot" placeholder="23,0" step="0.1" oninput="syncToCert()">
+                    <span class="unit-tag">°C</span>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:0">
+                  <label style="font-size:10px">Onzekerheid (°C)</label>
+                  <div class="input-group">
+                    <input type="number" id="f-temp-onz" placeholder="0,5" step="0.1" oninput="syncToCert()">
+                    <span class="unit-tag">°C</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="field">
@@ -1114,6 +1143,75 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="field">
               <label>Conclusietekst</label>
               <textarea id="f-conclusie-tekst" rows="4" placeholder="Optionele aanvullende opmerkingen..." oninput="syncToCert()"></textarea>
+            </div>
+            <div class="field" style="margin-top:4px">
+              <label>Checklist onderzoek</label>
+              <div class="conclusie-checklist">
+                <div class="checklist-item">
+                  <span class="checklist-label">Nauwkeurigheid nulstellen</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-ak" value="akkoord" onchange="syncToCert()"><label for="conn-nulst-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-nulst-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-nulst" id="conn-nulst-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-nulst-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Nauwkeurigheid nulstellen tarra</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-ak" value="akkoord" onchange="syncToCert()"><label for="conn-nulst-t-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-nulst-t-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-nulst-t" id="conn-nulst-t-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-nulst-t-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Beweeglijkheid</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-ak" value="akkoord" onchange="syncToCert()"><label for="conn-beweg-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-beweg-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-beweg" id="conn-beweg-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-beweg-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Max + 9e</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-ak" value="akkoord" onchange="syncToCert()"><label for="conn-max9e-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-max9e-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-max9e" id="conn-max9e-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-max9e-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Opschriften & Merktekens</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-ak" value="akkoord" onchange="syncToCert()"><label for="conn-opschr-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-opschr-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-opschr" id="conn-opschr-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-opschr-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Metrologische staat</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-ak" value="akkoord" onchange="syncToCert()"><label for="conn-metrolog-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-metrolog-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-metrolog" id="conn-metrolog-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-metrolog-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Technische staat</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-ak" value="akkoord" onchange="syncToCert()"><label for="conn-techn-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-techn-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-techn" id="conn-techn-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-techn-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+                <div class="checklist-item">
+                  <span class="checklist-label">Gebruiksomstandigheden</span>
+                  <div class="radio-group radio-group-sm">
+                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-ak" value="akkoord" onchange="syncToCert()"><label for="conn-gebruik-ak">Akkoord</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-nvt" value="n.v.t." checked onchange="syncToCert()"><label for="conn-gebruik-nvt">N.v.t.</label></div>
+                    <div class="radio-card"><input type="radio" name="conn-gebruik" id="conn-gebruik-nw" value="niet akkoord" onchange="syncToCert()"><label for="conn-gebruik-nw">Niet akkoord</label></div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Technicus</label>
@@ -1365,6 +1463,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               </div>
               <div class="cert-remark" id="c-conclusie-verklaring">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
               <div class="cert-remark" id="c-conclusie-tekst" style="margin-top:8px; font-style:normal; color:var(--fg)"></div>
+              <div id="c-conclusie-checklist" style="margin-top:8px"></div>
             </div>
           </div>
 
@@ -1663,7 +1762,7 @@ function buildRepeatTable() {
   for (let s = 1; s <= 2; s++) for (let i = 1; i <= 20; i++) { const e = g(`r${s}_${i}`); if (e) prev[`r${s}_${i}`] = e.value; }
 
   let head = `<tr><th rowspan="2">Last</th><th colspan="${n}" class="center">Afwijking</th>`
-    + `<th rowspan="2" class="center">Max.<br>verschil</th><th rowspan="2" class="center">MTF</th><th rowspan="2" class="center">✓</th></tr>`;
+    + `<th rowspan="2" class="center">Max.<br>verschil</th><th rowspan="2" class="center">Std.<br>dev.</th><th rowspan="2" class="center">MTF</th><th rowspan="2" class="center">✓</th></tr>`;
   head += '<tr>';
   for (let i = 1; i <= n; i++) head += `<th class="center">${i}</th>`;
   head += '</tr>';
@@ -1675,11 +1774,21 @@ function buildRepeatTable() {
     for (let i = 1; i <= n; i++) {
       body += `<td><input type="number" id="r${s}_${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRepeat()"></td>`;
     }
-    body += `<td class="mono center" id="r-diff${s}">—</td><td class="mono center" id="r-mtf${s}">—</td><td class="center" id="r-ok${s}">—</td></tr>`;
+    body += `<td class="mono center" id="r-diff${s}">—</td><td class="mono center" id="r-std${s}">—</td><td class="mono center" id="r-mtf${s}">—</td><td class="center" id="r-ok${s}">—</td></tr>`;
   });
   document.getElementById('rbody').innerHTML = body;
 
   Object.keys(prev).forEach(id => { const e = g(id); if (e) e.value = prev[id]; });
+}
+
+// Standaarddeviatie (sample): s = sqrt( Σ(xi - x̄)² / (n-1) )
+function calcStdDev(vals) {
+  if (vals.length < 2) return null;
+  const n = vals.length;
+  const mean = vals.reduce((a, b) => a + b, 0) / n;
+  const sqDiffs = vals.map(v => (v - mean) ** 2);
+  const variance = sqDiffs.reduce((a, b) => a + b, 0) / (n - 1);
+  return Math.sqrt(variance);
 }
 
 // Beoordeelt één reeks: max(afwijking) − min(afwijking) ≤ MTF bij de betreffende last.
@@ -1697,15 +1806,18 @@ function evalRepeatSeries(s) {
   }
   const diff = vals.length >= 2 ? Math.max(...vals) - Math.min(...vals) : null;
   const pass = diff !== null ? diff <= mtf : null;
-  return { vals, diff, mtf, pass, eDec, bel };
+  const stdDev = calcStdDev(vals);
+  return { vals, diff, stdDev, mtf, pass, eDec, bel };
 }
 
 function calcRepeat() {
   let any = false, all = true;
   repeatSeries.forEach(({ s }) => {
-    const { diff, mtf, pass, eDec } = evalRepeatSeries(s);
+    const { diff, stdDev, mtf, pass, eDec } = evalRepeatSeries(s);
     const de = g(`r-diff${s}`), me = g(`r-mtf${s}`), oe = g(`r-ok${s}`);
     if (de) { de.textContent = diff !== null ? diff.toFixed(eDec) : '—'; de.className = 'mono center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
+    const se = g(`r-std${s}`);
+    if (se) { se.textContent = stdDev !== null ? stdDev.toFixed(eDec + 1) : '—'; }
     if (me) { me.textContent = mtf ? '±' + _numStr(mtf, eDec) : '—'; }
     if (oe) { oe.textContent = pass === null ? '—' : (pass ? '✓' : '✗'); oe.className = 'center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
     if (pass !== null) { any = true; if (!pass) all = false; }
@@ -1880,8 +1992,22 @@ function syncToCert() {
 
   // Methode (now: Omstandigheden — no Pagina's)
   setCert('c-refstd', fv('f-refstd') || null);
-  const temp = fv('f-temp');
-  setCert('c-temp', temp ? `${temp} °C ± 0,5 °C` : null);
+  // Temperatuur-range: van-tot-onzekerheid
+  const tempVan = fv('f-temp-van');
+  const tempTot = fv('f-temp-tot');
+  const tempOnz = fv('f-temp-onz');
+  if (tempVan || tempTot) {
+    const v = tempVan || tempTot;
+    const t = tempTot || tempVan;
+    const onz = tempOnz ? ` ± ${tempOnz} °C` : '';
+    if (v !== t) {
+      setCert('c-temp', `${v} – ${t} °C${onz}`);
+    } else {
+      setCert('c-temp', `${v} °C${onz}`);
+    }
+  } else {
+    setCert('c-temp', null);
+  }
 
   // Weegproef table
   const unitTxt = currentUnit();
@@ -1943,7 +2069,7 @@ function syncToCert() {
   if (document.querySelectorAll('#rbody [id^="r1_"]').length !== rn) buildRepeatTable();
 
   let rheadHtml = `<tr><th rowspan="2">Last</th><th colspan="${rn}" class="center">Afwijking</th>`
-    + `<th rowspan="2" class="center">Max. verschil</th><th rowspan="2" class="center">MTF</th><th rowspan="2" class="center">✓</th></tr>`;
+    + `<th rowspan="2" class="center">Max.<br>verschil</th><th rowspan="2" class="center">Std.<br>dev.</th><th rowspan="2" class="center">MTF</th><th rowspan="2" class="center">✓</th></tr>`;
   rheadHtml += '<tr>';
   for (let i = 1; i <= rn; i++) rheadHtml += `<th class="center">${i}</th>`;
   rheadHtml += '</tr>';
@@ -1951,7 +2077,7 @@ function syncToCert() {
 
   let rbodyHtml = '';
   repeatSeries.forEach(({ s, label }) => {
-    const { diff, mtf, pass, eDec } = evalRepeatSeries(s);
+    const { diff, stdDev, mtf, pass, eDec } = evalRepeatSeries(s);
     const belRaw = fv(`f-herh-bel${s}`);
     const belTxt = belRaw ? ` (${belRaw} ${unitW()})` : '';
     let row = `<tr><td>${label}${belTxt}</td>`;
@@ -1961,6 +2087,7 @@ function syncToCert() {
     }
     const cls = pass === false ? 'fail' : pass === true ? 'pass' : '';
     row += `<td class="center mono ${cls}">${diff !== null ? diff.toFixed(eDec) : '—'}</td>`;
+    row += `<td class="center mono">${stdDev !== null ? stdDev.toFixed(eDec + 1) : '—'}</td>`;
     row += `<td class="center mono">${mtf ? '±' + _numStr(mtf, eDec) : '—'}</td>`;
     row += `<td class="center ${cls}" style="font-weight:700">${pass === null ? '—' : (pass ? '✓' : '✗')}</td>`;
     row += '</tr>';
@@ -2005,6 +2132,31 @@ function syncToCert() {
   if (concEl) {
     concEl.textContent = userConc;
     concEl.style.display = userConc ? 'block' : 'none';
+  }
+  // Conclusie-checklist: toon alleen items die niet "n.v.t." zijn
+  const checklistItems = [
+    { name: 'conn-nulst', label: 'Nauwkeurigheid nulstellen' },
+    { name: 'conn-nulst-t', label: 'Nauwkeurigheid nulstellen tarra' },
+    { name: 'conn-beweg', label: 'Beweeglijkheid' },
+    { name: 'conn-max9e', label: 'Max + 9e' },
+    { name: 'conn-opschr', label: 'Opschriften & Merktekens' },
+    { name: 'conn-metrolog', label: 'Metrologische staat' },
+    { name: 'conn-techn', label: 'Technische staat' },
+    { name: 'conn-gebruik', label: 'Gebruiksomstandigheden' },
+  ];
+  const checkEl = g('c-conclusie-checklist');
+  if (checkEl) {
+    let chtml = '';
+    checklistItems.forEach(({ name, label }) => {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      const val = checked ? checked.value : 'n.v.t.';
+      if (val === 'n.v.t.') return; // NVT = niet tonen in certificaat
+      const icon = val === 'akkoord' ? '✓' : '✗';
+      const cls = val === 'akkoord' ? 'pass' : 'fail';
+      chtml += `<div style="display:flex;align-items:center;gap:6px;font-size:9.5pt;margin-bottom:3px"><span style="font-weight:700;min-width:16px" class="${cls}">${icon}</span><span>${escapeHtml(label)}</span><span style="color:var(--muted);font-size:8pt">(${escapeHtml(val)})</span></div>`;
+    });
+    checkEl.innerHTML = chtml;
+    checkEl.style.display = chtml ? 'block' : 'none';
   }
 
   // Signature image toggle
@@ -2095,6 +2247,12 @@ function getFormData() {
   const rdata = {};
   data['_herh-touched'] = herhNTouched ? '1' : '';
   data['_oordeel-overridden'] = oordeelOverridden ? '1' : '';
+  // Conclusie-checklist
+  const connNames = ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'];
+  connNames.forEach(name => {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (checked) data[`_${name}`] = checked.value;
+  });
   rdata['f-herh-bel1'] = g('f-herh-bel1')?.value || '';
   rdata['f-herh-bel2'] = g('f-herh-bel2')?.value || '';
   const rn = parseInt(document.getElementById('f-herh-n')?.value) || 3;
@@ -2122,6 +2280,13 @@ function loadFormData(data) {
   }
   herhNTouched = data['_herh-touched'] === '1';
   oordeelOverridden = data['_oordeel-overridden'] === '1';
+  // Conclusie-checklist herstellen
+  ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'].forEach(name => {
+    if (data[`_${name}`]) {
+      const el = document.querySelector(`input[name="${name}"][value="${data[`_${name}`]}"]`);
+      if (el) el.checked = true;
+    }
+  });
   if (data['_herh-n']) { document.getElementById('f-herh-n').value = data['_herh-n']; }
   buildRepeatTable();
   if (data._repeat) {
@@ -2203,6 +2368,11 @@ function newCert() {
   document.getElementById('ordGoed').checked = true;
   oordeelOverridden = false;
   document.getElementById('excSquare').checked = true;
+  // Reset conclusie-checklist naar N.v.t.
+  ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'].forEach(name => {
+    const nvt = document.querySelector(`input[name="${name}"][value="n.v.t."]`);
+    if (nvt) nvt.checked = true;
+  });
   // Restore checkbox defaults
   const sigShow = document.getElementById('f-sig-show'); if (sigShow) sigShow.checked = true;
   // Restore counters
