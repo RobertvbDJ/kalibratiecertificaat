@@ -87,7 +87,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
    TOPBAR
    ═══════════════════════════════════════════ */
 .topbar {
-  display: flex; align-items: center; gap: 20px;
+  display: flex; align-items: center; gap: 16px;
   padding: 0 24px; height: 56px; flex-shrink: 0;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -98,17 +98,19 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   text-decoration: none; white-space: nowrap;
 }
 .wordmark img {
-  height: 30px; width: auto; max-width: none; display: block;
+  height: 22px; width: auto; max-width: none; display: block;
   object-fit: contain; flex-shrink: 0;
 }
+.wordmark .logo-dark { display: none; }
+:root[data-theme="dark"] .wordmark .logo-light { display: none; }
+:root[data-theme="dark"] .wordmark .logo-dark { display: block; }
 .wordmark-divider {
-  width: 1px; height: 20px; background: var(--border); margin: 0 6px;
+  width: 1px; height: 14px; background: var(--border); margin: 0 6px;
 }
 .wordmark-app {
-  font-weight: 600; font-size: 13px; color: var(--muted); letter-spacing: -0.005em;
+  font-weight: 600; font-size: 12px; color: var(--muted); letter-spacing: -0.005em;
 }
 
-.topbar-nav { display: flex; gap: 2px; flex: 1; margin-left: 16px; }
 .nav-tab {
   padding: 6px 14px; border-radius: var(--radius-sm);
   font-size: 13px; font-weight: 500; color: var(--muted);
@@ -118,7 +120,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .nav-tab:hover { color: var(--fg); background: var(--bg); }
 .nav-tab.active { color: var(--accent); background: var(--accent-5); }
 
-.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.topbar-actions { display: flex; gap: 6px; align-items: center; margin-left: auto; }
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 7px 14px; border-radius: var(--radius-sm);
@@ -131,6 +133,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .btn-ghost:hover { background: var(--bg); border-color: var(--border-strong); }
 .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+@media (max-width: 900px) {
+  .topbar-actions .btn span { display: none; }
+}
 
 /* ═══════════════════════════════════════════
    MAIN LAYOUT
@@ -241,7 +247,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .radio-card { flex: 1; min-width: 60px; position: relative; }
 .radio-card input { position: absolute; opacity: 0; width: 0; height: 0; }
 .radio-card label {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
   font-size: 12px; font-weight: 500; cursor: pointer;
   background: var(--surface); transition: all 0.12s ease; text-align: center; margin: 0;
@@ -272,6 +278,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .weighing-table input {
   border: none; border-radius: 0; padding: 6px 6px; font-family: var(--mono);
   font-size: 11px; width: 100%; background: transparent; outline: none; text-align: center;
+  color: var(--fg);
 }
 .weighing-table input:focus { background: var(--accent-5); }
 .weighing-table .pass { color: var(--success); font-weight: 600; }
@@ -414,16 +421,16 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   margin-bottom: 14px; padding-bottom: 14px;
   border-bottom: 2.5px solid var(--accent);
 }
-.cert-logo { display: flex; flex-direction: row; align-items: flex-end; gap: 14px; flex-shrink: 0; }
-.cert-logo-img { height: 56px; width: auto; max-width: none; display: block; object-fit: contain; flex-shrink: 0; }
+.cert-logo { display: flex; flex-direction: row; align-items: flex-end; gap: 24px; flex-shrink: 0; }
+.cert-logo-img { height: 52px; width: auto; max-width: none; display: block; object-fit: contain; flex-shrink: 0; }
 .cert-logo-sub {
-  font-size: 8.5px; color: var(--muted); font-weight: 400; letter-spacing: 0.02em;
-  line-height: 1.5; display: flex; flex-direction: column;
+  font-size: 9px; color: var(--muted); font-weight: 400; letter-spacing: 0.02em;
+  line-height: 1.45; display: flex; flex-direction: column;
 }
 .cert-logo-sub span { display: block; }
-.cert-title-block { text-align: right; padding-top: 4px; }
+.cert-title-block { text-align: right; }
 .cert-title {
-  font-size: 22px; font-weight: 700; color: var(--accent);
+  font-size: 20px; font-weight: 700; color: var(--accent);
   letter-spacing: -0.025em; line-height: 1.05;
 }
 .cert-cert-num { font-size: 8.5px; color: var(--muted); margin-top: 4px; font-family: var(--mono); letter-spacing: 0.02em; }
@@ -611,7 +618,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-wrap::before { display: none !important; }
   .cert-page-nr { display: none !important; }
   .cert-header { margin-bottom: 10pt; padding-bottom: 10pt; }
-  .cert-logo-img { height: 72pt !important; }
+  .cert-logo-img { height: 67pt !important; }
   .cert-title { font-size: 24pt !important; }
   .cert-cert-num { font-size: 9.5pt !important; }
   .cert-logo-sub { font-size: 8.5pt !important; }
@@ -649,12 +656,13 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
    CONCLUSIE CHECKLIST (formulier)
    ═══════════════════════════════════════════ */
 .conclusie-checklist { display: flex; flex-direction: column; gap: 6px; }
+#c-conclusie-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 12px; }
 .checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--border); }
 .checklist-item:last-child { border-bottom: none; }
-.checklist-label { font-size: 12px; font-weight: 500; color: var(--fg); min-width: 180px; }
+.checklist-label { font-size: 9px; font-weight: 500; color: var(--fg); min-width: 180px; }
 .radio-group-sm { gap: 4px !important; }
 .radio-group-sm .radio-card { padding: 2px 6px !important; }
-.radio-group-sm .radio-card label { font-size: 11px !important; padding: 2px 4px !important; }
+.radio-group-sm .radio-card label { font-size: 8px !important; padding: 2px 4px !important; }
 
 @media screen and (min-width: 1920px) {
   .cert-wrap { zoom: 1.6; }
@@ -681,12 +689,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   <!-- TOPBAR -->
   <header class="topbar">
     <a class="wordmark" href="#">
-      <img src="assets/logo-de-jong.png" alt="De Jong Weegsystemen">
+      <img class="logo-light" src="assets/logo-de-jong.png" alt="De Jong Weegsystemen">
+      <img class="logo-dark" src="assets/Logo_DJ-Weegsystemen_transparant_darkBG.png" alt="De Jong Weegsystemen">
       <span class="wordmark-divider"></span>
       <span class="wordmark-app">Kalibratiecertificaat</span>
     </a>
-
-    <nav class="topbar-nav"></nav>
 
     <div class="topbar-actions">
       <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()" title="Wissel licht/donker thema" aria-label="Wissel thema">
@@ -738,7 +745,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           <div class="section-body open">
             <div class="field">
               <label>Bedrijfsnaam <span class="req">*</span></label>
-              <input type="text" id="f-bedrijf" placeholder="Bijv. Albert Heijn B.V." oninput="syncToCert()">
+              <input type="text" id="f-bedrijf" placeholder="Bijv. Zuivelhoeve" oninput="syncToCert()">
             </div>
             <div class="field">
               <label>Adres</label>
@@ -758,7 +765,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             </div>
             <div class="field">
               <label>Order-/factuurnummer</label>
-              <input type="text" id="f-order" class="mono" placeholder="Bijv. 2025-0042" oninput="syncToCert()">
+              <input type="text" id="f-order" class="mono" placeholder="Bijv. 2026-0042" oninput="syncToCert()">
             </div>
           </div>
         </div>
@@ -793,11 +800,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="field-row">
               <div class="field">
                 <label>Merk</label>
-                <input type="text" id="f-fabrikaat" placeholder="Bijv. Mettler Toledo" oninput="syncToCert()">
+                <input type="text" id="f-fabrikaat" placeholder="Bijv. KPZ" oninput="syncToCert()">
               </div>
               <div class="field">
                 <label>Type</label>
-                <input type="text" id="f-type" placeholder="Bijv. IND331" oninput="syncToCert()">
+                <input type="text" id="f-type" placeholder="Bijv. 2-06S" oninput="syncToCert()">
               </div>
             </div>
             <div class="field-row">
@@ -1134,9 +1141,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="field">
               <label>Eindoordeel</label>
               <div class="radio-group">
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordGoed" value="Goedgekeurd" checked onchange="onEindoordeelChange()"><label for="ordGoed">✓ Goedgekeurd</label></div>
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordAfge" value="Afgekeurd" onchange="onEindoordeelChange()"><label for="ordAfge">✗ Afgekeurd</label></div>
-                <div class="radio-card"><input type="radio" name="eindoordeel" id="ordVoorw" value="Voorwaardelijk" onchange="onEindoordeelChange()"><label for="ordVoorw">~ Voorwaardelijk</label></div>
+                <div style="display:flex;flex:1;gap:10px">
+                  <div class="radio-card"><input type="radio" name="eindoordeel" id="ordGoed" value="Goedgekeurd" checked onchange="onEindoordeelChange()"><label for="ordGoed"><span>✓</span>Goedgekeurd</label></div>
+                  <div class="radio-card"><input type="radio" name="eindoordeel" id="ordAfge" value="Afgekeurd" onchange="onEindoordeelChange()"><label for="ordAfge"><span>✗</span>Afgekeurd</label></div>
+                  <div class="radio-card"><input type="radio" name="eindoordeel" id="ordVoorw" value="Voorwaardelijk" onchange="onEindoordeelChange()"><label for="ordVoorw"><span>~</span>Voorwaardelijk</label></div>
+                </div>
                 <button type="button" class="btn-link" onclick="resetEindoordeelAuto()" title="Zet terug op automatisch oordeel (op basis van meetresultaten)">↺ auto</button>
               </div>
             </div>
@@ -2079,8 +2088,11 @@ function syncToCert() {
   repeatSeries.forEach(({ s, label }) => {
     const { diff, stdDev, mtf, pass, eDec } = evalRepeatSeries(s);
     const belRaw = fv(`f-herh-bel${s}`);
-    const belTxt = belRaw ? ` (${belRaw} ${unitW()})` : '';
-    let row = `<tr><td>${label}${belTxt}</td>`;
+    const descLabel = `${label}. cap`;
+    const cellContent = belRaw
+      ? `${belRaw} ${unitW()} <span style="font-size:6pt;color:var(--muted)">(${descLabel})</span>`
+      : descLabel;
+    let row = `<tr><td>${cellContent}</td>`;
     for (let i = 1; i <= rn; i++) {
       const v = g(`r${s}_${i}`)?.value;
       row += `<td class="center mono">${v || '—'}</td>`;
@@ -2153,10 +2165,11 @@ function syncToCert() {
       if (val === 'n.v.t.') return; // NVT = niet tonen in certificaat
       const icon = val === 'akkoord' ? '✓' : '✗';
       const cls = val === 'akkoord' ? 'pass' : 'fail';
-      chtml += `<div style="display:flex;align-items:center;gap:6px;font-size:9.5pt;margin-bottom:3px"><span style="font-weight:700;min-width:16px" class="${cls}">${icon}</span><span>${escapeHtml(label)}</span><span style="color:var(--muted);font-size:8pt">(${escapeHtml(val)})</span></div>`;
+      const color = val === 'akkoord' ? '#16a34a' : '#dc2626';
+      chtml += `<div style="display:flex;align-items:center;gap:6px;font-size:9px;margin-bottom:3px"><span style="font-weight:700;min-width:16px;color:${color}">${icon}</span><span>${escapeHtml(label)}</span></div>`;
     });
     checkEl.innerHTML = chtml;
-    checkEl.style.display = chtml ? 'block' : 'none';
+    checkEl.style.display = chtml ? 'grid' : 'none';
   }
 
   // Signature image toggle
