@@ -519,7 +519,9 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   display: flex; align-items: flex-end; justify-content: flex-start;
   padding-left: 0;
   overflow: visible;
+  position: relative;
 }
+.cert-stempel-img { position: absolute; bottom: 15px; left: 60px; height: 45px; width: auto; opacity: 0.85; display: block; }
 .cert-sig-img { height: 128px; width: auto; opacity: 1; display: block; }
 .cert-sig-img.hidden { display: none; }
 .cert-sig-line { display: none; }
@@ -617,14 +619,34 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-running-foot { display: table-footer-group !important; }
   .cert-wrap::before { display: none !important; }
   .cert-page-nr { display: none !important; }
-  .cert-header { margin-bottom: 10pt; padding-bottom: 10pt; }
-  .cert-logo-img { height: 67pt !important; }
-  .cert-title { font-size: 24pt !important; }
-  .cert-cert-num { font-size: 9.5pt !important; }
-  .cert-logo-sub { font-size: 8.5pt !important; }
-  .cert-meta-label { font-size: 8pt !important; }
-  .cert-meta-value { font-size: 10pt !important; }
-  .cert-meta-value.mono { font-size: 9.5pt !important; }
+  .cert-header {
+    display: flex !important; align-items: flex-start !important;
+    justify-content: space-between !important; gap: 12pt !important;
+    width: 100% !important;
+    margin-bottom: 10.5pt; padding-bottom: 10.5pt;
+    border-bottom: 2pt solid #ff813d !important;
+  }
+  .cert-logo { display: flex !important; flex-direction: row !important; align-items: flex-end !important; gap: 18pt !important; flex-shrink: 0 !important; }
+  .cert-logo-img { height: 39pt !important; }
+  .cert-logo-sub {
+    font-size: 7pt !important; color: #6e6e73 !important;
+    font-weight: 400 !important; letter-spacing: 0.02em !important;
+    line-height: 1.45 !important;
+    display: flex !important; flex-direction: column !important;
+  }
+  .cert-title-block { text-align: right !important; }
+  .cert-title {
+    font-size: 15pt !important; font-weight: 700 !important; color: #ff813d !important;
+    letter-spacing: -0.025em !important; line-height: 1.05 !important;
+  }
+  .cert-cert-num {
+    font-size: 6.5pt !important; color: #6e6e73 !important;
+    margin-top: 3pt !important; font-family: var(--mono) !important;
+    letter-spacing: 0.02em !important;
+  }
+  .cert-meta-label { font-size: 6pt !important; }
+  .cert-meta-value { font-size: 7.5pt !important; }
+  .cert-meta-value.mono { font-size: 7pt !important; }
   .cert-section-header { font-size: 11pt !important; }
   .cert-section-sub { font-size: 6pt !important; }
   .cert-table { font-size: 9pt !important; }
@@ -637,6 +659,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   .cert-sig-name { font-size: 10pt !important; }
   .cert-sig-img-area { height: 96pt !important; }
   .cert-sig-img { height: 96pt !important; }
+  .cert-stempel-img { height: 34pt !important; }
   .cert-footer {
     display: flex !important;
     font-size: 8pt !important;
@@ -1481,6 +1504,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="cert-sig">
               <div class="cert-sig-img-area">
                 <img src="assets/handtekening-technicus.png" alt="" class="cert-sig-img" id="c-sig-img">
+                <img src="assets/stempel_DJS.png" alt="" class="cert-stempel-img" id="c-stempel-img">
               </div>
               <div class="cert-sig-line"></div>
               <div class="cert-sig-info">
