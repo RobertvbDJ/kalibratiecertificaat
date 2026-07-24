@@ -222,6 +222,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   background: var(--surface); outline: none;
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
+.field select { color-scheme: light dark; }
 .field input::placeholder, .field textarea::placeholder { color: #c7c7cc; }
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-10);
@@ -716,6 +717,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .radio-group-sm { gap: 4px !important; }
 .radio-group-sm .radio-card { padding: 2px 6px !important; }
 .radio-group-sm .radio-card label { font-size: 8px !important; padding: 2px 4px !important; }
+/* Conclusie: kleur op geselecteerde waarde */
+.radio-group-sm .radio-card input[value="akkoord"]:checked + label { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+.radio-group-sm .radio-card input[value="niet akkoord"]:checked + label { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+.radio-group-sm .radio-card input[value="n.v.t."]:checked + label { border-color: var(--border-strong); background: var(--bg); color: var(--muted); }
 
 @media screen and (min-width: 1920px) {
   .cert-wrap { zoom: 1.6; }
@@ -755,7 +760,28 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .company-img-placeholder { font-size:10px; color:var(--muted); }
 .company-label { font-size:12px; font-weight:500; color:var(--muted); margin-bottom:4px; display:block; }
 
-/* Modal (voor Instellingen) */
+/* Toast */
+.toast-wrap {
+  position: fixed; right: 20px; bottom: 20px; z-index: 2000;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+  pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); color: var(--fg);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.18s ease;
+}
+.toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+.toast.success { border-color: var(--success-border); }
+.toast.success svg { color: var(--success); }
+.toast.error { border-color: var(--danger-border); }
+.toast.error svg { color: var(--danger); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.toast.out { animation: toastOut 0.2s ease forwards; }
+@keyframes toastOut { to { opacity: 0; transform: translateY(8px); } }
 .modal-overlay {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(0,0,0,0.4); display: flex;
@@ -779,6 +805,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 </style>
 </head>
 <body>
+<div class="toast-wrap" id="toastWrap"></div>
 <div class="app">
 
   <!-- TOPBAR -->
@@ -800,6 +827,12 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
       <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()" title="Wissel licht/donker thema" aria-label="Wissel thema">
         <svg id="themeIcon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3a7 7 0 100 14 7 7 0 000-14zM10 3v14"/></svg>
         <span id="themeLabel">Donker</span>
+      </button>
+      <button class="btn btn-ghost" onclick="openSettings()" title="Instellingen" aria-label="Instellingen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
       </button>
       <button class="btn btn-ghost" onclick="newCert()" title="Begin een nieuw, leeg certificaat">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg>
@@ -942,14 +975,14 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="field">
                 <label>Min. belasting</label>
                 <div class="input-group">
-                  <input type="number" id="f-min" step="any" placeholder="—" oninput="syncToCert()">
+                  <input type="number" id="f-min" step="any" placeholder="-" oninput="syncToCert()">
                   <span class="unit-tag" data-unit="w">kg</span>
                 </div>
               </div>
               <div class="field">
                 <label>Tarra</label>
                 <div class="input-group">
-                  <input type="number" id="f-tarra" step="any" placeholder="—" oninput="syncToCert()">
+                  <input type="number" id="f-tarra" step="any" placeholder="-" oninput="syncToCert()">
                   <span class="unit-tag" data-unit="w">kg</span>
                 </div>
               </div>
@@ -1236,6 +1269,9 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             </div>
             <div class="field" style="margin-top:4px">
               <label>Checklist onderzoek</label>
+              <div style="display:flex; justify-content:flex-end; margin-bottom:8px">
+                <button type="button" class="btn-link" onclick="setAllChecklist('akkoord')" style="color:var(--success); border-color:var(--success); background:var(--success-bg)">Alles akkoord</button>
+              </div>
               <div class="conclusie-checklist">
                 <div class="checklist-item">
                   <span class="checklist-label">Nauwkeurigheid nulstellen</span>
@@ -1331,21 +1367,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           </div>
         </div>
 
-        <!-- Settings knop — laatste child van .form-scroll, scrollt mee met de rest -->
-        <div style="padding:40px 20px 0 0;margin-top:8px">
-          <button type="button" onclick="openSettings()" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.15s ease" title="Instellingen"
-            onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-            onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
-            </svg>
-          </button>
-        </div>
-
-      </div>
-
-    </aside>
+        </aside>
 
       <!-- Settings modal -->
     <div id="settings-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeSettings()">
@@ -1506,29 +1528,29 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="cert-meta-item" style="grid-column: 2; gap: 4px">
               <div>
                 <div class="cert-meta-label">Contactpersoon</div>
-                <div class="cert-meta-value" id="c-contact"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value" id="c-contact"><span class="cert-empty">-</span></div>
               </div>
               <div>
                 <div class="cert-meta-label">E-mail</div>
-                <div class="cert-meta-value" id="c-email"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value" id="c-email"><span class="cert-empty">-</span></div>
               </div>
               <div>
                 <div class="cert-meta-label">Locatie</div>
-                <div class="cert-meta-value" id="c-locatie"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value" id="c-locatie"><span class="cert-empty">-</span></div>
               </div>
             </div>
             <div class="cert-meta-item" style="grid-column: 3; gap: 4px">
               <div>
                 <div class="cert-meta-label">Order-/factuurnummer</div>
-                <div class="cert-meta-value mono" id="c-order"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value mono" id="c-order"><span class="cert-empty">-</span></div>
               </div>
               <div>
                 <div class="cert-meta-label">Kalibratiedatum</div>
-                <div class="cert-meta-value mono" id="c-kaldate"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value mono" id="c-kaldate"><span class="cert-empty">-</span></div>
               </div>
               <div>
                 <div class="cert-meta-label">Volgende kalibratie</div>
-                <div class="cert-meta-value mono" id="c-volgende" style="font-weight:700"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value mono" id="c-volgende" style="font-weight:700"><span class="cert-empty">-</span></div>
               </div>
             </div>
           </div>
@@ -1540,35 +1562,35 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="cert-meta-item" style="gap: 4px">
                 <div>
                   <div class="cert-meta-label">Merk / Type</div>
-                  <div class="cert-meta-value" id="c-fabrikaat"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-fabrikaat"><span class="cert-empty">-</span></div>
                 </div>
                 <div>
                   <div class="cert-meta-label">Serienummer</div>
-                  <div class="cert-meta-value mono" id="c-serienr"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value mono" id="c-serienr"><span class="cert-empty">-</span></div>
                 </div>
                 <div>
                   <div class="cert-meta-label">Bereik / Indeling</div>
-                  <div class="cert-meta-value" id="c-bereik"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-bereik"><span class="cert-empty">-</span></div>
                 </div>
               </div>
               <div class="cert-meta-item" style="gap: 4px">
                 <div>
                   <div class="cert-meta-label">Klasse / Soort</div>
-                  <div class="cert-meta-value" id="c-klasse"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-klasse"><span class="cert-empty">-</span></div>
                 </div>
                 <div>
                   <div class="cert-meta-label">Min. belasting</div>
-                  <div class="cert-meta-value" id="c-min"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-min"><span class="cert-empty">-</span></div>
                 </div>
               </div>
               <div class="cert-meta-item" style="gap: 4px">
                 <div>
                   <div class="cert-meta-label">Tarra</div>
-                  <div class="cert-meta-value" id="c-tarra"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-tarra"><span class="cert-empty">-</span></div>
                 </div>
                 <div>
                   <div class="cert-meta-label">Bouwjaar</div>
-                  <div class="cert-meta-value" id="c-bouwjaar"><span class="cert-empty">—</span></div>
+                  <div class="cert-meta-value" id="c-bouwjaar"><span class="cert-empty">-</span></div>
                 </div>
               </div>
             </div>
@@ -1580,11 +1602,11 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="cert-meta cert-meta-3">
               <div class="cert-meta-item">
                 <div class="cert-meta-label">Referentie-standaard</div>
-                <div class="cert-meta-value" id="c-refstd"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value" id="c-refstd"><span class="cert-empty">-</span></div>
               </div>
               <div class="cert-meta-item">
                 <div class="cert-meta-label">Temperatuur</div>
-                <div class="cert-meta-value" id="c-temp"><span class="cert-empty">—</span></div>
+                <div class="cert-meta-value" id="c-temp"><span class="cert-empty">-</span></div>
               </div>
               <div class="cert-meta-item">
                 <div class="cert-meta-label">Gravitatie</div>
@@ -1650,12 +1672,12 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <tbody>
                   <tr>
                     <td class="center">Afwijking (<span data-unit="m">kg</span>)</td>
-                    <td class="center mono" id="c-exc-p1"><span class="cert-empty">—</span></td>
-                    <td class="center mono" id="c-exc-p2"><span class="cert-empty">—</span></td>
-                    <td class="center mono" id="c-exc-p3"><span class="cert-empty">—</span></td>
-                    <td class="center mono" id="c-exc-p4"><span class="cert-empty">—</span></td>
-                    <td class="center mono" id="c-exc-p5"><span class="cert-empty">—</span></td>
-                    <td class="center mono" id="c-exc-tol"><span class="cert-empty">—</span></td>
+                    <td class="center mono" id="c-exc-p1"><span class="cert-empty">-</span></td>
+                    <td class="center mono" id="c-exc-p2"><span class="cert-empty">-</span></td>
+                    <td class="center mono" id="c-exc-p3"><span class="cert-empty">-</span></td>
+                    <td class="center mono" id="c-exc-p4"><span class="cert-empty">-</span></td>
+                    <td class="center mono" id="c-exc-p5"><span class="cert-empty">-</span></td>
+                    <td class="center mono" id="c-exc-tol"><span class="cert-empty">-</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -1682,7 +1704,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 <div class="cert-conclusion-value pass" id="c-eindoordeel">Goedgekeurd</div>
               </div>
               <div class="cert-conclusion-row">
-                <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">—</span></div>
+                <div class="cert-conclusion-value" id="c-kalibrateur"><span class="cert-empty">-</span></div>
               </div>
               <div class="cert-remark" id="c-conclusie-verklaring">Hierbij wordt verklaard dat bovenstaand weegwerktuig is gecontroleerd conform de richtlijnen van OIML R76-1:2006 en NEN-EN 45501:2015. De vastgestelde afwijkingen bevinden zich binnen de maximaal toelaatbare fouten (MTF) behorende bij de nauwkeurigheidsklasse.</div>
               <div class="cert-remark" id="c-conclusie-tekst" style="margin-top:8px; font-style:normal; color:var(--fg)"></div>
@@ -1699,7 +1721,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               </div>
               <div class="cert-sig-line"></div>
               <div class="cert-sig-info">
-                <span class="cert-sig-name" id="c-sig-name"><span class="cert-empty">—</span></span>
+                <span class="cert-sig-name" id="c-sig-name"><span class="cert-empty">-</span></span>
               </div>
             </div>
             <div class="cert-sig">
@@ -1707,7 +1729,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               <div class="cert-sig-line"></div>
               <div class="cert-sig-info">
                 <span class="cert-sig-label">Datum:</span>
-                <span class="cert-sig-name mono" id="c-sig-date"><span class="cert-empty">—</span></span>
+                <span class="cert-sig-name mono" id="c-sig-date"><span class="cert-empty">-</span></span>
               </div>
             </div>
           </div>
@@ -2071,11 +2093,11 @@ function calcRepeat() {
   repeatSeries.forEach(({ s }) => {
     const { diff, stdDev, mtf, pass, eDec } = evalRepeatSeries(s);
     const de = g(`r-diff${s}`), me = g(`r-mtf${s}`), oe = g(`r-ok${s}`);
-    if (de) { de.textContent = diff !== null ? diff.toFixed(eDec) : '—'; de.className = 'mono center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
+    if (de) { de.textContent = diff !== null ? diff.toFixed(eDec) : '-'; de.className = 'mono center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
     const se = g(`r-std${s}`);
-    if (se) { se.textContent = stdDev !== null ? stdDev.toFixed(eDec + 1) : '—'; }
-    if (me) { me.textContent = mtf ? '±' + _numStr(mtf, eDec) : '—'; }
-    if (oe) { oe.textContent = pass === null ? '—' : (pass ? '✓' : '✗'); oe.className = 'center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
+    if (se) { se.textContent = stdDev !== null ? stdDev.toFixed(eDec + 1) : '-'; }
+    if (me) { me.textContent = mtf ? '±' + _numStr(mtf, eDec) : '-'; }
+    if (oe) { oe.textContent = pass === null ? '-' : (pass ? '✓' : '✗'); oe.className = 'center' + (pass === false ? ' fail' : pass === true ? ' pass' : ''); }
     if (pass !== null) { any = true; if (!pass) all = false; }
   });
   const r = g('herh-result');
@@ -2154,7 +2176,7 @@ function syncToCert() {
   });
 
   g('c-certnr').textContent = fv('f-certnr') || '— / —';
-  g('c-footer-nr').textContent = fv('f-certnr') || '—';
+  g('c-footer-nr').textContent = fv('f-certnr') || '-';
 
   // Opdrachtgever
   const bedrijf = fv('f-bedrijf');
@@ -2302,7 +2324,7 @@ function syncToCert() {
     
     whtml += `<tr>
       <td class="center">${i}</td>
-      <td class="center mono">${nom !== undefined && nom !== null ? nom : '—'}</td>
+      <td class="center mono">${nom !== undefined && nom !== null ? nom : '-'}</td>
       <td class="center mono">${d ? '±' + tol : '-'}</td>
       <td class="center mono">${opBeforeStr}</td>
       <td class="center mono">${opAfterStr}</td>
@@ -2342,13 +2364,13 @@ function syncToCert() {
     let row = `<tr><td>${cellContent}</td>`;
     for (let i = 1; i <= rn; i++) {
       const v = g(`r${s}_${i}`)?.value;
-      row += `<td class="center mono">${v || '—'}</td>`;
+      row += `<td class="center mono">${v || '-'}</td>`;
     }
     const cls = pass === false ? 'fail' : pass === true ? 'pass' : '';
-    row += `<td class="center mono ${cls}">${diff !== null ? diff.toFixed(eDec) : '—'}</td>`;
-    row += `<td class="center mono">${stdDev !== null ? stdDev.toFixed(eDec + 1) : '—'}</td>`;
-    row += `<td class="center mono">${mtf ? '±' + _numStr(mtf, eDec) : '—'}</td>`;
-    row += `<td class="center ${cls}" style="font-weight:700">${pass === null ? '—' : (pass ? '✓' : '✗')}</td>`;
+    row += `<td class="center mono ${cls}">${diff !== null ? diff.toFixed(eDec) : '-'}</td>`;
+    row += `<td class="center mono">${stdDev !== null ? stdDev.toFixed(eDec + 1) : '-'}</td>`;
+    row += `<td class="center mono">${mtf ? '±' + _numStr(mtf, eDec) : '-'}</td>`;
+    row += `<td class="center ${cls}" style="font-weight:700">${pass === null ? '-' : (pass ? '✓' : '✗')}</td>`;
     row += '</tr>';
     rbodyHtml += row;
   });
@@ -2442,6 +2464,14 @@ function onEindoordeelChange() {
 // Herstel het automatische oordeel (afgeleid uit meetresultaten)
 function resetEindoordeelAuto() {
   oordeelOverridden = false;
+  syncToCert();
+}
+// Zet alle conclusie-checklist radiogroepen op één waarde
+function setAllChecklist(value) {
+  ['conn-nulst','conn-nulst-t','conn-beweg','conn-max9e','conn-opschr','conn-metrolog','conn-techn','conn-gebruik'].forEach(name => {
+    const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (el) { el.checked = true; }
+  });
   syncToCert();
 }
 
@@ -2664,11 +2694,11 @@ function applyCompanyToCert() {
   var addr2El = document.getElementById('c-company-addr2');
   var webEl = document.getElementById('c-company-web');
   var footerEl = document.getElementById('c-company-footer');
-  if (nameEl) nameEl.textContent = data.companyName || '—';
+  if (nameEl) nameEl.textContent = data.companyName || '-';
   if (addr1El) addr1El.textContent = data.address1 || '';
   if (addr2El) addr2El.textContent = data.address2 || '';
   if (webEl) webEl.textContent = data.website || '';
-  if (footerEl) footerEl.textContent = data.companyShort || '—';
+  if (footerEl) footerEl.textContent = data.companyShort || '-';
   var logoImg = document.getElementById('c-logo-img');
   if (logoImg) logoImg.src = data.logoDataUrl || DEFAULT_LOGO;
   var topLight = document.getElementById('c-topbar-logo-light');
@@ -2685,7 +2715,7 @@ function setCert(id, val) {
   const el = document.getElementById(id);
   if (!el) return;
   if (val === null || val === '') {
-    el.innerHTML = '<span class="cert-empty">—</span>';
+    el.innerHTML = '<span class="cert-empty">-</span>';
   } else {
     el.textContent = val;
   }
@@ -2694,7 +2724,7 @@ function setCertHtml(id, html) {
   const el = document.getElementById(id);
   if (!el) return;
   if (html === null || html === '') {
-    el.innerHTML = '<span class="cert-empty">—</span>';
+    el.innerHTML = '<span class="cert-empty">-</span>';
   } else {
     el.innerHTML = html;
   }
@@ -2829,6 +2859,7 @@ function saveToFile() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 500);
   flashButton(event?.target?.closest('.btn'), 'Opgeslagen!');
+  showToast('Certificaat opgeslagen als bestand');
 }
 
 function loadFromFile() {
@@ -2846,8 +2877,9 @@ function loadFromFile() {
       try {
         const data = JSON.parse(ev.target.result);
         loadFormData(data);
+        showToast('Certificaat geladen');
       } catch (err) {
-        alert('Fout bij het laden van het bestand.\nZorg dat het een geldig JSON-certificaatbestand is.');
+        showToast('Fout: bestand is geen geldig certificaat', 'error');
       }
     };
     reader.readAsText(file);
@@ -2890,6 +2922,7 @@ function newCert() {
   // Clear session so reload doesn't restore old data
   try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
   flashButton(event?.target?.closest('.btn'), 'Nieuw');
+  showToast('Nieuw certificaat gestart');
 }
 
 function genCertNr() {
@@ -2934,6 +2967,22 @@ function flashButton(btn, label) {
   }, 1400);
 }
 
+function showToast(msg, type = 'success') {
+  const wrap = document.getElementById('toastWrap');
+  if (!wrap) return;
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icon = type === 'error'
+    ? '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6v5M10 14h.01M10 3a7 7 0 100 14 7 7 0 000-14z"/></svg>'
+    : '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10l4 4 6-8"/></svg>';
+  t.innerHTML = icon + `<span>${msg}</span>`;
+  wrap.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 220);
+  }, 2200);
+}
+
 // ── SESSION AUTO-SAVE (so a reload doesn't lose work) ──
 function saveSession() {
   try { localStorage.setItem(SESSION_KEY, JSON.stringify(getFormData())); } catch (e) {}
@@ -2949,6 +2998,14 @@ function restoreSession() {
 }
 document.addEventListener('input', () => { clearTimeout(window._sessionTimer); window._sessionTimer = setTimeout(saveSession, 400); });
 document.addEventListener('change', () => { clearTimeout(window._sessionTimer); window._sessionTimer = setTimeout(saveSession, 200); });
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', (e) => {
+  const mod = e.ctrlKey || e.metaKey;
+  if (!mod) return;
+  // Ctrl/Cmd+S → opslaan (voorkom browser 'opslaan als')
+  if (e.key === 's' || e.key === 'S') { e.preventDefault(); saveToFile(); }
+});
 
 // ── EXCENTRIC POSITION DIAGRAM ──
 function diagramSVG(shape) {
