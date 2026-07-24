@@ -264,26 +264,42 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 }
 .btn-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-5); }
 
-/* Weighing table */
-.weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; table-layout: fixed; }
+/* Weegproef-tabel — compact-refined (variant A) */
+.weighing-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
 .weighing-table th {
-  padding: 7px 8px; background: var(--bg); font-weight: 600; font-size: 11px;
-  color: var(--muted); text-align: center; border-bottom: 1px solid var(--border);
+  padding: 6px 8px; background: transparent; font-weight: 600; font-size: 10px;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em;
+  text-align: right; border-bottom: 1px solid var(--border-strong);
 }
-.weighing-table td { padding: 1px; border-bottom: 1px solid var(--border); }
+.weighing-table th:first-child { text-align: left; width: 7%; }
+.weighing-table td {
+  padding: 5px 8px; border-bottom: 1px solid var(--border);
+  text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-size: 11px; color: var(--fg);
+}
 .weighing-table td:first-child {
-  background: var(--bg); font-weight: 600; font-size: 10px;
-  color: var(--muted); text-align: center;
+  text-align: left; font-family: var(--font); font-weight: 500;
+  font-size: 11px; color: var(--muted);
 }
-.weighing-table td:last-child { text-align: center; width: 32px; }
 .weighing-table input {
-  border: none; border-radius: 0; padding: 6px 6px; font-family: var(--mono);
-  font-size: 11px; width: 100%; background: transparent; outline: none; text-align: center;
+  border: none; border-radius: 0; padding: 2px 0; font-family: var(--mono);
+  font-size: 11px; width: 100%; background: transparent; outline: none; text-align: right;
   color: var(--fg);
 }
-.weighing-table input:focus { background: var(--accent-5); }
+.weighing-table input:focus { border-bottom: 1px solid var(--accent); }
+.weighing-table th.center { text-align: center; }
 .weighing-table .pass { color: var(--success); font-weight: 600; }
 .weighing-table .fail { color: var(--danger); font-weight: 600; }
+/* Herhaalbaarheid — losse reeks-blokken (optie B) */
+.herh-block { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; background: var(--surface); }
+.herh-block-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; gap: 12px; flex-wrap: wrap; }
+.herh-block-title { font-size: 13px; font-weight: 600; color: var(--fg); }
+.herh-block-sub { font-size: 11px; color: var(--muted); }
+.herh-last-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.herh-last-row label { font-size: 12px; color: var(--muted); font-weight: 500; }
+.herh-last-row input { width: 90px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--mono); font-size: 12px; background: var(--bg); color: var(--fg); outline: none; }
+.herh-last-row input:focus { border-color: var(--accent); }
+.herh-block .weighing-table td:first-child { color: var(--muted); font-weight: 500; }
 /* Last-kolom gecentreerd */
 #c-wtable tbody td:nth-child(2) { text-align: center; padding-right: 10px; }
 
@@ -477,24 +493,30 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 .cert-exc-diagram { width: 90px; height: 90px; flex-shrink: 0; color: #111; }
 
 /* Cert tables */
-.cert-table { width: 100%; border-collapse: collapse; font-size: 8.5px; }
-.cert-table th {
-  padding: 4px 6px; background: #f8f8fa; font-weight: 600; font-size: 8px;
-  color: #6b7280; letter-spacing: 0.01em;
-  border: 0.5px solid #e5e5e8; text-align: center;
+.cert-table { width: 100%; border-collapse: collapse; font-size: 8.5px; font-variant-numeric: tabular-nums; }
+.cert-table thead th {
+  padding: 5px 6px; background: transparent; font-weight: 600; font-size: 7.5px;
+  color: #8a8a8f; text-transform: uppercase; letter-spacing: 0.04em;
+  border: none; border-bottom: 0.75px solid #c9c9cf; text-align: center;
 }
-.cert-table td {
-  padding: 3px 6px; border: 0.5px solid #e5e5e8; font-size: 8.5px;
+.cert-table tbody td {
+  padding: 4px 6px; border: none; border-bottom: 0.5px solid #ececef; font-size: 8.5px;
 }
 .cert-table th.center { text-align: center; }
 .cert-table td.center { text-align: center; }
 .cert-table td.mono { font-family: var(--mono); font-size: 8px; }
-.cert-table tr:nth-child(even) td { background: #fafafa; }
+.cert-table tr:nth-child(even) td { background: transparent; }
 .cert-table .pass { color: var(--success); font-weight: 600; }
 .cert-table .fail { color: var(--danger); font-weight: 600; }
 
-/* Weegproef tabel */
-#c-wtable { table-layout: fixed; margin-top: 6px; }
+/* Weegproef tabel — alleen de afwijkende uitlijning t.o.v. base .cert-table */
+#c-wtable { table-layout: fixed; margin-top: 6px; font-variant-numeric: tabular-nums; }
+#c-wtable thead th:first-child { text-align: left; }
+#c-wtable thead th:not(:first-child) { text-align: right; }
+#c-wtable tbody td { text-align: right; }
+#c-wtable tbody td.center { text-align: right; }
+#c-wtable tbody td:first-child { text-align: left; color: #8a8a8f; font-weight: 500; }
+#c-wtable tbody td:nth-child(2) { text-align: center; padding-right: 10px; color: #111; font-weight: 500; }
 
 /* Conclusion */
 .cert-section.conclusie { margin-top: 4rem; }
@@ -1067,20 +1089,20 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 </colgroup>
                 <thead>
                   <tr>
-                    <th rowspan="3">Nr</th>
-                    <th rowspan="3">Last<br><span data-unit="w">kg</span></th>
-                    <th rowspan="3">MTF<br><span data-unit="m">kg</span></th>
-                    <th colspan="4">AFWIJKING</th>
-                  </tr>
-                  <tr>
+                    <th>Nr</th>
+                    <th>Last <span data-unit="w">kg</span></th>
+                    <th>MTF <span data-unit="m">kg</span></th>
                     <th colspan="2">OP</th>
                     <th colspan="2">NEER</th>
                   </tr>
                   <tr>
-                    <th>voor<br>justering</th>
-                    <th>na<br>justering</th>
-                    <th>voor<br>justering</th>
-                    <th>na<br>justering</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>v&oacute;&oacute;r</th>
+                    <th>n&aacute;</th>
+                    <th>v&oacute;&oacute;r</th>
+                    <th>n&aacute;</th>
                   </tr>
                 </thead>
                 <tbody id="wbody"></tbody>
@@ -1114,55 +1136,35 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 Plaats de testlast achtereenvolgens op de <strong>5 posities</strong>. Positie&nbsp;1 is het midden; 2&ndash;5 zijn de hoeken/randen op ca. ⅓ van Max.
               </div>
             </div>
-            <div class="field">
+            <div class="herh-last-row" style="margin-top:4px">
               <label>Belasting (⅓ van Max)</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-bel" placeholder="50" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="w">kg</span>
-              </div>
+              <input type="number" id="f-exc-bel" placeholder="50" oninput="syncToCert()">
+              <span data-unit="w">kg</span>
             </div>
-            <div class="field">
-              <label>Positie 1 — midden (afwijking)</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-p1" placeholder="0" step="0.001" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>Positie 2 — afwijking</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-p2" placeholder="0" step="0.001" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>Positie 3 — afwijking</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-p3" placeholder="0" step="0.001" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>Positie 4 — afwijking</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-p4" placeholder="0" step="0.001" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>Positie 5 — afwijking</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-p5" placeholder="0" step="0.001" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
-            <div class="field">
-              <label>MTF</label>
-              <div class="input-group">
-                <input type="number" id="f-exc-tol" placeholder="1d" oninput="syncToCert()">
-                <span class="unit-tag" data-unit="m">kg</span>
-              </div>
-            </div>
+            <table class="weighing-table" style="margin-top:10px">
+              <thead>
+                <tr>
+                  <th class="center">Positie</th>
+                  <th class="center">1</th>
+                  <th class="center">2</th>
+                  <th class="center">3</th>
+                  <th class="center">4</th>
+                  <th class="center">5</th>
+                  <th class="center">MTF</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Afwijking (kg)</td>
+                  <td><input type="number" id="f-exc-p1" placeholder="0" step="0.001" oninput="syncToCert()"></td>
+                  <td><input type="number" id="f-exc-p2" placeholder="0" step="0.001" oninput="syncToCert()"></td>
+                  <td><input type="number" id="f-exc-p3" placeholder="0" step="0.001" oninput="syncToCert()"></td>
+                  <td><input type="number" id="f-exc-p4" placeholder="0" step="0.001" oninput="syncToCert()"></td>
+                  <td><input type="number" id="f-exc-p5" placeholder="0" step="0.001" oninput="syncToCert()"></td>
+                  <td><input type="number" id="f-exc-tol" placeholder="1d" oninput="syncToCert()"></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -1191,11 +1193,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
                 </div>
               </div>
             </div>
-            <div style="overflow-x:auto; margin-top:8px">
-              <table class="weighing-table" id="repeatTable">
-                <thead id="rhead"></thead>
-                <tbody id="rbody"></tbody>
-              </table>
+            <div style="margin-top:8px; display:flex; flex-direction:column; gap:14px">
+              <div id="repeatBlock1"></div>
             </div>
             <div class="result-row">
               <div class="result-badge info" id="herh-result">
@@ -1608,21 +1607,21 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
               </colgroup>
               <thead>
                 <tr>
-                  <th class="center" rowspan="3">Nr</th>
-                  <th class="center" rowspan="3">Last<br>(<span data-unit="w">kg</span>)</th>
-                  <th class="center" rowspan="3">MTF<br>(<span data-unit="m">kg</span>)</th>
-                  <th class="center" colspan="4">AFWIJKING</th>
-                  <th class="center" rowspan="3"></th>
-                </tr>
-                <tr>
+                  <th class="center" rowspan="1">Nr</th>
+                  <th class="center" rowspan="1">Last<br>(<span data-unit="w">kg</span>)</th>
+                  <th class="center" rowspan="1">MTF<br>(<span data-unit="m">kg</span>)</th>
                   <th class="center" colspan="2">OP</th>
                   <th class="center" colspan="2">NEER</th>
+                  <th class="center" rowspan="1"></th>
                 </tr>
                 <tr>
-                  <th class="center">voor<br>justering</th>
-                  <th class="center">na<br>justering</th>
-                  <th class="center">voor<br>justering</th>
-                  <th class="center">na<br>justering</th>
+                  <th class="center"></th>
+                  <th class="center"></th>
+                  <th class="center"></th>
+                  <th class="center">v&oacute;&oacute;r</th>
+                  <th class="center">n&aacute;</th>
+                  <th class="center">v&oacute;&oacute;r</th>
+                  <th class="center">n&aacute;</th>
                 </tr>
               </thead>
               <tbody id="c-wbody"></tbody>
@@ -1739,8 +1738,8 @@ let herhNTouched = false;
 // Eindoordeel: false = automatisch afgeleid uit meetresultaten, true = handmatig overschreven.
 let oordeelOverridden = false;
 const repeatSeries = [
-  { s: 1, label: 'ca. 50% max', belId: 'f-herh-bel1' },
-  { s: 2, label: 'ca. 80% max', belId: 'f-herh-bel2' }
+  { s: 1, label: 'Reeks 1', pct: 50, belId: 'f-herh-bel1' },
+  { s: 2, label: 'Reeks 2', pct: 80, belId: 'f-herh-bel2' }
 ];
 
 // ── SECTION TOGGLE ──
@@ -1988,22 +1987,36 @@ function buildRepeatTable() {
   repeatSeries.forEach(({ belId }) => { const e = g(belId); if (e) prev[belId] = e.value; });
   for (let s = 1; s <= 2; s++) for (let i = 1; i <= 20; i++) { const e = g(`r${s}_${i}`); if (e) prev[`r${s}_${i}`] = e.value; }
 
-  let head = `<tr><th rowspan="2">Last</th><th colspan="${n}" class="center">Afwijking</th>`
-    + `<th rowspan="2" class="center">Max.<br>verschil</th><th rowspan="2" class="center">Std.<br>dev.</th><th rowspan="2" class="center">MTF</th><th rowspan="2" class="center">✓</th></tr>`;
-  head += '<tr>';
-  for (let i = 1; i <= n; i++) head += `<th class="center">${i}</th>`;
-  head += '</tr>';
-  document.getElementById('rhead').innerHTML = head;
+  let html = '';
+  repeatSeries.forEach(({ s, label, belId, pct }) => {
+    let head = `<tr><th class="center">Meting</th>`;
+    for (let i = 1; i <= n; i++) head += `<th class="center">${i}</th>`;
+    head += '</tr>';
 
-  let body = '';
-  repeatSeries.forEach(({ s, label, belId }) => {
-    body += `<tr><td>${label}<br><input type="number" id="${belId}" step="any" placeholder="last" style="width:64px" oninput="syncToCert(); calcRepeat()"> <span data-unit="w">kg</span></td>`;
+    let body = `<tr><td>Afwijking (kg)</td>`;
     for (let i = 1; i <= n; i++) {
-      body += `<td><input type="number" id="r${s}_${i}" step="0.001" placeholder="—" oninput="syncToCert(); calcRepeat()"></td>`;
+      body += `<td><input type="number" id="r${s}_${i}" step="0.001" placeholder="-" oninput="syncToCert(); calcRepeat()"></td>`;
     }
-    body += `<td class="mono center" id="r-diff${s}">—</td><td class="mono center" id="r-std${s}">—</td><td class="mono center" id="r-mtf${s}">—</td><td class="center" id="r-ok${s}">—</td></tr>`;
+    body += '</tr>';
+
+    html += `<div class="herh-block">
+      <div class="herh-block-head">
+        <span class="herh-block-title">${label}</span>
+        <span class="herh-block-sub">ca. ${pct}% van Max</span>
+      </div>
+      <div class="herh-last-row">
+        <label>Testlast</label>
+        <input type="number" id="${belId}" step="any" placeholder="last" oninput="syncToCert(); calcRepeat()">
+        <span data-unit="w">kg</span>
+      </div>
+      <table class="weighing-table">
+        <thead>${head}</thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
   });
-  document.getElementById('rbody').innerHTML = body;
+
+  document.getElementById('repeatBlock1').innerHTML = html;
 
   Object.keys(prev).forEach(id => { const e = g(id); if (e) e.value = prev[id]; });
 }
