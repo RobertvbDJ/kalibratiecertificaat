@@ -720,6 +720,17 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 }
 .technici-item .btn-link { font-size: 16px; color: var(--danger); padding: 2px 6px; }
 
+/* Company-afbeeldingen (in Instellingen) */
+.company-img-row { display:flex; align-items:center; gap:12px; }
+.company-img-preview {
+  width:60px; height:40px; border:1px solid var(--border); border-radius:4px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  flex-shrink:0; background:var(--bg);
+}
+.company-img-preview img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+.company-img-placeholder { font-size:10px; color:var(--muted); }
+.company-label { font-size:12px; font-weight:500; color:var(--muted); margin-bottom:4px; display:block; }
+
 /* Modal (voor Instellingen) */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 1000;
@@ -749,13 +760,19 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   <!-- TOPBAR -->
   <header class="topbar">
     <a class="wordmark" href="#">
-      <img class="logo-light" src="assets/logo-de-jong.png" alt="De Jong Weegsystemen">
-      <img class="logo-dark" src="assets/Logo_DJ-Weegsystemen_transparant_darkBG.png" alt="De Jong Weegsystemen">
+      <img class="logo-light" src="assets/logo-de-jong.png" alt="De Jong Weegsystemen" id="c-topbar-logo-light">
+      <img class="logo-dark" src="assets/Logo_DJ-Weegsystemen_transparant_darkBG.png" alt="De Jong Weegsystemen" id="c-topbar-logo-dark">
       <span class="wordmark-divider"></span>
       <span class="wordmark-app">Kalibratiecertificaat</span>
     </a>
 
     <div class="topbar-actions">
+      <!-- Auth -->
+      <span id="auth-user" style="font-size:13px;color:var(--muted);display:none"></span>
+      <button class="btn btn-ghost" id="auth-btn" onclick="openAuth()" title="Inloggen" style="display:inline-flex">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="auth-label">Inloggen</span>
+      </button>
       <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()" title="Wissel licht/donker thema" aria-label="Wissel thema">
         <svg id="themeIcon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3a7 7 0 100 14 7 7 0 000-14zM10 3v14"/></svg>
         <span id="themeLabel">Donker</span>
@@ -1348,12 +1365,101 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
             <div class="technici-lijst" id="technici-lijst"></div>
           </div>
           <div class="field" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-            <label style="color:var(--muted);font-style:italic">Bedrijfsinstellingen (binnenkort)</label>
-            <p style="font-size:12px;color:var(--muted);line-height:1.5">Hier komen later: bedrijfsnaam, logo, handtekening-afbeelding, etc.<br>Zodat de app aan te passen is per bedrijf.</p>
+            <label>Bedrijfsgegevens</label>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div>
+                  <label class="company-label">Bedrijfsnaam</label>
+                  <input type="text" id="f-company-name" placeholder="De Jong Weegsystemen BV" oninput="onCompanyChange()" style="width:100%">
+                </div>
+                <div>
+                  <label class="company-label">Korte naam (footer)</label>
+                  <input type="text" id="f-company-short" placeholder="De Jong Weegsystemen" oninput="onCompanyChange()" style="width:100%">
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div>
+                  <label class="company-label">Adres</label>
+                  <input type="text" id="f-company-addr1" placeholder="Westermaatsweg 6" oninput="onCompanyChange()" style="width:100%">
+                </div>
+                <div>
+                  <label class="company-label">Postcode + Plaats</label>
+                  <input type="text" id="f-company-addr2" placeholder="7556 BT Hengelo" oninput="onCompanyChange()" style="width:100%">
+                </div>
+              </div>
+              <div>
+                <label class="company-label">Website</label>
+                <input type="text" id="f-company-web" placeholder="www.dj.nl" oninput="onCompanyChange()" style="width:100%">
+              </div>
+            </div>
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+              <label style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:8px;display:block">Afbeeldingen</label>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div class="company-img-row">
+                  <div class="company-img-preview" id="company-logo-preview"><span class="company-img-placeholder">Logo</span></div>
+                  <div style="flex:1">
+                    <label class="company-label">Logo-afbeelding</label>
+                    <div style="display:flex;gap:6px">
+                      <input type="file" accept="image/*" onchange="handleCompanyImage('logo')" style="font-size:12px;flex:1">
+                      <button type="button" class="btn btn-ghost btn-sm" onclick="removeCompanyImage('logo')" style="font-size:11px">Verwijder</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="company-img-row">
+                  <div class="company-img-preview" id="company-stempel-preview"><span class="company-img-placeholder">Stempel</span></div>
+                  <div style="flex:1">
+                    <label class="company-label">Stempel-afbeelding</label>
+                    <div style="display:flex;gap:6px">
+                      <input type="file" accept="image/*" onchange="handleCompanyImage('stempel')" style="font-size:12px;flex:1">
+                      <button type="button" class="btn btn-ghost btn-sm" onclick="removeCompanyImage('stempel')" style="font-size:11px">Verwijder</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="company-img-row">
+                  <div class="company-img-preview" id="company-sig-preview"><span class="company-img-placeholder">Handtekening</span></div>
+                  <div style="flex:1">
+                    <label class="company-label">Handtekening-afbeelding</label>
+                    <div style="display:flex;gap:6px">
+                      <input type="file" accept="image/*" onchange="handleCompanyImage('sig')" style="font-size:12px;flex:1">
+                      <button type="button" class="btn btn-ghost btn-sm" onclick="removeCompanyImage('sig')" style="font-size:11px">Verwijder</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-ghost" onclick="closeSettings()">Sluiten</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth modal -->
+    <div id="auth-modal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeAuth()">
+      <div class="modal-dialog" style="max-width:380px">
+        <div class="modal-header">
+          <span style="font-weight:600" id="auth-modal-title">Inloggen</span>
+          <button type="button" class="btn-link" onclick="closeAuth()" style="font-size:18px;cursor:pointer">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="auth-error" style="color:var(--danger);font-size:13px;margin-bottom:10px;display:none"></div>
+          <div id="auth-success" style="color:var(--success);font-size:13px;margin-bottom:10px;display:none"></div>
+          <div class="field" style="margin-bottom:12px">
+            <label for="auth-email">E-mailadres</label>
+            <input type="email" id="auth-email" placeholder="bedrijf@voorbeeld.nl" style="width:100%">
+          </div>
+          <div class="field" style="margin-bottom:16px">
+            <label for="auth-password">Wachtwoord</label>
+            <input type="password" id="auth-password" placeholder="Minimaal 6 tekens" style="width:100%">
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-primary" onclick="handleSignIn()" style="flex:1;justify-content:center" id="auth-submit-btn">Inloggen</button>
+          </div>
+          <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--muted)">
+            Nog geen account?
+            <a href="#" onclick="toggleAuthMode()" style="color:var(--accent);text-decoration:none;font-weight:500" id="auth-toggle-link">Registreer</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1370,12 +1476,12 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           <!-- Header -->
           <div class="cert-header">
             <div class="cert-logo">
-              <img src="assets/logo-de-jong.png" alt="De Jong Weegsystemen" class="cert-logo-img">
+              <img src="assets/logo-de-jong.png" alt="De Jong Weegsystemen" class="cert-logo-img" id="c-logo-img">
               <div class="cert-logo-sub">
-                <span>De Jong Weegsystemen BV</span>
-                <span>Westermaatsweg 6</span>
-                <span>7556 BT Hengelo</span>
-                <span>www.dj.nl</span>
+                <span id="c-company-name">De Jong Weegsystemen BV</span>
+                <span id="c-company-addr1">Westermaatsweg 6</span>
+                <span id="c-company-addr2">7556 BT Hengelo</span>
+                <span id="c-company-web">www.dj.nl</span>
               </div>
             </div>
             <div class="cert-title-block">
@@ -1610,7 +1716,7 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
           <tfoot class="cert-running-foot">
             <tr><td>
           <div class="cert-footer">
-            <span>De Jong Weegsystemen · Kalibratiecertificaat: <span id="c-footer-nr">—</span></span>
+            <span><span id="c-company-footer">De Jong Weegsystemen</span> · Kalibratiecertificaat: <span id="c-footer-nr">—</span></span>
             <span class="cert-page-nr">Pagina <span class="page-current">1</span> van <span class="page-total">?</span></span>
           </div>
             </td></tr>
@@ -1621,6 +1727,10 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
 
   </main>
 </div>
+
+<!-- Supabase backend (optioneel — nodig voor cloud-opslag & inloggen) -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 <script>
 // Herhaalbaarheid: bijgehouden of gebruiker het aantal metingen handmatig heeft aangepast.
@@ -2311,6 +2421,7 @@ function openSettings() {
   const modal = document.getElementById('settings-modal');
   if (!modal) return;
   renderTechniciLijst();
+  renderCompanySettingsForm();
   modal.style.display = 'flex';
   document.getElementById('f-nieuw-technicus').value = '';
   setTimeout(() => {
@@ -2347,6 +2458,9 @@ function loadTechnici() {
 
 function saveTechnici(names) {
   try { localStorage.setItem(TECHNICI_KEY, JSON.stringify(names)); } catch (e) {}
+  if (window.supa && window.supa.isLoggedIn && window.supa.isLoggedIn()) {
+    window.supa.techniciSave(names).catch(function(e) { console.warn('Supabase sync error:', e); });
+  }
   loadTechnici();
 }
 
@@ -2400,6 +2514,142 @@ function getInitials(name) {
   if (parts.length === 0) return '';
   const lastIdx = parts.length - 1;
   return parts.map((w, i) => (i === 0 || i === lastIdx) ? w[0].toUpperCase() : w[0].toLowerCase()).join('');
+}
+
+// ── BEDRIJFSINSTELLINGEN ──
+const COMPANY_KEY = 'dj-company-settings';
+const DEFAULT_LOGO = 'assets/logo-de-jong.png';
+const DEFAULT_LOGO_DARK = 'assets/Logo_DJ-Weegsystemen_transparant_darkBG.png';
+const DEFAULT_SIG = 'assets/handtekening-technicus.png';
+const DEFAULT_STEMPEL = 'assets/stempel_DJS.png';
+
+function defaultCompanySettings() {
+  return {
+    companyName: 'De Jong Weegsystemen BV',
+    companyShort: 'De Jong Weegsystemen',
+    address1: 'Westermaatsweg 6',
+    address2: '7556 BT Hengelo',
+    website: 'www.dj.nl',
+    logoDataUrl: '',
+    stempelDataUrl: '',
+    sigDataUrl: ''
+  };
+}
+
+function loadCompanySettings() {
+  try {
+    const raw = localStorage.getItem(COMPANY_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      return { ...defaultCompanySettings(), ...data };
+    }
+  } catch (e) {}
+  return defaultCompanySettings();
+}
+
+function saveCompanySettings(data) {
+  try { localStorage.setItem(COMPANY_KEY, JSON.stringify(data)); } catch (e) {}
+  if (window.supa && window.supa.isLoggedIn && window.supa.isLoggedIn()) {
+    window.supa.companySave(data).catch(function(e) { console.warn('Supabase sync error:', e); });
+  }
+}
+
+function renderCompanySettingsForm() {
+  const data = loadCompanySettings();
+  const sv = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  sv('f-company-name', data.companyName);
+  sv('f-company-short', data.companyShort);
+  sv('f-company-addr1', data.address1);
+  sv('f-company-addr2', data.address2);
+  sv('f-company-web', data.website);
+  showCompanyPreview('logo', data.logoDataUrl);
+  showCompanyPreview('stempel', data.stempelDataUrl);
+  showCompanyPreview('sig', data.sigDataUrl);
+}
+
+function showCompanyPreview(type, dataUrl) {
+  const el = document.getElementById('company-' + type + '-preview');
+  if (!el) return;
+  if (dataUrl) {
+    el.innerHTML = '<img src="' + dataUrl + '" alt="">';
+  } else {
+    const labels = { logo: 'Logo', stempel: 'Stempel', sig: 'Handtekening' };
+    el.innerHTML = '<span class="company-img-placeholder">' + (labels[type] || type) + '</span>';
+  }
+}
+
+function onCompanyChange() {
+  const prev = loadCompanySettings();
+  const data = {
+    companyName: document.getElementById('f-company-name')?.value || '',
+    companyShort: document.getElementById('f-company-short')?.value || '',
+    address1: document.getElementById('f-company-addr1')?.value || '',
+    address2: document.getElementById('f-company-addr2')?.value || '',
+    website: document.getElementById('f-company-web')?.value || '',
+    logoDataUrl: prev.logoDataUrl || '',
+    stempelDataUrl: prev.stempelDataUrl || '',
+    sigDataUrl: prev.sigDataUrl || ''
+  };
+  saveCompanySettings(data);
+  applyCompanyToCert();
+}
+
+function handleCompanyImage(type) {
+  const input = event.target;
+  const file = input.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    const settings = loadCompanySettings();
+    var keyMap = { logo: 'logoDataUrl', stempel: 'stempelDataUrl', sig: 'sigDataUrl' };
+    settings[keyMap[type]] = dataUrl;
+    saveCompanySettings(settings);
+    showCompanyPreview(type, dataUrl);
+    applyCompanyToCert();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeCompanyImage(type) {
+  const settings = loadCompanySettings();
+  var keyMap = { logo: 'logoDataUrl', stempel: 'stempelDataUrl', sig: 'sigDataUrl' };
+  settings[keyMap[type]] = '';
+  saveCompanySettings(settings);
+  showCompanyPreview(type, '');
+  var row = document.getElementById('company-' + type + '-preview');
+  if (row) {
+    var container = row.closest('.company-img-row');
+    if (container) {
+      var fi = container.querySelector('input[type="file"]');
+      if (fi) fi.value = '';
+    }
+  }
+  applyCompanyToCert();
+}
+
+function applyCompanyToCert() {
+  var data = loadCompanySettings();
+  var nameEl = document.getElementById('c-company-name');
+  var addr1El = document.getElementById('c-company-addr1');
+  var addr2El = document.getElementById('c-company-addr2');
+  var webEl = document.getElementById('c-company-web');
+  var footerEl = document.getElementById('c-company-footer');
+  if (nameEl) nameEl.textContent = data.companyName || '—';
+  if (addr1El) addr1El.textContent = data.address1 || '';
+  if (addr2El) addr2El.textContent = data.address2 || '';
+  if (webEl) webEl.textContent = data.website || '';
+  if (footerEl) footerEl.textContent = data.companyShort || '—';
+  var logoImg = document.getElementById('c-logo-img');
+  if (logoImg) logoImg.src = data.logoDataUrl || DEFAULT_LOGO;
+  var topLight = document.getElementById('c-topbar-logo-light');
+  var topDark = document.getElementById('c-topbar-logo-dark');
+  if (topLight) topLight.src = data.logoDataUrl || DEFAULT_LOGO;
+  if (topDark) topDark.src = data.logoDataUrl || DEFAULT_LOGO_DARK;
+  var sigImg = document.getElementById('c-sig-img');
+  if (sigImg) sigImg.src = data.sigDataUrl || DEFAULT_SIG;
+  var stempelImg = document.getElementById('c-stempel-img');
+  if (stempelImg) stempelImg.src = data.stempelDataUrl || DEFAULT_STEMPEL;
 }
 
 function setCert(id, val) {
@@ -2478,6 +2728,7 @@ function getFormData() {
     rdata[`r2_${i}`] = g(`r2_${i}`)?.value || '';
   }
   data._repeat = rdata;
+  data._companySettings = loadCompanySettings();
   return data;
 }
 
@@ -2522,6 +2773,10 @@ function loadFormData(data) {
   if (data._excshape) {
     const el = document.querySelector(`input[name="excshape"][value="${data._excshape}"]`);
     if (el) el.checked = true;
+  }
+  if (data._companySettings) {
+    saveCompanySettings(data._companySettings);
+    applyCompanyToCert();
   }
   renderDiagrams();
   onUnitChange();
@@ -2773,13 +3028,125 @@ function toggleTheme() {
   try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
 }
 
+// ── AUTH FUNCTIES ──
+var authMode = 'login';
+function openAuth() {
+  var m = document.getElementById('auth-modal');
+  if (!m) return;
+  authMode = 'login';
+  document.getElementById('auth-modal-title').textContent = 'Inloggen';
+  document.getElementById('auth-submit-btn').textContent = 'Inloggen';
+  document.getElementById('auth-toggle-link').textContent = 'Registreer';
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  m.style.display = 'flex';
+  setTimeout(function() { var e = document.getElementById('auth-email'); if (e) e.focus(); }, 100);
+}
+function closeAuth() {
+  var m = document.getElementById('auth-modal');
+  if (m) m.style.display = 'none';
+}
+function toggleAuthMode() {
+  if (authMode === 'login') {
+    authMode = 'signup';
+    document.getElementById('auth-modal-title').textContent = 'Registreren';
+    document.getElementById('auth-submit-btn').textContent = 'Registreren';
+    document.getElementById('auth-toggle-link').textContent = 'Inloggen';
+  } else {
+    authMode = 'login';
+    document.getElementById('auth-modal-title').textContent = 'Inloggen';
+    document.getElementById('auth-submit-btn').textContent = 'Inloggen';
+    document.getElementById('auth-toggle-link').textContent = 'Registreer';
+  }
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+}
+function showAuthError(msg) {
+  var el = document.getElementById('auth-error');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+function showAuthSuccess(msg) {
+  var el = document.getElementById('auth-success');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+async function handleSignIn() {
+  var email = document.getElementById('auth-email')?.value.trim();
+  var password = document.getElementById('auth-password')?.value;
+  if (!email || !password) { showAuthError('Vul e-mail en wachtwoord in.'); return; }
+  try {
+    if (authMode === 'signup') {
+      await window.supa.signUp(email, password);
+      showAuthSuccess('Account aangemaakt! Controleer je e-mail om te bevestigen.');
+      return;
+    }
+    await window.supa.signIn(email, password);
+    closeAuth();
+    await window.supa.syncFromServer();
+    updateAuthUI();
+    // Reload form data after sync
+    loadTechnici();
+    renderTechniciLijst();
+    applyCompanyToCert();
+    if (window.restoreSession) {
+      var r = restoreSession();
+      if (!r) syncToCert();
+    }
+  } catch (e) {
+    showAuthError(e.message || 'Er is een fout opgetreden.');
+  }
+}
+async function handleLogout() {
+  try {
+    await window.supa.signOut();
+    updateAuthUI();
+  } catch (e) {
+    console.warn('Logout error:', e);
+  }
+}
+function updateAuthUI() {
+  var btn = document.getElementById('auth-btn');
+  var label = document.getElementById('auth-label');
+  var userSpan = document.getElementById('auth-user');
+  if (window.supa && window.supa.isLoggedIn && window.supa.isLoggedIn()) {
+    var user = window.supa.getUser();
+    if (btn) btn.style.display = 'none';
+    if (userSpan) {
+      userSpan.textContent = (user && user.email) || 'Ingelogd';
+      userSpan.style.display = 'inline';
+      userSpan.style.cursor = 'pointer';
+      userSpan.title = 'Klik om uit te loggen';
+      userSpan.onclick = handleLogout;
+    }
+  } else {
+    if (btn) btn.style.display = 'inline-flex';
+    if (userSpan) { userSpan.style.display = 'none'; userSpan.onclick = null; }
+  }
+}
+function supaOnAuthChange(user) {
+  updateAuthUI();
+}
+
 // ── INIT ──
 try {
   const savedTheme = (() => { try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; } })();
   if (savedTheme) applyTheme(savedTheme);
   initDefaults();
+  // Init Supabase auth
+  if (window.supa) {
+    window.supa.initAuth().then(function(user) {
+      if (user) { updateAuthUI(); return window.supa.syncFromServer(); }
+    }).then(function() {
+      loadTechnici();
+      renderTechniciLijst();
+      applyCompanyToCert();
+    }).catch(function(e) { console.warn('Supabase init error:', e); });
+  }
   loadTechnici();
   renderTechniciLijst();
+  // Apply company settings to certificate
+  applyCompanyToCert();
   // Restore session if available
   const restored = restoreSession();
   if (!restored) syncToCert();
