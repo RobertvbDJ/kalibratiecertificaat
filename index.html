@@ -177,6 +177,8 @@ html, body { height: 100%; font-family: var(--font); background: var(--bg); colo
   transition: border-color 0.15s ease;
 }
 .section:hover { border-color: var(--border-strong); }
+.section.open { border-color: var(--accent); }
+.section.open > .section-header { background: var(--accent-5); }
 .section-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 11px 14px; cursor: pointer; user-select: none;
@@ -1749,17 +1751,31 @@ function toggleSection(headerEl) {
     if (!section) return;
     const body = section.querySelector('.section-body');
     const chev = headerEl.querySelector('.section-chevron');
+    const isOpen = body && body.classList.contains('open');
+
+    // Sluit alle andere secties eerst (accordeon: altijd max. 1 open)
+    document.querySelectorAll('.section').forEach(sec => {
+      if (sec !== section) {
+        const b = sec.querySelector('.section-body');
+        const c = sec.querySelector('.section-chevron');
+        if (b) { b.classList.remove('open'); b.style.display = 'none'; }
+        if (c) c.classList.remove('open');
+        sec.classList.remove('open');
+      }
+    });
+
     if (body) {
-      const isOpen = body.classList.contains('open');
       if (isOpen) {
         body.classList.remove('open');
         body.style.display = 'none';
+        section.classList.remove('open');
       } else {
         body.classList.add('open');
         body.style.display = 'block';
+        section.classList.add('open');
       }
     }
-    if (chev) chev.classList.toggle('open');
+    if (chev) chev.classList.toggle('open', !isOpen);
   } catch(e) {
     console.error('toggleSection error:', e);
   }
